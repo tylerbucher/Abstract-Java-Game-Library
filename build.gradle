@@ -1,0 +1,26 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+mainClassName = 'org.ajgl.test.MainTest'
+
+repositories {
+    mavenCentral()
+	
+	flatDir {
+		dirs 'lib'
+	}
+}
+
+jar {
+    baseName = 'AJGL'
+    version =  '0.0.1'
+}
+
+dependencies {
+    compile files('lib/lwjgl_3/jar/lwjgl.jar')
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
