@@ -6,10 +6,6 @@ mainClassName = 'org.ajgl.test.MainTest'
 
 repositories {
     mavenCentral()
-	
-	flatDir {
-		dirs 'lib'
-	}
 }
 
 jar {
@@ -18,7 +14,9 @@ jar {
 }
 
 dependencies {
-    compile files('lib/lwjgl_3/jar/lwjgl.jar')
+    compile "org.lwjgl:lwjgl:2.9.3"
+    compile "org.lwjgl.lwjgl:lwjgl_util:2.9.3"
+	compile "org.slick2d:slick2d-core:1.0.1"
 }
 
 task wrapper(type: Wrapper) {
