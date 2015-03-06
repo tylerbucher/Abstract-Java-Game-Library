@@ -70,9 +70,6 @@ public class MainTest {
     private GLFWErrorCallback errorCallback;
     private GLFWKeyCallback   keyCallback;
     
-    //TEst
-    FloatBuffer buffer;
-    
     int triangleData, triangleColor;
     
     public void preInitGL() {
@@ -140,10 +137,6 @@ public class MainTest {
     
     public void init() {
         //=== MYCODE ===
-        float[] array = new float[] {50.0f, 50.0f, 50.0f, 562.0f, 1074.0f, 562.0f, 1074.0f, 50.0f};
-        buffer = BufferUtils.createFloatBuffer(array.length);
-        buffer.put(array);
-        buffer.flip();
     }
     
     public void gameStart() {
@@ -173,7 +166,7 @@ public class MainTest {
     }
     
     private void render() {
-        Immediate.draw(GL11.GL_QUADS, 4, buffer);
+        Immediate.twoPointdraw(GL11.GL_QUADS, 50.0f, 50.0f, 50.0f, 562.0f, 1074.0f, 562.0f, 1074.0f, 50.0f);
     }
     
     public void exit() {
