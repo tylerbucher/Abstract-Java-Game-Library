@@ -77,33 +77,41 @@ public class MainTest {
     }
     
     public void initGL() {
+        preWindowSetup();
+        windowSetup();
+        callbackSetup();
+        
+        glfwMakeContextCurrent(window);     // Make the OpenGL context current
+        glfwSwapInterval(VSYNC);            // Enable v-sync
+        glfwShowWindow(window);             // Make the window visible
+        GLContext.createFromCurrent();      // Bind lwjgl with GLFW
+        
+        // Initialize openGl
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, WIDTH, 0, HEIGHT, 1, -1);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        
+        //glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set the clear color
+        
+    }
+    
+    private void preWindowSetup() {
         // Setup an error callback
         GLFW.glfwSetErrorCallback(errorCallback = errorCallbackPrint(System.err));
  
         // Initialize GLFW
         if (GLFW.glfwInit() != GL11.GL_TRUE)
             exit();
- 
+    }
+    
+    private void windowSetup() {
         // Configure Window Properties
         glfwDefaultWindowHints();
         GLFW.glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Keep the window hidden
         glfwWindowHint(GLFW_RESIZABLE, RESIZABLE); // Do not allow resizing
         glfwWindowHint(GLFW_REFRESH_RATE, REFRESH_RATE); // Refresh rate
         
-        // Create the window
-        window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, NULL, NULL);
-        if ( window == NULL )
-            exit();
- 
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {//TODO Dispatch key events
-                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                    glfwSetWindowShouldClose(window, GL_TRUE); 
-            }
-        });
- 
         // Get the resolution of the primary monitor
         ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         // Center our window
@@ -113,26 +121,21 @@ public class MainTest {
             (GLFWvidmode.height(vidmode) - HEIGHT) / 2
         );
         
- 
-        // Make the OpenGL context current
-        glfwMakeContextCurrent(window);
-        
-        // Enable v-sync
-        glfwSwapInterval(VSYNC);
- 
-        // Make the window visible
-        glfwShowWindow(window);
-        
-        GLContext.createFromCurrent(); // Bind lwjgl with GLFW
-        
-        // Initialize openGl
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0, WIDTH, 0, HEIGHT, 1, -1);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set the clear color
-        
+        // Create the window
+        window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, NULL, NULL);
+        if ( window == NULL )
+            exit();
+    }
+    
+    private void callbackSetup() {
+        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
+        glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int key, int scancode, int action, int mods) {//TODO Dispatch key events
+                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+                    glfwSetWindowShouldClose(window, GL_TRUE); 
+            }
+        });
     }
     
     public void init() {
