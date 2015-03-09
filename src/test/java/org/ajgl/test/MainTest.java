@@ -30,13 +30,13 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
-import org.ajgl.graphics.Immediate;
+import org.ajgl.graphics.Graphics;
+import org.ajgl.graphics.VertexBufferedObject;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Sys;
 import org.lwjgl.glfw.GLFW;
@@ -44,6 +44,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GLContext;
 
 
@@ -89,11 +90,15 @@ public class MainTest {
         // Initialize openGl
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
+        //GL11.glOrtho(0, WIDTH, 0, HEIGHT, WIDTH, -HEIGHT);
         GL11.glOrtho(0, WIDTH, 0, HEIGHT, 1, -1);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         
-        //glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Set the clear color
-        
+        // Enable alpha transparency (for overlay image)
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
     }
     
     private void preWindowSetup() {
@@ -112,6 +117,11 @@ public class MainTest {
         glfwWindowHint(GLFW_RESIZABLE, RESIZABLE); // Do not allow resizing
         glfwWindowHint(GLFW_REFRESH_RATE, REFRESH_RATE); // Refresh rate
         
+        // Create the window
+        window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, NULL, NULL);
+        if ( window == NULL )
+            exit();
+        
         // Get the resolution of the primary monitor
         ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         // Center our window
@@ -120,11 +130,6 @@ public class MainTest {
             (GLFWvidmode.width(vidmode) - WIDTH) / 2,
             (GLFWvidmode.height(vidmode) - HEIGHT) / 2
         );
-        
-        // Create the window
-        window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, NULL, NULL);
-        if ( window == NULL )
-            exit();
     }
     
     private void callbackSetup() {
@@ -145,6 +150,18 @@ public class MainTest {
     public void gameStart() {
         System.out.println("LWJGL Version: ["+Sys.getVersion()+"]");
         
+        float[] array = new float[]{50, 50, 50, 100, 100, 50};
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
+        buffer.put(array);
+        buffer.flip();
+        
+        float[] arrayC = new float[]{1,0,0, 0,1,0, 0,0,1};
+        FloatBuffer bufferC = BufferUtils.createFloatBuffer(arrayC.length);
+        bufferC.put(arrayC);
+        bufferC.flip();
+        
+        triangleData = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, buffer);
+        triangleColor = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, bufferC);
         while ( glfwWindowShouldClose(window) == GL_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             // Run Cycles
@@ -169,7 +186,16 @@ public class MainTest {
     }
     
     private void render() {
-        Immediate.twoPointdraw(GL11.GL_QUADS, 50.0f, 50.0f, 50.0f, 562.0f, 1074.0f, 562.0f, 1074.0f, 50.0f);
+        primitiveRender();
+    }
+    
+    private void primitiveRender() {
+        Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
+        
+        VertexBufferedObject.colorPointer(triangleColor, 3, 0, 0, GL11.GL_FLOAT);
+        VertexBufferedObject.drawVboArrays(triangleData, 2, 3, 0, 0, 0, GL11.GL_FLOAT, GL11.GL_TRIANGLES);
+        
+        Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
     }
     
     public void exit() {

@@ -24,8 +24,9 @@
 
 package org.ajgl.graphics;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
+import org.ajgl.OpenGLInfo;
+import org.lwjgl.opengl.GL11;
+
 
 
 /**
@@ -35,22 +36,29 @@ import java.lang.annotation.Target;
 public class Graphics {
     
     /**
-     * 
-     * @author Tyler Bucher
-     * @see org.lwjgl.opengl.GL11                    GL11
-     * @see org.lwjgl.opengl.GL11#GL_POINTS          GL_POINTS        
-     * @see org.lwjgl.opengl.GL11#GL_LINES           GL_LINES         
-     * @see org.lwjgl.opengl.GL11#GL_LINE_LOOP       GL_LINE_LOOP     
-     * @see org.lwjgl.opengl.GL11#GL_LINE_STRIP      GL_LINE_STRIP    
-     * @see org.lwjgl.opengl.GL11#GL_TRIANGLES       GL_TRIANGLES     
-     * @see org.lwjgl.opengl.GL11#GL_TRIANGLE_STRIP  GL_TRIANGLE_STRIP
-     * @see org.lwjgl.opengl.GL11#GL_TRIANGLE_FAN    GL_TRIANGLE_FAN  
-     * @see org.lwjgl.opengl.GL11#GL_QUADS           GL_QUADS         
-     * @see org.lwjgl.opengl.GL11#GL_QUAD_STRIP      GL_QUAD_STRIP    
-     * @see org.lwjgl.opengl.GL11#GL_POLYGON         GL_POLYGON       
+     * Enables a OpenGL state.
+     * @param state - The list of OpenGL states to enable.
      */
-    @Target({ElementType.PARAMETER})
-    public @interface BeginMode {
-        
+    public static void enableClientSideState(int... state) {
+        for(int i=0;i<state.length;i++)
+            GL11.glEnableClientState(state[i]);
+    }
+    
+    /**
+     * Disables a OpenGL state.
+     * @param state - The list of OpenGL states to disable.
+     */
+    public static void disableClientSideState(int... state) {
+        for(int i=0;i<state.length;i++)
+            GL11.glDisableClientState(state[i]);
+    }
+    
+    /**
+     * Binds the {@code textureID} to the current OpenGL context.
+     * @param textureID - The id of the texture
+     */
+    @OpenGLInfo(fwdCompatible = true, openGLVersion = "1.1", status = "Release")
+    public static void bindTexture(int textureID) {
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
     }
 }
