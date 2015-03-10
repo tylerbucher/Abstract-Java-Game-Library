@@ -41,36 +41,64 @@ import org.lwjgl.opengl.GLContext;
  */
 public abstract class Window {
     
-    private int HEIGHT = 800;
-    private int WIDTH = 1200;
-    private int RESIZABLE = GL11.GL_FALSE;
-    private int REFRESH_RATE = 60;
-    private int VSYNC = 1;
-    private String TITLE = "AJGL TEST";
+    private volatile int height;
+    private volatile int width;
+    private volatile String title;
+    private volatile long monitor;
+    private volatile long share;
     // The window handler
-    public long window;
+    private volatile long window;
     
     // callback reference instances
-    private GLFWErrorCallback errorCallback;
-    private GLFWKeyCallback   keyCallback;
+    private volatile GLFWErrorCallback errorCallback;
     
-    public Window(float x, float y) {
-        System.out.println("callback");
-        errorCallbackSetup();
-        System.out.println("window");
-        windowSetup();
-        System.out.println("callback 2");
-        callbackSetup();
-        System.out.println("glfw context");
-        glfwContext();
+    private Thread thread;
+    
+    public Window() {
+        this.height = 800;
+        this.width = 1200;
+        this.title = "Abstract Java Game Library";
+        this.monitor = 0;
+        this.share = 0;
+        this.thread = new Thread();
+        
+        setup();
+    } 
+    
+    public Window(int height, int width, String title, long monitor, long share, Thread thread) {
+        this.height = height;
+        this.width = width;
+        this.title = title;
+        this.monitor = monitor;
+        this.share = share;
+        this.thread = thread;
+        
+        setup();
     }
     
-    private void errorCallbackSetup() {
+    public boolean setup() {
+        errorCallbackSetup();
+        if(!windowSetup())
+            return false;
+        glfwContext();
+        initGL();
+        return true;
+    }
+    
+    public void startThread() {
+        try{
+            thread.start();
+        } catch(IllegalThreadStateException e) {
+            return;
+        }
+    }
+
+    protected void errorCallbackSetup() {
         // Setup an error callback
         GLFW.glfwSetErrorCallback(errorCallback = errorCallbackPrint(System.err));
     }
     
-    private boolean windowSetup() {
+    protected boolean windowSetup() {
         // Initialize GLFW
         if (GLFW.glfwInit() != 1) {
             errorCallback.release();
@@ -78,76 +106,31 @@ public abstract class Window {
         }
         
         // Setup window properties
-        windowHintSetup();
+        //windowHintSetup();
         
         // Create the window
-        window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, NULL, NULL);
+        window = glfwCreateWindow(width, height, title, monitor, share);
         if (window == 0) {
             errorCallback.release();
             return false;
         }
         
         // Setup window position
-        windowPosition();
+        //windowPosition();
         
         return true;
     }
     
-    private void windowHintSetup() {
-        // Configure Window Properties
-        glfwDefaultWindowHints();
-        GLFW.glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Keep the window hidden
-        glfwWindowHint(GLFW_RESIZABLE, RESIZABLE); // Do not allow resizing
-        glfwWindowHint(GLFW_REFRESH_RATE, REFRESH_RATE); // Refresh rate
+    protected void initGL() {
+        // Initialize openGl
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, width, 0, height, 1, -1);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
     }
     
-    private void windowPosition() {
-     // Get the resolution of the primary monitor
-        ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        // Center our window
-        glfwSetWindowPos(
-            window,
-            (GLFWvidmode.width(vidmode) - WIDTH) / 2,
-            (GLFWvidmode.height(vidmode) - HEIGHT) / 2
-        );
-    }
-    
-    public void closeGLFW() {
-        glfwTerminate();
-        errorCallback.release();
-    }
-    
-    private abstract void callbackSetup(); 
-//    {
-//        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-//        glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
-//            @Override
-//            public void invoke(long window, int key, int scancode, int action, int mods) {//TODO Dispatch key events
-//                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-//                    glfwSetWindowShouldClose(window, GL_TRUE); 
-//            }
-//        });
-//    }
-    
-    public abstract void initGL(); 
-//    {
-//        // Initialize openGl
-//        GL11.glMatrixMode(GL11.GL_PROJECTION);
-//        GL11.glLoadIdentity();
-//        //GL11.glOrtho(0, WIDTH, 0, HEIGHT, WIDTH, -HEIGHT);
-//        GL11.glOrtho(0, WIDTH, 0, HEIGHT, 1, -1);
-//        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-//        
-//        // Enable alpha transparency (for overlay image)
-//        GL11.glEnable(GL11.GL_BLEND);
-//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-//        GL11.glEnable(GL11.GL_DEPTH_TEST);
-//        GL11.glDepthFunc(GL11.GL_LEQUAL);
-//    }
-    
-    public void glfwContext() {
+    protected void glfwContext() {
         glfwMakeContextCurrent(window);     // Make the OpenGL context current
-        glfwShowWindow(window);             // Make the window visible
         GLContext.createFromCurrent();      // Bind lwjgl with GLFW
     }
 }
