@@ -150,51 +150,51 @@ public class MainTest {
         //=== MYCODE ===
     }
     
-    public static void gameStart() {
+    public void gameStart() {
         System.out.println("LWJGL Version: ["+Sys.getVersion()+"]");
         
-//        float[] array = new float[]{50, 50, 50, 100, 100, 50};
-//        FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
-//        buffer.put(array);
-//        buffer.flip();
-//        
-//        float[] arrayC = new float[]{1,0,0, 0,1,0, 0,0,1};
-//        FloatBuffer bufferC = BufferUtils.createFloatBuffer(arrayC.length);
-//        bufferC.put(arrayC);
-//        bufferC.flip();
-//        
-//        triangleData = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, buffer);
-//        triangleColor = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, bufferC);
-        while ( glfwWindowShouldClose(windowN.window) == GL_FALSE ) {
+        float[] array = new float[]{50, 50, 50, 100, 100, 50};
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
+        buffer.put(array);
+        buffer.flip();
+        
+        float[] arrayC = new float[]{1,0,0, 0,1,0, 0,0,1};
+        FloatBuffer bufferC = BufferUtils.createFloatBuffer(arrayC.length);
+        bufferC.put(arrayC);
+        bufferC.flip();
+        
+        triangleData = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, buffer);
+        triangleColor = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, bufferC);
+        while ( glfwWindowShouldClose(window) == GL_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             // Run Cycles
             input();
             update();
             render();
             // Display Buffer swap
-            glfwSwapBuffers(windowN.window);
-            glfwSwapBuffers(windowp.window);
+            glfwSwapBuffers(window);
         }
         
         // Release window and window call backs
-        glfwDestroyWindow(windowN.window);
-        glfwDestroyWindow(windowp.window);
-        //keyCallback.release();
+        glfwDestroyWindow(window);
+        glfwDestroyWindow(windowN.getWindow());
+        keyCallback.release();
+        exit();
     }
     
-    private static void input() {
+    private void input() {
         glfwPollEvents();
     }
     
-    private static void update() {
+    private void update() {
         
     }
     
-    private static void render() {
-        //primitiveRender();
+    private void render() {
+        primitiveRender();
     }
     
-    private static void primitiveRender() {
+    private void primitiveRender() {
         Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
         
         VertexBufferedObject.colorPointer(triangleColor, 3, 0, 0, GL11.GL_FLOAT);
@@ -211,16 +211,23 @@ public class MainTest {
     }
     
     public static void main(String[] args) {
-        windowN = new Window(1f, 1f);
-        windowN.initGL();
-        windowp = new Window(1f, 1f);
-        windowp.initGL();
+//        windowN = new Window(1f, 1f);
+//        windowN.initGL();
+//        windowp = new Window(1f, 1f);
+//        windowp.initGL();
+//        
         
-        MainTest.gameStart();
-        //MainTest test = new MainTest();
-//        test.preInitGL();
-//        test.initGL();
-//        test.init();
-//        test.gameStart();
+        
+        
+        windowN = new Window(1200, 800, "Test", 0, 0, new Thread());
+        windowN.setup();
+        windowN.setThread(new GameThread(windowN.getWindow()));
+        windowN.startThread();
+        
+        MainTest test = new MainTest();
+        test.preInitGL();
+        test.initGL();
+        test.init();
+        test.gameStart();
     }
 }
