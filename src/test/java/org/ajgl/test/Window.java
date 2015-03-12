@@ -19,17 +19,14 @@ import org.lwjgl.opengl.GLContext;
  */
 public class Window {
     
-    private volatile int height;
-    private volatile int width;
-    private volatile String title;
-    private volatile long monitor;
-    private volatile long share;
-    // The window handler
-    private volatile long window;
+    private int height;
+    private int width;
+    private String title;
+    private long monitor;
+    private long share;
+    private long window;   // The window handler
     
-    // callback reference instances
-    private volatile GLFWErrorCallback errorCallback;
-    
+    private GLFWErrorCallback errorCallback;   // callback reference instances
     private Thread thread;
     
     public Window() {
@@ -54,16 +51,16 @@ public class Window {
         errorCallbackSetup();
         if(!windowSetup())
             return false;
-        //glfwContext();
-        //initGL();
         return true;
     }
     
     public void startThread() {
-        try{
-            thread.start();
-        } catch(IllegalThreadStateException e) {
-            return;
+        if(!thread.isAlive()) {
+            try{
+                thread.start();
+            } catch(IllegalThreadStateException e) {
+                return;
+            }
         }
     }
 
@@ -80,7 +77,7 @@ public class Window {
         }
         
         // Setup window properties
-        //windowHintSetup();
+        preWindowCreation();
         
         // Create the window
         window = glfwCreateWindow(width, height, title, monitor, share);
@@ -90,46 +87,18 @@ public class Window {
         }
         
         // Setup window position
-        //windowPosition();
+        postWindowCreation();
         
         return true;
     }
     
-    protected void initGL() {
-        // Initialize openGl
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0, width, 0, height, 1, -1);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+    protected void preWindowCreation() {
+        GLFW.glfwDefaultWindowHints();
+    }
+    
+    protected void postWindowCreation() {
         
-        // Enable alpha transparency (for overlay image)
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
     }
-    
-    protected void glfwContext() {
-        glfwMakeContextCurrent(window);     // Make the OpenGL context current
-        GLContext.createFromCurrent();      // Bind lwjgl with GLFW
-    }
-
-    
-    /**
-     * @return the window
-     */
-    public synchronized long getWindow() {
-        return window;
-    }
-
-    
-    /**
-     * @param window the window to set
-     */
-    public synchronized void setWindow(long window) {
-        this.window = window;
-    }
-
     
     /**
      * @return the errorCallback
@@ -137,15 +106,15 @@ public class Window {
     public synchronized GLFWErrorCallback getErrorCallback() {
         return errorCallback;
     }
-
     
     /**
      * @param errorCallback the errorCallback to set
      */
     public synchronized void setErrorCallback(GLFWErrorCallback errorCallback) {
+        if(!this.errorCallback.isDestroyed())
+            this.errorCallback.release();
         this.errorCallback = errorCallback;
     }
-
     
     /**
      * @return the thread
@@ -153,13 +122,64 @@ public class Window {
     public synchronized Thread getThread() {
         return thread;
     }
-
     
     /**
      * @param thread the thread to set
      */
     public synchronized void setThread(Thread thread) {
+        if(this.thread != null)
+            this.thread.interrupt();
         this.thread = thread;
+    }
+    
+    /**
+     * @return the height
+     */
+    public synchronized int getHeight() {
+        return height;
+    }
+    
+    /**
+     * @return the width
+     */
+    public synchronized int getWidth() {
+        return width;
+    }
+    
+    public synchronized void setWindowSize(int width, int height) {
+        GLFW.glfwSetWindowSize(window, width, height);
+    }
+    
+    /**
+     * @return the title
+     */
+    public synchronized String getTitle() {
+        return title;
+    }
+    
+    public synchronized void setTitle(String title) {
+        GLFW.glfwSetWindowTitle(window, title);
+    }
+    
+    /**
+     * @return the monitor
+     */
+    public synchronized long getMonitor() {
+        return monitor;
+    }
+    
+    /**
+     * @return the share
+     */
+    public synchronized long getShare() {
+        return share;
+    }
+    
+    /**
+     * @return the window
+     */
+    public synchronized long getWindow() {
+        return window;
     }
     
 }

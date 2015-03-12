@@ -84,8 +84,8 @@ public class GameThread extends Thread {
             // Display Buffer swap
             glfwSwapBuffers(windowHandler);
         }
-        System.out.println("hey");
-        GLFW.glfwSetWindowShouldClose(windowHandler, 1);
+        
+        //MainTest.close = true;
     }
     
     private void input() {

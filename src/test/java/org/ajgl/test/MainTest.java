@@ -53,7 +53,8 @@ import org.lwjgl.opengl.GLContext;
  *
  */
 public class MainTest {
-    
+    public static volatile boolean close = false;
+    static boolean closed = false;
     static Window windowN;
     static Window windowp;
     
@@ -167,6 +168,12 @@ public class MainTest {
         triangleColor = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, bufferC);
         while ( glfwWindowShouldClose(window) == GL_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
+            if(!windowN.getThread().isAlive() && !closed) {
+                glfwDestroyWindow(windowN.getWindow());
+                windowN.getErrorCallback().release();
+                closed = true;
+            }
             // Run Cycles
             input();
             update();
@@ -177,7 +184,10 @@ public class MainTest {
         
         // Release window and window call backs
         glfwDestroyWindow(window);
-        glfwDestroyWindow(windowN.getWindow());
+        if(!closed) {
+            windowN.getThread().interrupt();
+            glfwDestroyWindow(windowN.getWindow());
+        }
         keyCallback.release();
         exit();
     }
@@ -219,7 +229,7 @@ public class MainTest {
         
         
         
-        windowN = new Window(1200, 800, "Test", 0, 0, new Thread());
+        windowN = new Window(1200, 800, "Test", 0, 0, null);
         windowN.setup();
         windowN.setThread(new GameThread(windowN.getWindow()));
         windowN.startThread();
