@@ -35,6 +35,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
+import org.ajgl.concurrent.Tasker;
 import org.ajgl.graphics.Graphics;
 import org.ajgl.graphics.VertexBufferedObject;
 import org.lwjgl.BufferUtils;
@@ -142,7 +143,7 @@ public class MainTest {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {//TODO Dispatch key events
                 if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                    glfwSetWindowShouldClose(window, GL_TRUE); 
+                    Tasker.executeASyncTask("GLFW_MAIN_THREAD");
             }
         });
     }
@@ -168,12 +169,6 @@ public class MainTest {
         triangleColor = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, bufferC);
         while ( glfwWindowShouldClose(window) == GL_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            
-            if(!windowN.getThread().isAlive() && !closed) {
-                glfwDestroyWindow(windowN.getWindow());
-                windowN.getErrorCallback().release();
-                closed = true;
-            }
             // Run Cycles
             input();
             update();
@@ -184,16 +179,13 @@ public class MainTest {
         
         // Release window and window call backs
         glfwDestroyWindow(window);
-        if(!closed) {
-            windowN.getThread().interrupt();
-            glfwDestroyWindow(windowN.getWindow());
-        }
         keyCallback.release();
         exit();
     }
     
     private void input() {
         glfwPollEvents();
+        Tasker.executeASyncTask("GLFW_MAIN_THREAD");
     }
     
     private void update() {
@@ -231,7 +223,7 @@ public class MainTest {
         
         windowN = new Window(1200, 800, "Test", 0, 0, null);
         windowN.setup();
-        windowN.setThread(new GameThread(windowN.getWindow()));
+        windowN.setThread(new GameThread(windowN));
         windowN.startThread();
         
         MainTest test = new MainTest();

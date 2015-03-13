@@ -16,6 +16,8 @@ import static org.lwjgl.opengl.GL11.glClear;
 
 import java.nio.FloatBuffer;
 
+import org.ajgl.concurrent.Task;
+import org.ajgl.concurrent.Tasker;
 import org.ajgl.graphics.Graphics;
 import org.ajgl.graphics.VertexBufferedObject;
 import org.lwjgl.BufferUtils;
@@ -31,17 +33,17 @@ import org.lwjgl.opengl.GLContext;
  */
 public class GameThread extends Thread {
     
-    private long windowHandler;
-    
+    //private long windowHandler;
+    private Window window;
     private int triangleData, triangleColor;
     
-    public GameThread(long windowHandler) {
-        this.windowHandler = windowHandler;
+    public GameThread(Window window) {
+        this.window = window;
     }
     
     protected void initGL() {
         
-        glfwMakeContextCurrent(windowHandler);     // Make the OpenGL context current
+        glfwMakeContextCurrent(window.getWindow());     // Make the OpenGL context current
         GLContext.createFromCurrent();      // Bind lwjgl with GLFW
         // Initialize openGl
         GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -75,17 +77,17 @@ public class GameThread extends Thread {
         initGL();
         setupTriangle();
         
-        while (glfwWindowShouldClose(windowHandler) == GL_FALSE) {
+        while (glfwWindowShouldClose(window.getWindow()) == GL_FALSE) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             // Run Cycles
             input();
             update();
             render();
             // Display Buffer swap
-            glfwSwapBuffers(windowHandler);
+            glfwSwapBuffers(window.getWindow());
         }
         
-        //MainTest.close = true;
+        exit();
     }
     
     private void input() {
@@ -110,8 +112,12 @@ public class GameThread extends Thread {
     }
     
     public void exit() {
-        // Terminate GLFW and release the GLFWerrorfun
-        glfwTerminate();
-        System.exit(1);
+        Tasker.postASyncTask(new Task("GLFW_MAIN_THREAD") {
+           @Override
+           public void execute() {
+               glfwDestroyWindow(window.getWindow());
+               window.getErrorCallback().release();
+           }
+        });
     }
 }
