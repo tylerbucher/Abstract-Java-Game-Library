@@ -36,7 +36,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * This class draws shapes to the screen through OpenGL. The 
  * rendering method that this class uses is "Vertex Arrays". Please 
- * note that of this moment (03/8/2015) OpenGL has Deprecated vertex 
+ * note that of this moment (03/8/2015) OpenGL has not deprecated vertex 
  * arrays. But they are not often used in modern OpenGL.
  * @author Tyler Bucher
  */
@@ -50,8 +50,8 @@ public final class VertexArrays {
      * @param stride - The stride offset; used for interleaving data
      * @param vertices - The color vertices
      */
-    @OpenGLInfo(fwdCompatible = false, openGLVersion = "1.1", status = "Release")
-    public static void setColorPointer(int size, int stride, FloatBuffer vertices) {
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
+    public static void colorPointer(int size, int stride, FloatBuffer vertices) {
         GL11.glColorPointer(size, stride, vertices);
     }
     
@@ -63,47 +63,45 @@ public final class VertexArrays {
      * @param stride - The stride offset; used for interleaving data
      * @param vertices - The texture vertices
      */
-    @OpenGLInfo(fwdCompatible = false, openGLVersion = "1.1", status = "Release")
-    public static void setTexturePointer(int size, int stride, FloatBuffer vertices) {
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
+    public static void texturePointer(int size, int stride, FloatBuffer vertices) {
         GL11.glTexCoordPointer(size, stride, vertices);
     }
     
     /**
-     * Draws the vertex array; Uses redundant vertices. You need to enable 
+     * Sets the vertex pointer of the vertex array. You need to enable 
      * {@link org.lwjgl.opengl.GL11#GL_VERTEX_ARRAY GL_VERTEX_ARRAY} before 
      * you can use this method.
-     * @param beginMode - The OpenGL begin mode
      * @param vertexPointData - The number of points per vertex data (i.e. 1-1D, 2-2D, 3-3D)
-     * @param vertexNumber - The number of vertices
-     * @param first - The start point of the array
      * @param stride - The stride offset; used for interleaving data
      * @param vertices - The vertex vertices
      */
-    @OpenGLInfo(fwdCompatible = false, openGLVersion = "1.1", status = "Release")
-    public static void drawArrays(@BeginMode int beginMode, int vertexPointData, int vertexNumber, int first, int stride, FloatBuffer vertices) {
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
+    public static void vertexPointer(int vertexPointData, int stride, FloatBuffer vertices) {
         // point to and draw vertex array
         GL11.glVertexPointer(vertexPointData, stride, vertices);
+    }
+    
+    /**
+     * Draws the vertex array; Uses redundant vertices.
+     * @param beginMode - The OpenGL begin mode
+     * @param vertexNumber - The number of vertices
+     * @param first - The start point of the array
+     */
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
+    public static void drawArrays(@BeginMode int beginMode, int vertexNumber, int first) {
         GL11.glDrawArrays(beginMode, first, vertexNumber);
     }
     
     /**
-     * Draws the vertex array; Does not use redundant vertices. You need to enable 
-     * {@link org.lwjgl.opengl.GL11#GL_VERTEX_ARRAY GL_VERTEX_ARRAY} before 
-     * you can use this method.
+     * Draws the vertex array; Does not use redundant vertices.
      * @param beginMode - The OpenGL begin mode
      * @param dataType - The OpenGL dataType
-     * @param vertexPointData - The number of points per vertex data (i.e. 1-1D, 2-2D, 3-3D)
      * @param vertexNumber - The number of vertices
-     * @param first - The start point of the array
-     * @param stride - The stride offset; used for interleaving data
-     * @param vertices - The vertex vertices
      * @param indices - The index vertices
      */
-    @OpenGLInfo(fwdCompatible = false, openGLVersion = "1.1", status = "Release")
-    public static void drawElements(@BeginMode int beginMode, @GLDataType int dataType, int vertexPointData, 
-            int vertexNumber, int first, int stride, FloatBuffer vertices, ByteBuffer indices) {
-        // point to and draw vertex array
-        GL11.glVertexPointer(vertexPointData, stride, vertices);
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
+    public static void drawElements(@BeginMode int beginMode, @GLDataType int dataType, int vertexNumber, ByteBuffer indices) {
         GL11.glDrawElements(beginMode, vertexNumber, dataType, indices);
     }
 }

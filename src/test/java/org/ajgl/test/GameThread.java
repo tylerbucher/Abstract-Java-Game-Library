@@ -106,7 +106,7 @@ public class GameThread extends Thread {
         Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
         
         VertexBufferedObject.colorPointer(triangleColor, 3, 0, 0, GL11.GL_FLOAT);
-        VertexBufferedObject.drawVboArrays(triangleData, 2, 3, 0, 0, 0, GL11.GL_FLOAT, GL11.GL_TRIANGLES);
+        //VertexBufferedObject.drawVboArrays(triangleData, 2, 3, 0, 0, 0, GL11.GL_FLOAT, GL11.GL_TRIANGLES);
         
         Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
     }
