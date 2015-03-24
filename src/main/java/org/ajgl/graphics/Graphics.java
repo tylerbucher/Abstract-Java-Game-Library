@@ -60,7 +60,7 @@ public class Graphics {
      * Binds the {@code textureID} to the current OpenGL context.
      * @param textureID - The id of the texture
      */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void bindTexture(@TextureFormat int textureFormat, int textureID) {
         GL11.glBindTexture(textureFormat, textureID);
     }
