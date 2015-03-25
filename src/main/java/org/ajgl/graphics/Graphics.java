@@ -25,7 +25,7 @@
 package org.ajgl.graphics;
 
 import org.ajgl.OpenGLInfo;
-import org.ajgl.graphics.UtilAnnotations.TextureFormat;
+import org.ajgl.graphics.UtilAnnotations.GlTextureFormat;
 import org.lwjgl.opengl.GL11;
 
 
@@ -61,7 +61,7 @@ public class Graphics {
      * @param textureID - The id of the texture
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static void bindTexture(@TextureFormat int textureFormat, int textureID) {
+    public static void bindTexture(@GlTextureFormat int textureFormat, int textureID) {
         GL11.glBindTexture(textureFormat, textureID);
     }
 }

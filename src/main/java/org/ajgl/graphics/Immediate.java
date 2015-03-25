@@ -25,7 +25,7 @@
 package org.ajgl.graphics;
 
 import org.ajgl.OpenGLInfo;
-import org.ajgl.graphics.UtilAnnotations.BeginMode;
+import org.ajgl.graphics.UtilAnnotations.GlBeginMode;
 import org.lwjgl.opengl.GL11;
 
 
@@ -44,7 +44,7 @@ public final class Immediate {
      * @param beginMode - The {@link UtilAnnotations#BeginMode BeginMode} to use
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void beginDraw(@BeginMode int beginMode) {
+    public static void beginDraw(@GlBeginMode int beginMode) {
         GL11.glBegin(beginMode);
     }
     

@@ -27,8 +27,8 @@ package org.ajgl.graphics;
 import java.nio.ByteBuffer;
 
 import org.ajgl.OpenGLInfo;
-import org.ajgl.graphics.UtilAnnotations.CompileMode;
-import org.ajgl.graphics.UtilAnnotations.GLDataType;
+import org.ajgl.graphics.UtilAnnotations.GlCompileMode;
+import org.ajgl.graphics.UtilAnnotations.GlDataType;
 import org.lwjgl.opengl.GL11;
 
 
@@ -60,7 +60,7 @@ public final class DisplayList {
      * @param compileMode - The OpenGL compile mode
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void newList(int listID, @CompileMode int compileMode) {
+    public static void newList(int listID, @GlCompileMode int compileMode) {
         GL11.glNewList(listID, compileMode);
     }
     
@@ -89,7 +89,7 @@ public final class DisplayList {
      * @param lists - The lists to draw
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void drawLists(int listID, int number, @GLDataType int dataType, ByteBuffer lists) {
+    public static void drawLists(int listID, int number, @GlDataType int dataType, ByteBuffer lists) {
         GL11.glListBase(listID);
         GL11.glCallLists(number, dataType, lists);
     }

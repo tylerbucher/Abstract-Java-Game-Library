@@ -34,7 +34,7 @@ public class UtilAnnotations {
      */
     @Retention(RetentionPolicy.SOURCE)
     @Target({ElementType.PARAMETER})
-    public @interface BeginMode {
+    public @interface GlBeginMode {
         
     }
     
@@ -56,7 +56,7 @@ public class UtilAnnotations {
      */
     @Retention(RetentionPolicy.SOURCE)
     @Target({ElementType.PARAMETER})
-    public @interface DrawMode {
+    public @interface GlDrawMode {
         
     }
     
@@ -71,45 +71,53 @@ public class UtilAnnotations {
      */
     @Retention(RetentionPolicy.SOURCE)
     @Target({ElementType.PARAMETER})
-    public @interface CompileMode {
+    public @interface GlCompileMode {
         
     }
     
     /**
-     * 
+     * The following constants are OpenGL Data-type pointers.
+     * <ul>
+     * <li>{@link org.lwjgl.opengl.GL11#GL_BYTE GL_BYTE}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_UNSIGNED_BYTE GL_UNSIGNED_BYTE}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_SHORT GL_SHORT}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_UNSIGNED_SHORT GL_UNSIGNED_SHORT}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_INT GL_INT}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_UNSIGNED_INT GL_UNSIGNED_INT}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_FLOAT GL_FLOAT}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_2_BYTES GL_2_BYTES}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_3_BYTES GL_3_BYTES}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_4_BYTES GL_4_BYTES}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_DOUBLE GL_DOUBLE}
+     * </ul>
      * @author Tyler Bucher
-     * @see org.lwjgl.opengl.GL11#GL_BYTE            GL_BYTE
-     * @see org.lwjgl.opengl.GL11#GL_UNSIGNED_BYTE   GL_UNSIGNED_BYTE
-     * @see org.lwjgl.opengl.GL11#GL_SHORT           GL_SHORT
-     * @see org.lwjgl.opengl.GL11#GL_UNSIGNED_SHORT  GL_UNSIGNED_SHORT
-     * @see org.lwjgl.opengl.GL11#GL_INT             GL_INT
-     * @see org.lwjgl.opengl.GL11#GL_UNSIGNED_INT    GL_UNSIGNED_INT
-     * @see org.lwjgl.opengl.GL11#GL_FLOAT           GL_FLOAT
      */
     @Retention(RetentionPolicy.SOURCE)
     @Target({ElementType.PARAMETER})
-    public @interface GLDataType {
+    public @interface GlDataType {
         
     }
     
     /**
-     * 
+     * The following are OpenGL texture constants.
+     * <ul>
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_1D TEXTURE_1D}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_2D TEXTURE_2D}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_RECTANGLE TEXTURE_RECTANGLE}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_3D TEXTURE_3D}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_BUFFER TEXTURE_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}
+     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}
+     * </ul>
      * @author Tyler Bucher
-     * @see org.lwjgl.opengl.GL11#TEXTURE_1D                    TEXTURE_1D
-     * @see org.lwjgl.opengl.GL11#TEXTURE_2D                    TEXTURE_2D
-     * @see org.lwjgl.opengl.GL11#TEXTURE_1D_ARRAY              TEXTURE_1D_ARRAY
-     * @see org.lwjgl.opengl.GL11#TEXTURE_RECTANGLE             TEXTURE_RECTANGLE
-     * @see org.lwjgl.opengl.GL11#TEXTURE_CUBE_MAP              TEXTURE_CUBE_MAP
-     * @see org.lwjgl.opengl.GL11#TEXTURE_3D                    TEXTURE_3D
-     * @see org.lwjgl.opengl.GL11#TEXTURE_2D_ARRAY              TEXTURE_2D_ARRAY
-     * @see org.lwjgl.opengl.GL11#TEXTURE_CUBE_MAP_ARRAY        TEXTURE_CUBE_MAP_ARRAY
-     * @see org.lwjgl.opengl.GL11#TEXTURE_BUFFER                TEXTURE_BUFFER
-     * @see org.lwjgl.opengl.GL11#TEXTURE_2D_MULTISAMPLE        TEXTURE_2D_MULTISAMPLE
-     * @see org.lwjgl.opengl.GL11#TEXTURE_2D_MULTISAMPLE_ARRAY  TEXTURE_2D_MULTISAMPLE_ARRAY
      */
     @Retention(RetentionPolicy.SOURCE)
     @Target({ElementType.PARAMETER})
-    public @interface TextureFormat {
+    public @interface GlTextureFormat {
         
     }
     
@@ -138,7 +146,34 @@ public class UtilAnnotations {
      * @author Tyler Bucher
      */
     @Retention(RetentionPolicy.SOURCE)
-    public @interface GLBegin {
+    public @interface GlBeginFunction {
+        
+    }
+    
+    /**
+     * For GL buffer binding the following functions should
+     * be applicable. To use the buffer functions you need to call
+     * {@link org.lwjgl.opengl.GL15#glBindBuffer(int, int) glBindBuffer} 
+     * then the function don't forget to call 
+     * {@link org.lwjgl.opengl.GL15#glBindBuffer(int, int) glBindBuffer(int, 0)} 
+     * again when you are done.
+     * <ul>
+     * <li>{@link org.lwjgl.opengl.GL11 glVertexPointer}
+     * <li>{@link org.lwjgl.opengl.GL11 glColorPointer}
+     * <li>{@link org.lwjgl.opengl.GL14 glSecondaryColorPointer}
+     * <li>{@link org.lwjgl.opengl.GL11 glIndexPointer}
+     * <li>{@link org.lwjgl.opengl.GL11 glNormalPointer}
+     * <li>{@link org.lwjgl.opengl.GL14 glFogCoordPointer}
+     * <li>{@link org.lwjgl.opengl.GL11 glTexCoordPointer}
+     * <li>{@link org.lwjgl.opengl.GL30 glVertexAttribPointer}
+     * <li>{@link org.lwjgl.opengl.GL11#glEdgeFlagPointer(int, java.nio.ByteBuffer) glEdgeFlagPointer}
+     * <li>{@link org.lwjgl.opengl.GL15 glBufferData}
+     * <li>{@link org.lwjgl.opengl.GL15 glBufferSubData}
+     * </ul>
+     * @author Tyler Bucher
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface GlBufferFunction {
         
     }
 }

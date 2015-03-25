@@ -28,8 +28,8 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import org.ajgl.OpenGLInfo;
-import org.ajgl.graphics.UtilAnnotations.BeginMode;
-import org.ajgl.graphics.UtilAnnotations.GLDataType;
+import org.ajgl.graphics.UtilAnnotations.GlBeginMode;
+import org.ajgl.graphics.UtilAnnotations.GlDataType;
 import org.lwjgl.opengl.GL11;
 
 
@@ -89,7 +89,7 @@ public final class VertexArrays {
      * @param first - The start point of the array
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void drawArrays(@BeginMode int beginMode, int vertexNumber, int first) {
+    public static void drawArrays(@GlBeginMode int beginMode, int vertexNumber, int first) {
         GL11.glDrawArrays(beginMode, first, vertexNumber);
     }
     
@@ -101,7 +101,7 @@ public final class VertexArrays {
      * @param indices - The index vertices
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void drawElements(@BeginMode int beginMode, @GLDataType int dataType, int vertexNumber, ByteBuffer indices) {
+    public static void drawElements(@GlBeginMode int beginMode, @GlDataType int dataType, int vertexNumber, ByteBuffer indices) {
         GL11.glDrawElements(beginMode, vertexNumber, dataType, indices);
     }
 }
