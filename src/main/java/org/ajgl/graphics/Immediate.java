@@ -25,6 +25,7 @@
 package org.ajgl.graphics;
 
 import org.ajgl.OpenGLInfo;
+import org.ajgl.graphics.UtilAnnotations.GlBeginFunction;
 import org.ajgl.graphics.UtilAnnotations.GlBeginMode;
 import org.lwjgl.opengl.GL11;
 
@@ -37,6 +38,7 @@ import org.lwjgl.opengl.GL11;
  * @author Tyler Bucher
  */
 @Deprecated
+@GlBeginFunction
 public final class Immediate {
     
     /**
