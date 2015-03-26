@@ -176,4 +176,31 @@ public class UtilAnnotations {
     public @interface GlBufferFunction {
         
     }
+    
+    /**
+     * The Following constants are OpenGL buffer data targets.
+     * <ul>
+     * <li>{@link org.lwjgl.opengl.GL15#GL_ARRAY_BUFFER GL_ARRAY_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL42#GL_ATOMIC_COUNTER_BUFFER GL_ATOMIC_COUNTER_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_COPY_READ_BUFFER GL_COPY_READ_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_COPY_WRITE_BUFFER GL_COPY_WRITE_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL43#GL_DISPATCH_INDIRECT_BUFFER GL_DISPATCH_INDIRECT_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL40#GL_DRAW_INDIRECT_BUFFER GL_DRAW_INDIRECT_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL15#GL_ELEMENT_ARRAY_BUFFER GL_ELEMENT_ARRAY_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL21#GL_PIXEL_PACK_BUFFER GL_PIXEL_PACK_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL21#GL_PIXEL_UNPACK_BUFFER GL_PIXEL_UNPACK_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL44#GL_QUERY_BUFFER GL_QUERY_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL43#GL_SHADER_STORAGE_BUFFER GL_SHADER_STORAGE_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_TEXTURE_BUFFER GL_TEXTURE_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL30#GL_TRANSFORM_FEEDBACK_BUFFER GL_TRANSFORM_FEEDBACK_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_UNIFORM_BUFFER GL_UNIFORM_BUFFER}
+     * </ul>
+     * @author Tyler Bucher
+     * @see {@link org.lwjgl.opengl.GL15 glBufferData}
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @Target({ElementType.PARAMETER})
+    public @interface GlBufferTarget {
+        
+    }
 }

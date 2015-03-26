@@ -161,42 +161,12 @@ public class MainTest {
         
         System.out.println("LWJGL Version: ["+Sys.getVersion()+"]");
         
-        int vbovertexhandler;
-        int vbocolorhandler;  
-        // ======================================= Vertex buffered object =======================================
-        FloatBuffer vertexBufferVBO = BufferUtils.createFloatBuffer(6);
-        vertexBufferVBO.put(new float[]{500, 500, 600, 500, 600, 600});
-        vertexBufferVBO.flip();
-        vbovertexhandler = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, vertexBufferVBO);
-        
-        FloatBuffer colorBufferVBO = BufferUtils.createFloatBuffer(9);
-        colorBufferVBO.put(new float[]{1,0,0, 0,1,0, 0,0,1});
-        colorBufferVBO.flip();
-        vbocolorhandler = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, colorBufferVBO);
-        
-        int handler = DisplayList.createDisplayListHandler(1);
-        GL11.glNewList(handler, GL11.GL_COMPILE);
-        {
-            Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
-            
-            VertexBufferedObject.vertexPointer(vbovertexhandler, 2, 0, 0, GL11.GL_FLOAT);
-            VertexBufferedObject.colorPointer(vbocolorhandler, 3, 0, 0, GL11.GL_FLOAT);
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-            
-            VertexBufferedObject.drawVboArrays(GL11.GL_TRIANGLES, 0, 3);
-            
-            Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
-        }
-        GL11.glEndList();
-        
         while ( glfwWindowShouldClose(window) == GL_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             // Run Cycles
             input();
             update();
             render();
-            
-            GL11.glCallList(handler);
             
             // Display Buffer swap
             glfwSwapBuffers(window);

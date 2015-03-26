@@ -24,11 +24,16 @@
 
 package org.ajgl.graphics;
 
+import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
 import org.ajgl.OpenGLInfo;
 import org.ajgl.graphics.UtilAnnotations.GlBeginMode;
 import org.ajgl.graphics.UtilAnnotations.GlBufferFunction;
+import org.ajgl.graphics.UtilAnnotations.GlBufferTarget;
 import org.ajgl.graphics.UtilAnnotations.GlDataType;
 import org.ajgl.graphics.UtilAnnotations.GlDrawMode;
 import org.lwjgl.opengl.GL11;
@@ -51,7 +56,71 @@ public final class VertexBufferedObject {
      * @return The int value of the handler. 
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static int createVboHandler(int bufferTarget, @GlDrawMode int drawMode, FloatBuffer vertices) {
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, ByteBuffer vertices) {
+        // Initialize vertex VBO handler
+        int handler = GL15.glGenBuffers();
+        GL15.glBindBuffer(bufferTarget, handler);
+        GL15.glBufferData(bufferTarget, vertices, drawMode);
+        GL15.glBindBuffer(bufferTarget, 0);
+        return handler;
+    }
+    
+    /**
+     * Creates a vertex buffer object handler.
+     * @param drawMode - The OpenGL draw mode of the object.
+     * @param vertices - The vertices of the object
+     * @return The int value of the handler. 
+     */
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, ShortBuffer vertices) {
+        // Initialize vertex VBO handler
+        int handler = GL15.glGenBuffers();
+        GL15.glBindBuffer(bufferTarget, handler);
+        GL15.glBufferData(bufferTarget, vertices, drawMode);
+        GL15.glBindBuffer(bufferTarget, 0);
+        return handler;
+    }
+    
+    /**
+     * Creates a vertex buffer object handler.
+     * @param drawMode - The OpenGL draw mode of the object.
+     * @param vertices - The vertices of the object
+     * @return The int value of the handler. 
+     */
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, IntBuffer vertices) {
+        // Initialize vertex VBO handler
+        int handler = GL15.glGenBuffers();
+        GL15.glBindBuffer(bufferTarget, handler);
+        GL15.glBufferData(bufferTarget, vertices, drawMode);
+        GL15.glBindBuffer(bufferTarget, 0);
+        return handler;
+    }
+    
+    /**
+     * Creates a vertex buffer object handler.
+     * @param drawMode - The OpenGL draw mode of the object.
+     * @param vertices - The vertices of the object
+     * @return The int value of the handler. 
+     */
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, FloatBuffer vertices) {
+        // Initialize vertex VBO handler
+        int handler = GL15.glGenBuffers();
+        GL15.glBindBuffer(bufferTarget, handler);
+        GL15.glBufferData(bufferTarget, vertices, drawMode);
+        GL15.glBindBuffer(bufferTarget, 0);
+        return handler;
+    }
+    
+    /**
+     * Creates a vertex buffer object handler.
+     * @param drawMode - The OpenGL draw mode of the object.
+     * @param vertices - The vertices of the object
+     * @return The int value of the handler. 
+     */
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, DoubleBuffer vertices) {
         // Initialize vertex VBO handler
         int handler = GL15.glGenBuffers();
         GL15.glBindBuffer(bufferTarget, handler);
