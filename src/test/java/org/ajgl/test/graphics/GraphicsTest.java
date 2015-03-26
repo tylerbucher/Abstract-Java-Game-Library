@@ -14,6 +14,7 @@ import org.ajgl.graphics.VertexBufferedObject;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
 
 
 /**
@@ -142,28 +143,34 @@ public class GraphicsTest {
     static {
         // Vertex buffer setup
         FloatBuffer vertexBufferVAO = BufferUtils.createFloatBuffer(6);
-        vertexBufferVAO.put(new float[]{600, 10, 550, 50, 500, 10});
+        vertexBufferVAO.put(new float[]{600,10, 550,50, 500,10});
         vertexBufferVAO.flip();
         // VBO vertex handler
-        vbobvertexhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, vertexBufferVAO);
+//        vbobvertexhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, vertexBufferVAO, 2);
         // Color buffer setup
         FloatBuffer colorBufferVAO = BufferUtils.createFloatBuffer(9);
         colorBufferVAO.put(new float[]{1,0,0, 0,1,0, 0,0,1});
         colorBufferVAO.flip();
         // VBO color handler
-        vbobcolorhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, colorBufferVAO);
+//        vbobcolorhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, colorBufferVAO, 3);
         // VAO object handler
         vaohandler = VertexArrayObject.createVaoHandler();
         // VAO Setup
         VertexArrayObject.bindVao(vaohandler); {
+            // VBO vertex handler
+            vbobvertexhandler = VertexArrayObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, vertexBufferVAO, 
+                    0, 2, GL11.GL_FLOAT, false, 0, 0);
+            // VBO color handler
+            vbobcolorhandler = VertexArrayObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, colorBufferVAO, 
+                    1, 3, GL11.GL_FLOAT, false, 0, 0);
             // Vertex pointer
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobvertexhandler);
-            GL11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
+            //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobvertexhandler);
+            //GL11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
             // Color pointer
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobcolorhandler);
-            GL11.glColorPointer(3, GL11.GL_FLOAT, 0, 0);
+            //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobcolorhandler);
+            //GL11.glColorPointer(3, GL11.GL_FLOAT, 0, 0);
             // Clear binding
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+            //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         } VertexArrayObject.bindVao(0);  // Unbind VAO
     }
     
@@ -171,11 +178,16 @@ public class GraphicsTest {
         // Bind VAO
         VertexArrayObject.bindVao(vaohandler); {
             // Enable client state
-            Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
+//            Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
+            GL20.glEnableVertexAttribArray(0);
+            GL20.glEnableVertexAttribArray(1);
             // draw VBO
             VertexBufferedObject.drawVboArrays(GL11.GL_TRIANGLES, 0, 3);
+            
+            GL20.glDisableVertexAttribArray(0);
+            GL20.glDisableVertexAttribArray(1);
             // Disable client state
-            Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
+//            Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
         } VertexArrayObject.bindVao(0); // Unbind VAO
     }
     // ======================================= Vertex Array Object ==========================================
