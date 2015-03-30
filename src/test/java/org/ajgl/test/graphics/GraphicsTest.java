@@ -4,6 +4,7 @@
 package org.ajgl.test.graphics;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import org.ajgl.graphics.DisplayList;
 import org.ajgl.graphics.Graphics;
@@ -121,6 +122,7 @@ public class GraphicsTest {
     // ======================================= Vertex Buffered Object =======================================
     private static int vbovertexhandler;
     private static int vbocolorhandler;
+    private static int vboindexhandler;
     
     static {
         // Vertex buffer setup
@@ -135,32 +137,39 @@ public class GraphicsTest {
         colorBufferVBO.flip();
         // VBO color handler
         vbocolorhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, colorBufferVBO);
+        // Index buffer setup
+        IntBuffer indexBufferVBO = BufferUtils.createIntBuffer(3);
+        indexBufferVBO.put(new int[]{0,1,2});//-1,-1,0 -1,1,0, 1,-1,0
+        indexBufferVBO.flip();
+        // VBO color handler
+        vboindexhandler = VertexBufferedObject.createVboHandler(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, indexBufferVBO);
     }
     
     public static void vboDraw() {
 //        GL20.glUseProgram(shaderProgram.getID());
         // Enable client state
-//        Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
+        Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY, GL11.GL_INDEX_ARRAY);
+        // Index pointer
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboindexhandler);
+        GL11.glIndexPointer(GL11.GL_FLOAT, 0, 0);
         // Vertex pointer
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbovertexhandler);
-        GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-//        GL11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
+        GL11.glVertexPointer(3, GL11.GL_FLOAT, 0, 0);
         // Color pointer
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbocolorhandler);
-        GL20.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, 0, 0);
-//        GL11.glColorPointer(3, GL11.GL_FLOAT, 0, 0);
+        GL11.glColorPointer(3, GL11.GL_FLOAT, 0, 0);
+        
+        
+        // Draw VBO
+//        VertexBufferedObject.drawVboArrays(GL11.GL_TRIANGLES, 0, 3);
+        VertexBufferedObject.drawVboElements(GL11.GL_TRIANGLES, 3, GL11.GL_UNSIGNED_INT, 0);
+        
         // Clear binding
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         
-        GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
-        // Draw VBO
-        VertexBufferedObject.drawVboArrays(GL11.GL_TRIANGLES, 0, 3);
-        
-        GL20.glDisableVertexAttribArray(0);
-        GL20.glDisableVertexAttribArray(1);
         // Disable client state
-        Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
+        Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY, GL11.GL_INDEX_ARRAY);
     }
     // ======================================= Vertex Buffered Object =======================================
     

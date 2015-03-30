@@ -1,11 +1,18 @@
-#version 150
+#version 410 core
 
-in vec3 in_Position;
-in vec3 in_Color;
+layout(location=0) in vec3 position;
+layout(location=1) in vec3 color;
 
-out vec4 pass_Color;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
-void main(void) {
-    gl_Position = vec4(in_Position, 1.0);
-    pass_Color = vec4(in_Color, 1.0);
+out vec3 oColor;
+
+void main()
+{
+    oColor = color;
+    
+    mat4 mvp = projection * view * model;
+    gl_Position = mvp * vec4(position, 1.0f);
 }

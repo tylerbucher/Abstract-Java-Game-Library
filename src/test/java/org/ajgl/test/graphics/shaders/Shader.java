@@ -65,4 +65,25 @@ public class Shader {
         //CharSequence source = builder.toString();
         return new Shader(type, shaderSource);
     }
+    
+    public static CharSequence loadShader(String path) {
+        StringBuilder shaderSource = new StringBuilder();
+        int shaderID = 0;
+         
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(path));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                shaderSource.append(line).append("\n");
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.err.println("Could not read file.");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        //CharSequence source = builder.toString();
+        return shaderSource;
+    }
 }
