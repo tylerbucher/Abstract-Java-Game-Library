@@ -148,7 +148,7 @@ public class Test {
         
         // =================== VAO Setup ========================
         FloatBuffer vertexBufferVAO = BufferUtils.createFloatBuffer(9);
-        vertexBufferVAO.put(new float[]{-0.95f,-0.95f,0, -0.5f,-0.95f,0, -0.95f,-0.5f,0});//{-0.95f,-0.95f,0, -0.5f,-0.95f,0, -0.95f,-0.5f,0}
+        vertexBufferVAO.put(new float[]{0,0,0, 1.5f,0,0, 0,1.5f,0});//{-0.95f,-0.95f,0, -0.5f,-0.95f,0, -0.95f,-0.5f,0}
         vertexBufferVAO.flip();
         
         FloatBuffer colorBufferVAO = BufferUtils.createFloatBuffer(9);
@@ -220,22 +220,6 @@ public class Test {
         GL20.glAttachShader(programID, sahderVert);
         GL20.glAttachShader(programID, sahderFrag);
         
-        GL20.glBindAttribLocation(programID, 0, "position");
-        GL20.glBindAttribLocation(programID, 1, "color");
-        
-        int uniModel = GL20.glGetUniformLocation(programID, "model");
-        Matrix4f model = new Matrix4f();
-        GL40.glUniformMatrix4(uniModel, false, model.getBuffer());
-
-        int uniView = GL20.glGetUniformLocation(programID, "view");
-        Matrix4f view = new Matrix4f();
-        GL40.glUniformMatrix4(uniView, false, view.getBuffer());
-
-        int uniProjection = GL20.glGetUniformLocation(programID, "projection");
-        float ratio = 1200f / 800f;
-        Matrix4f projection = Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
-        GL40.glUniformMatrix4(uniProjection, false, projection.getBuffer());
-        
         GL20.glLinkProgram(programID);
         GL20.glValidateProgram(programID);
         // =================== Shader Program ===================
@@ -248,18 +232,26 @@ public class Test {
         // =============== Shader Program Check =================
         GL20.glUseProgram(programID);
         
-//        int uniModel = GL20.glGetUniformLocation(programID, "model");
-//        Matrix4f model = new Matrix4f();
-//        GL40.glUniformMatrix4(uniModel, false, model.getBuffer());
-//
-//        int uniView = GL20.glGetUniformLocation(programID, "view");
-//        Matrix4f view = new Matrix4f();
-//        GL40.glUniformMatrix4(uniView, false, view.getBuffer());
-//
-//        int uniProjection = GL20.glGetUniformLocation(programID, "projection");
-//        float ratio = 1200f / 800f;
-//        Matrix4f projection = Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
-//        GL40.glUniformMatrix4(uniProjection, false, projection.getBuffer());
+        int uniModel = GL20.glGetUniformLocation(programID, "model");
+        if(uniModel != -1) {
+            Matrix4f model = new Matrix4f();
+            GL40.glUniformMatrix4(uniModel, false, model.getBuffer());
+        }
+
+        int uniView = GL20.glGetUniformLocation(programID, "view");
+        if(uniModel != -1) {
+            Matrix4f view = new Matrix4f();
+            GL40.glUniformMatrix4(uniView, false, view.getBuffer());
+        }
+
+        int uniProjection = GL20.glGetUniformLocation(programID, new String("projection"));
+        if(uniModel != -1) {
+            float ratio = 1200f / 800f;
+            Matrix4f projection = Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
+            GL40.glUniformMatrix4(uniProjection, false, projection.getBuffer());
+        }
+        
+        System.out.println("m: "+uniModel+"\nv: "+uniView+"\np: "+uniProjection);
         
         
         GL20.glUseProgram(0);
@@ -272,19 +264,6 @@ public class Test {
             input();
             
             GL20.glUseProgram(programID);
-            
-//            int uniModel = GL20.glGetUniformLocation(programID, "model");
-//            Matrix4f model = new Matrix4f();
-//            GL40.glUniformMatrix4(uniModel, false, model.getBuffer());
-//
-//            int uniView = GL20.glGetUniformLocation(programID, "view");
-//            Matrix4f view = new Matrix4f();
-//            GL40.glUniformMatrix4(uniView, false, view.getBuffer());
-//
-//            int uniProjection = GL20.glGetUniformLocation(programID, "projection");
-//            float ratio = 1200f / 800f;
-//            Matrix4f projection = Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
-//            GL40.glUniformMatrix4(uniProjection, false, projection.getBuffer());
             
             GL30.glBindVertexArray(vaoID);
             {
