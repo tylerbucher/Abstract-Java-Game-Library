@@ -148,7 +148,7 @@ public class Test {
         
         // =================== VAO Setup ========================
         FloatBuffer vertexBufferVAO = BufferUtils.createFloatBuffer(9);
-        vertexBufferVAO.put(new float[]{0,0,0, 1.5f,0,0, 0,1.5f,0});//{-0.95f,-0.95f,0, -0.5f,-0.95f,0, -0.95f,-0.5f,0}
+        vertexBufferVAO.put(new float[]{50,50,0, 150,50,0, 50,150,0});//{-0.95f,-0.95f,0, -0.5f,-0.95f,0, -0.95f,-0.5f,0}
         vertexBufferVAO.flip();
         
         FloatBuffer colorBufferVAO = BufferUtils.createFloatBuffer(9);
@@ -166,7 +166,7 @@ public class Test {
             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertHandle);
             GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBufferVAO, GL15.GL_STATIC_DRAW);
             GL20.glEnableVertexAttribArray(0);
-            GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, true, 0, 0);
+            GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
             
             int colorHandle = GL15.glGenBuffers();
@@ -247,7 +247,7 @@ public class Test {
         int uniProjection = GL20.glGetUniformLocation(programID, new String("projection"));
         if(uniModel != -1) {
             float ratio = 1200f / 800f;
-            Matrix4f projection = Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
+            Matrix4f projection = Matrix4f.orthographic(0f, 1200f, 0f, 800f, -1f, 1f);//Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
             GL40.glUniformMatrix4(uniProjection, false, projection.getBuffer());
         }
         
