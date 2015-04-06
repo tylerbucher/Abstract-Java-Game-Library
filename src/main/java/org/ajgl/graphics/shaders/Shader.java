@@ -71,7 +71,7 @@ public class Shader {
         return shaderSource;
     }
     
-    private final int id; // Shader id as given by OpenGL
+    public final int id; // Shader id as given by OpenGL
     
     /**
      * Creates a new shader object.
@@ -92,14 +92,6 @@ public class Shader {
         int status = GL20.glGetShaderi(id, GL20.GL_COMPILE_STATUS);
         
         return status == 0 ? false : true;
-    }
-    
-    /**
-     * Returns the id of the shader.
-     * @return Id of the shader.
-     */
-    public int getID() {
-        return id;
     }
     
     /**

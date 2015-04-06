@@ -34,7 +34,7 @@ import org.lwjgl.opengl.GL20;
  */
 public class ShaderProgram {
     
-    private final int id;   // The shader program id
+    public final int id;   // The shader program id
     
     /**
      * Creates a new basic ShaderProgram object.
@@ -47,16 +47,16 @@ public class ShaderProgram {
      * Attaches a shader to the program.
      * @param shader - The shader to be attached.
      */
-    public void attachShader(int shader) {
-        GL20.glAttachShader(id, shader);
+    public void attachShader(Shader shader) {
+        GL20.glAttachShader(id, shader.id);
     }
     
     /**
      * Detaches a shader from the program.
      * @param shader - The shader to be detached.
      */
-    public void detachShader(int shader) {
-        GL20.glDetachShader(id, shader);
+    public void detachShader(Shader shader) {
+        GL20.glDetachShader(id, shader.id);
     }
     
     /**
