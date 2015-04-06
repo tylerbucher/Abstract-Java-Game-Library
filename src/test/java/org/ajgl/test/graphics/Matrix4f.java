@@ -244,12 +244,13 @@ public class Matrix4f {
      *
      * @return Vector as FloatBuffer
      */
-    public DoubleBuffer getBuffer() {
-        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(16);
+    public FloatBuffer getBuffer() {
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
         buffer.put(m00).put(m10).put(m20).put(m30);
         buffer.put(m01).put(m11).put(m21).put(m31);
         buffer.put(m02).put(m12).put(m22).put(m32);
         buffer.put(m03).put(m13).put(m23).put(m33);
+        
         buffer.flip();
         return buffer;
     }
@@ -279,6 +280,7 @@ public class Matrix4f {
         ortho.m03 = tx;
         ortho.m13 = ty;
         ortho.m23 = tz;
+        ortho.m33 = 1f;
 
         return ortho;
     }

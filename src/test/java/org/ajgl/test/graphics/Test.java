@@ -29,6 +29,7 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
@@ -46,6 +47,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL33;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GLContext;
 
@@ -128,7 +130,7 @@ public class Test {
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GL11.glOrtho(0, WIDTH, 0, HEIGHT, 1, -1);
+        GL11.glOrtho(0, 1200f, 0, 800f, 1, -1);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         
         // Enable alpha transparency (for overlay image)
@@ -146,57 +148,26 @@ public class Test {
         
         // ===============================================================================================
         
-        // =================== VAO Setup ========================
-        FloatBuffer vertexBufferVAO = BufferUtils.createFloatBuffer(9);
-        vertexBufferVAO.put(new float[]{50,50,0, 150,50,0, 50,150,0});//{-0.95f,-0.95f,0, -0.5f,-0.95f,0, -0.95f,-0.5f,0}
-        vertexBufferVAO.flip();
-        
-        FloatBuffer colorBufferVAO = BufferUtils.createFloatBuffer(9);
-        colorBufferVAO.put(new float[]{1,0,0, 0,1,0, 0,0,1});
-        colorBufferVAO.flip();
-        
-        IntBuffer indicesBufferVAO = BufferUtils.createIntBuffer(3);
-        indicesBufferVAO.put(new int[]{0, 1, 2});
-        indicesBufferVAO.flip();
-        
-        int vaoID = GL30.glGenVertexArrays();
-        GL30.glBindVertexArray(vaoID);
-        {
-            int vertHandle = GL15.glGenBuffers();
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertHandle);
-            GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBufferVAO, GL15.GL_STATIC_DRAW);
-            GL20.glEnableVertexAttribArray(0);
-            GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-            
-            int colorHandle = GL15.glGenBuffers();
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorHandle);
-            GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colorBufferVAO, GL15.GL_STATIC_DRAW);
-            GL20.glEnableVertexAttribArray(1);
-            GL20.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, 0, 0);
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-        }
-        GL30.glBindVertexArray(0);
-        
-        int indicesHandle = GL15.glGenBuffers();
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesHandle);
-        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBufferVAO, GL15.GL_STATIC_DRAW);
-        //GL20.glEnableVertexAttribArray(2);
-        //GL20.glVertexAttribPointer(2, 1, GL11.GL_UNSIGNED_INT, false, 0, 0);
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
-        
-        // =================== VAO Setup ========================
-        
         // =================== Shader Setup =====================
         String vertPath = "src/test/java/org/ajgl/test/graphics/shaders/VertexShaderTest.glsl";
         String fragPath = "src/test/java/org/ajgl/test/graphics/shaders/FragmentShaderTest.glsl";
         
         int sahderVert = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-        GL20.glShaderSource(sahderVert, Shader.loadShader(vertPath));
+        try {
+            GL20.glShaderSource(sahderVert, Shader.loadShader(vertPath));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         GL20.glCompileShader(sahderVert);
         
         int sahderFrag = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-        GL20.glShaderSource(sahderFrag, Shader.loadShader(fragPath));
+        try {
+            GL20.glShaderSource(sahderFrag, Shader.loadShader(fragPath));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         GL20.glCompileShader(sahderFrag);
         
         System.out.println("v: "+sahderVert+"\n"+"f: "+sahderFrag);
@@ -220,6 +191,9 @@ public class Test {
         GL20.glAttachShader(programID, sahderVert);
         GL20.glAttachShader(programID, sahderFrag);
         
+        //GL20.glBindAttribLocation(programID, 0, "position");
+        //GL20.glBindAttribLocation(programID, 1, "color");
+        
         GL20.glLinkProgram(programID);
         GL20.glValidateProgram(programID);
         // =================== Shader Program ===================
@@ -234,27 +208,89 @@ public class Test {
         
         int uniModel = GL20.glGetUniformLocation(programID, "model");
         if(uniModel != -1) {
+            System.out.println("true");
             Matrix4f model = new Matrix4f();
-            GL40.glUniformMatrix4(uniModel, false, model.getBuffer());
+            GL20.glUniformMatrix4(uniModel, false, model.getBuffer());
         }
 
         int uniView = GL20.glGetUniformLocation(programID, "view");
-        if(uniModel != -1) {
+        if(uniView != -1) {
             Matrix4f view = new Matrix4f();
-            GL40.glUniformMatrix4(uniView, false, view.getBuffer());
+            GL20.glUniformMatrix4(uniView, false, view.getBuffer());
         }
 
-        int uniProjection = GL20.glGetUniformLocation(programID, new String("projection"));
-        if(uniModel != -1) {
-            float ratio = 1200f / 800f;
-            Matrix4f projection = Matrix4f.orthographic(0f, 1200f, 0f, 800f, -1f, 1f);//Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
-            GL40.glUniformMatrix4(uniProjection, false, projection.getBuffer());
+        int uniProjection = GL20.glGetUniformLocation(programID, "projection");
+        if(uniProjection != -1) {
+            Matrix4f projection = Matrix4f.orthographic(0f, 1200f, 0f, 800f, 1f, -1f);//Matrix4f.orthographic(-ratio, ratio, -1f, 1f, -1f, 1f);
+            GL20.glUniformMatrix4(uniProjection, false, projection.getBuffer());
         }
         
-        System.out.println("m: "+uniModel+"\nv: "+uniView+"\np: "+uniProjection);
+        System.out.println("model: "+uniModel+"\nview: "+uniView+"\nprojection: "+uniProjection);
         
+        int uniTest = GL20.glGetUniformLocation(programID, "test");
+        if(uniTest != -1) {
+            GL20.glUniform1f(uniTest, 1.0f);
+        }
         
         GL20.glUseProgram(0);
+        
+     // =================== VAO Setup ========================
+        FloatBuffer vertexBufferVAO = BufferUtils.createFloatBuffer(9);
+        vertexBufferVAO.put(new float[]{50f,50f,0f, 150f,50f,0f, 50f,150f,0f});//{-0.95f,-0.95f,0, -0.5f,-0.95f,0, -0.95f,-0.5f,0}
+        vertexBufferVAO.flip();//{50f,50f,0f, 150f,50f,0f, 50f,150f,0f}
+        
+        FloatBuffer colorBufferVAO = BufferUtils.createFloatBuffer(9);
+        colorBufferVAO.put(new float[]{1f,0f,0f, 0f,1f,0f, 0f,0f,1f});
+        colorBufferVAO.flip();
+        
+        IntBuffer indicesBufferVAO = BufferUtils.createIntBuffer(3);
+        indicesBufferVAO.put(new int[]{0, 1, 2});
+        indicesBufferVAO.flip();
+        
+        int pos = GL20.glGetAttribLocation(programID, "position");
+        int color = GL20.glGetAttribLocation(programID, "color");
+        System.out.println("p: "+pos+"\nc: "+color);
+        
+        int vertHandle = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertHandle);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBufferVAO, GL15.GL_STATIC_DRAW);
+        GL20.glEnableVertexAttribArray(pos);
+        GL20.glVertexAttribPointer(pos, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        
+        int colorHandle = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorHandle);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colorBufferVAO, GL15.GL_STATIC_DRAW);
+        GL20.glEnableVertexAttribArray(color);
+        GL20.glVertexAttribPointer(color, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        
+        int vaoID = GL30.glGenVertexArrays();
+        GL30.glBindVertexArray(vaoID);
+        {
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertHandle);
+            GL20.glEnableVertexAttribArray(pos);
+            GL20.glVertexAttribPointer(pos, 3, GL11.GL_FLOAT, false, 0, 0);
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+            
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorHandle);
+            GL20.glEnableVertexAttribArray(color);
+            GL20.glVertexAttribPointer(color, 3, GL11.GL_FLOAT, false, 0, 0);
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        }
+        GL30.glBindVertexArray(0);
+        
+        GL20.glDisableVertexAttribArray(pos);
+      GL20.glDisableVertexAttribArray(color);
+        
+        int indicesHandle = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesHandle);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBufferVAO, GL15.GL_STATIC_DRAW);
+        //GL20.glEnableVertexAttribArray(2);
+        //GL20.glVertexAttribPointer(2, 1, GL11.GL_UNSIGNED_INT, false, 0, 0);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+        
+        // =================== VAO Setup ========================
         // ===============================================================================================
         
         while ( glfwWindowShouldClose(window) == GL_FALSE ) {
@@ -267,8 +303,8 @@ public class Test {
             
             GL30.glBindVertexArray(vaoID);
             {
-                GL20.glEnableVertexAttribArray(0);
-                GL20.glEnableVertexAttribArray(1);
+                GL20.glEnableVertexAttribArray(pos);
+                GL20.glEnableVertexAttribArray(color);
                 
                 GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesHandle);
                 
@@ -277,23 +313,23 @@ public class Test {
                 
                 GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
                 
-                GL20.glDisableVertexAttribArray(0);
-                GL20.glDisableVertexAttribArray(1);
+                GL20.glDisableVertexAttribArray(pos);
+                GL20.glDisableVertexAttribArray(color);
             }
             GL30.glBindVertexArray(0);
             
 //            GL11.glBegin(GL11.GL_TRIANGLES); {
-//                GL11.glIndexi(0);
+//                //GL11.glIndexi(0);
 //                GL11.glColor3f(1, 0, 0);
-//                GL11.glVertex3f(10, 10, 0);
+//                GL11.glVertex3f(-1, -1, 0);
 //                
-//                GL11.glIndexi(1);
+//                //GL11.glIndexi(1);
 //                GL11.glColor3f(0, 1, 0);
-//                GL11.glVertex3f(50, 10, 0);
+//                GL11.glVertex3f(1, -1, 0);
 //                
-//                GL11.glIndexi(2);
+//                //GL11.glIndexi(2);
 //                GL11.glColor3f(0, 0, 1);
-//                GL11.glVertex3f(10, 50, 0);
+//                GL11.glVertex3f(-1, 1, 0);
 //            } GL11.glEnd();
             
             GL20.glUseProgram(0);

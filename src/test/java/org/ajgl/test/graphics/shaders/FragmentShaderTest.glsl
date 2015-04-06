@@ -1,4 +1,4 @@
-#version 410 core
+#version 400
 
 in vec3 oColor;
 

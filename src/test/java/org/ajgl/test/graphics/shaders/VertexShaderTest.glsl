@@ -1,4 +1,4 @@
-#version 410 core
+#version 400
 
 layout(location=0) in vec3 position;
 layout(location=1) in vec3 color;
@@ -12,7 +12,6 @@ out vec3 oColor;
 void main()
 {
     oColor = color;
-    
     mat4 mvp = projection * view * model;
-    gl_Position = projection * view * model * vec4(position, 1.0f);
+    gl_Position = mvp * vec4(position, 1.0f);
 }
