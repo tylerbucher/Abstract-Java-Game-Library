@@ -35,7 +35,6 @@ import org.lwjgl.opengl.GL20;
  * This class is designed to represent a temporary shader 
  * object that should be loaded by a ShaderProgram.
  * @author Tyler Bucher
- *
  */
 public class Shader {
     

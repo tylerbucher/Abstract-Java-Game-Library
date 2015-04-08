@@ -1,6 +1,27 @@
 /**
+ * The MIT License (MIT)
  * 
+ * Copyright (c) 2015 Tyler Bucher
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
 package org.ajgl.test.graphics;
 
 import java.nio.FloatBuffer;
@@ -12,38 +33,18 @@ import org.ajgl.graphics.Immediate;
 import org.ajgl.graphics.VertexArrayObject;
 import org.ajgl.graphics.VertexArrays;
 import org.ajgl.graphics.VertexBufferedObject;
-import org.ajgl.test.MainTest;
-import org.ajgl.test.graphics.shaders.Shader;
-import org.ajgl.test.graphics.shaders.ShaderProgram;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
 
 
 /**
- * @author Tyler
- *
+ * This class is designed to test all of the 
+ * fixed pipeline OpenGL drawing functions.
+ * @author Tyler Bucher
  */
 @SuppressWarnings("deprecation")
 public class GraphicsTest {
-    
-    // ======================================= Load Shaders =================================================
-//    private static Shader vertexShader;
-//    private static Shader fragmentShader;
-//    public static ShaderProgram shaderProgram;
-//    
-//    static {
-//        vertexShader = Shader.loadShader(GL20.GL_VERTEX_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/VertexShaderTest.glsl");
-//        fragmentShader = Shader.loadShader(GL20.GL_FRAGMENT_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/FragmentShaderTest.glsl");
-//        
-//        shaderProgram = new ShaderProgram();
-//        shaderProgram.attachShader(vertexShader);
-//        shaderProgram.attachShader(fragmentShader);
-//        GL20.glValidateProgram(shaderProgram.getID());
-////        shaderProgram.link();
-//    }
-    // ======================================= Load Shaders =================================================
     
     // ======================================= Immediate Mode ===============================================
     public static void immidateDraw() {
@@ -139,14 +140,13 @@ public class GraphicsTest {
         vbocolorhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, colorBufferVBO);
         // Index buffer setup
         IntBuffer indexBufferVBO = BufferUtils.createIntBuffer(3);
-        indexBufferVBO.put(new int[]{0,1,2});//-1,-1,0 -1,1,0, 1,-1,0
+        indexBufferVBO.put(new int[]{0,1,2});
         indexBufferVBO.flip();
         // VBO color handler
         vboindexhandler = VertexBufferedObject.createVboHandler(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, indexBufferVBO);
     }
     
     public static void vboDraw() {
-//        GL20.glUseProgram(shaderProgram.getID());
         // Enable client state
         Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY, GL11.GL_INDEX_ARRAY);
         // Index pointer
@@ -158,16 +158,13 @@ public class GraphicsTest {
         // Color pointer
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbocolorhandler);
         GL11.glColorPointer(3, GL11.GL_FLOAT, 0, 0);
-        
-        
         // Draw VBO
-//        VertexBufferedObject.drawVboArrays(GL11.GL_TRIANGLES, 0, 3);
         VertexBufferedObject.drawVboElements(GL11.GL_TRIANGLES, 3, GL11.GL_UNSIGNED_INT, 0);
-        
+        // Alternate draw method
+        //VertexBufferedObject.drawVboArrays(GL11.GL_TRIANGLES, 0, 3);
         // Clear binding
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
-        
         // Disable client state
         Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY, GL11.GL_INDEX_ARRAY);
     }
@@ -178,76 +175,43 @@ public class GraphicsTest {
     private static int vbobvertexhandler;
     private static int vbobcolorhandler;
     
-    public static void setupVAO() {
-        int v = GL20.glGetAttribLocation(MainTest.shaderProgram.getID(), "in_Position");
-        int c = GL20.glGetAttribLocation(MainTest.shaderProgram.getID(), "in_Color");
+    static {
         // Vertex buffer setup
         FloatBuffer vertexBufferVAO = BufferUtils.createFloatBuffer(9);
         vertexBufferVAO.put(new float[]{600,10,0, 550,50,0, 500,10,0});
         vertexBufferVAO.flip();
         // VBO vertex handler
-//        vbobvertexhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, vertexBufferVAO, 2);
+        vbobvertexhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, vertexBufferVAO);
         // Color buffer setup
         FloatBuffer colorBufferVAO = BufferUtils.createFloatBuffer(9);
         colorBufferVAO.put(new float[]{1,0,0, 0,1,0, 0,0,1});
         colorBufferVAO.flip();
         // VBO color handler
-//        vbobcolorhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, colorBufferVAO, 3);
+        vbobcolorhandler = VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, colorBufferVAO);
         // VAO object handler
-        
-//        int vbobvertexhandler = GL15.glGenBuffers();
-//        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobvertexhandler);
-//        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBufferVAO, GL15.GL_STATIC_DRAW);
-//        
-//        int vbobcolorhandler = GL15.glGenBuffers();
-//        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobcolorhandler);
-//        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colorBufferVAO, GL15.GL_STATIC_DRAW);
-//        
-//        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-        
         vaohandler = VertexArrayObject.createVaoHandler();
         // VAO Setup
         VertexArrayObject.bindVao(vaohandler); {
-//            GL20.glEnableVertexAttribArray(0);
-//            GL20.glEnableVertexAttribArray(1);
-            // VBO vertex handler
-            vbobvertexhandler = VertexArrayObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, vertexBufferVAO, 
-                    0, 3, GL11.GL_FLOAT, false, 0, 0);
-            // VBO color handler
-            vbobcolorhandler = VertexArrayObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, colorBufferVAO, 
-                    1, 3, GL11.GL_FLOAT, false, 0, 0);
-//            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobvertexhandler);
-//            GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-//            
-//            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobcolorhandler);
-//            GL20.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, 0, 0);
-//            
-//            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-//            
-//            GL20.glDisableVertexAttribArray(0);
-//            GL20.glDisableVertexAttribArray(1);
-            
+            // Vertex pointer
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobvertexhandler);
+            GL11.glVertexPointer(3, GL11.GL_FLOAT, 0, 0);
+            // Color pointer
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobcolorhandler);
+            GL11.glColorPointer(3, GL11.GL_FLOAT, 0, 0);
+            // Unbind
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         } VertexArrayObject.bindVao(0);  // Unbind VAO
     }
     
     public static void vaoDraw() {
-//        GL20.glUseProgram(shaderProgram.getID());
         // Bind VAO
         VertexArrayObject.bindVao(vaohandler); {
             // Enable client state
-//            Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
-            int v = GL20.glGetAttribLocation(MainTest.shaderProgram.getID(), "in_Position");
-            int c = GL20.glGetAttribLocation(MainTest.shaderProgram.getID(), "in_Color");
-            
-            GL20.glEnableVertexAttribArray(v);
-            GL20.glEnableVertexAttribArray(c);
+            Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
             // draw VBO
             VertexBufferedObject.drawVboArrays(GL11.GL_TRIANGLES, 0, 3);
-            
-            GL20.glDisableVertexAttribArray(v);
-            GL20.glDisableVertexAttribArray(c);
             // Disable client state
-//            Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
+            Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
         } VertexArrayObject.bindVao(0); // Unbind VAO
     }
     // ======================================= Vertex Array Object ==========================================

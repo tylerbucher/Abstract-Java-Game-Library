@@ -24,18 +24,7 @@
 
 package org.ajgl.graphics;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-
 import org.ajgl.OpenGLInfo;
-import org.ajgl.graphics.UtilAnnotations.GlBufferTarget;
-import org.ajgl.graphics.UtilAnnotations.GlDataType;
-import org.ajgl.graphics.UtilAnnotations.GlDrawMode;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 
@@ -63,95 +52,5 @@ public class VertexArrayObject {
     @OpenGLInfo(doc = false, openGLVersion = "3.0", profile = "OPENGL_CORE_PROFILE")
     public static void bindVao(int arrayHandler) {
         GL30.glBindVertexArray(arrayHandler);
-    }
-    
-    /**
-     * Creates a vertex buffer object handler.
-     * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
-     */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, ByteBuffer vertices, 
-           int index, int size, @GlDataType int type, boolean normalized, int stride, int pointerOffset) {
-        // Initialize vertex VBO handler
-        int handler = GL15.glGenBuffers();
-        GL15.glBindBuffer(bufferTarget, handler);
-        GL15.glBufferData(bufferTarget, vertices, drawMode);
-        GL20.glVertexAttribPointer(index, size, type, normalized, stride, pointerOffset);
-        GL15.glBindBuffer(bufferTarget, 0);
-        return handler;
-    }
-    
-    /**
-     * Creates a vertex buffer object handler.
-     * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
-     */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, ShortBuffer vertices, 
-            int index, int size, @GlDataType int type, boolean normalized, int stride, int pointerOffset) {
-        // Initialize vertex VBO handler
-        int handler = GL15.glGenBuffers();
-        GL15.glBindBuffer(bufferTarget, handler);
-        GL15.glBufferData(bufferTarget, vertices, drawMode);
-        GL20.glVertexAttribPointer(index, size, type, normalized, stride, pointerOffset);
-        GL15.glBindBuffer(bufferTarget, 0);
-        return handler;
-    }
-    
-    /**
-     * Creates a vertex buffer object handler.
-     * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
-     */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, IntBuffer vertices, 
-            int index, int size, @GlDataType int type, boolean normalized, int stride, int pointerOffset) {
-        // Initialize vertex VBO handler
-        int handler = GL15.glGenBuffers();
-        GL15.glBindBuffer(bufferTarget, handler);
-        GL15.glBufferData(bufferTarget, vertices, drawMode);
-        GL20.glVertexAttribPointer(index, size, type, normalized, stride, pointerOffset);
-        GL15.glBindBuffer(bufferTarget, 0);
-        return handler;
-    }
-    
-    /**
-     * Creates a vertex buffer object handler.
-     * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
-     */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, FloatBuffer vertices, 
-            int index, int size, @GlDataType int type, boolean normalized, int stride, int pointerOffset) {
-        // Initialize vertex VBO handler
-        int handler = GL15.glGenBuffers();
-        GL15.glBindBuffer(bufferTarget, handler);
-        GL15.glBufferData(bufferTarget, vertices, drawMode);
-        GL20.glVertexAttribPointer(index, size, type, normalized, stride, pointerOffset);
-        GL15.glBindBuffer(bufferTarget, 0);
-        return handler;
-    }
-    
-    /**
-     * Creates a vertex buffer object handler.
-     * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
-     */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, DoubleBuffer vertices, 
-            int index, int size, @GlDataType int type, boolean normalized, int stride, int pointerOffset) {
-        // Initialize vertex VBO handler
-        int handler = GL15.glGenBuffers();
-        GL15.glBindBuffer(bufferTarget, handler);
-        GL15.glBufferData(bufferTarget, vertices, drawMode);
-        GL20.glVertexAttribPointer(index, size, type, normalized, stride, pointerOffset);
-        GL15.glBindBuffer(bufferTarget, 0);
-        return handler;
     }
 }

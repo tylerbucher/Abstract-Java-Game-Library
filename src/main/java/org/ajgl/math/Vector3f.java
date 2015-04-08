@@ -1,47 +1,44 @@
 /**
  * 
  */
-package org.ajgl.test.graphics;
-
+package org.ajgl.math;
 
 import java.nio.FloatBuffer;
+
 import org.lwjgl.BufferUtils;
 
+
 /**
- * This class represents a (x,y,z,w)-Vector. GLSL equivalent to vec4.
+ * This class represents a (x,y,z)-Vector. GLSL equivalent to vec3.
  *
  * @author Heiko Brumme
  */
-public class Vector4f {
+public class Vector3f {
 
     public float x;
     public float y;
     public float z;
-    public float w;
 
     /**
-     * Creates a default 4-tuple vector with all values set to 0.
+     * Creates a default 3-tuple vector with all values set to 0.
      */
-    public Vector4f() {
+    public Vector3f() {
         this.x = 0f;
         this.y = 0f;
         this.z = 0f;
-        this.w = 0f;
     }
 
     /**
-     * Creates a 4-tuple vector with specified values.
+     * Creates a 3-tuple vector with specified values.
      *
      * @param x x value
      * @param y y value
      * @param z z value
-     * @param w w value
      */
-    public Vector4f(float x, float y, float z, float w) {
+    public Vector3f(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.w = w;
     }
 
     /**
@@ -50,7 +47,7 @@ public class Vector4f {
      * @return Squared length of this vector
      */
     public float lengthSquared() {
-        return x * x + y * y + z * z + w * w;
+        return x * x + y * y + z * z;
     }
 
     /**
@@ -67,7 +64,7 @@ public class Vector4f {
      *
      * @return Normalized vector
      */
-    public Vector4f normalize() {
+    public Vector3f normalize() {
         float length = length();
         return divide(length);
     }
@@ -78,12 +75,11 @@ public class Vector4f {
      * @param other The other vector
      * @return Sum of this + other
      */
-    public Vector4f add(Vector4f other) {
+    public Vector3f add(Vector3f other) {
         float x = this.x + other.x;
         float y = this.y + other.y;
         float z = this.z + other.z;
-        float w = this.w + other.w;
-        return new Vector4f(x, y, z, w);
+        return new Vector3f(x, y, z);
     }
 
     /**
@@ -91,7 +87,7 @@ public class Vector4f {
      *
      * @return Negated vector
      */
-    public Vector4f negate() {
+    public Vector3f negate() {
         return scale(-1f);
     }
 
@@ -101,7 +97,7 @@ public class Vector4f {
      * @param other The other vector
      * @return Difference of this - other
      */
-    public Vector4f subtract(Vector4f other) {
+    public Vector3f subtract(Vector3f other) {
         return this.add(other.negate());
     }
 
@@ -111,12 +107,11 @@ public class Vector4f {
      * @param scalar Scalar to multiply
      * @return Scalar product of this * scalar
      */
-    public Vector4f scale(float scalar) {
+    public Vector3f scale(float scalar) {
         float x = this.x * scalar;
         float y = this.y * scalar;
         float z = this.z * scalar;
-        float w = this.w * scalar;
-        return new Vector4f(x, y, z, w);
+        return new Vector3f(x, y, z);
     }
 
     /**
@@ -125,7 +120,7 @@ public class Vector4f {
      * @param scalar Scalar to multiply
      * @return Scalar quotient of this / scalar
      */
-    public Vector4f divide(float scalar) {
+    public Vector3f divide(float scalar) {
         return scale(1f / scalar);
     }
 
@@ -135,8 +130,21 @@ public class Vector4f {
      * @param other The other vector
      * @return Dot product of this * other
      */
-    public float dot(Vector4f other) {
-        return this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w;
+    public float dot(Vector3f other) {
+        return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
+
+    /**
+     * Calculates the dot product of this vector with another vector.
+     *
+     * @param other The other vector
+     * @return Cross product of this x other
+     */
+    public Vector3f cross(Vector3f other) {
+        float x = this.y * other.z - this.z * other.y;
+        float y = this.z * other.x - this.x * other.z;
+        float z = this.x * other.y - this.y * other.x;
+        return new Vector3f(x, y, z);
     }
 
     /**
@@ -147,7 +155,7 @@ public class Vector4f {
      * @param alpha The alpha value, must be between 0.0 and 1.0
      * @return Linear interpolated vector
      */
-    public Vector4f lerp(Vector4f other, float alpha) {
+    public Vector3f lerp(Vector3f other, float alpha) {
         return this.scale(1f - alpha).add(other.scale(alpha));
     }
 
@@ -157,8 +165,8 @@ public class Vector4f {
      * @return Vector as FloatBuffer
      */
     public FloatBuffer getBuffer() {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(4);
-        buffer.put(x).put(y).put(z).put(w);
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(3);
+        buffer.put(x).put(y).put(z);
         buffer.flip();
         return buffer;
     }

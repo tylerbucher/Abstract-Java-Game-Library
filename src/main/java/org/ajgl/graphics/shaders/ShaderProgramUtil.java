@@ -24,13 +24,16 @@
 
 package org.ajgl.graphics.shaders;
 
+import org.ajgl.graphics.UtilAnnotations.GlShaderFunction;
 import org.lwjgl.opengl.GL20;
 
 
 /**
- * @author Tyler
- *
+ * This class is designed to provide direct access 
+ * to OpenGL shader program functions.
+ * @author Tyler Bucher
  */
+@GlShaderFunction
 public final class ShaderProgramUtil {
     
     /**

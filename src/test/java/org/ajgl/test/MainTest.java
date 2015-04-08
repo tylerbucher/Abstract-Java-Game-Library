@@ -173,39 +173,38 @@ public class MainTest {
         System.out.println("LWJGL Version: ["+Sys.getVersion()+"]");
         System.out.println("OpenGL Version: ["+GL11.glGetString(GL11.GL_VERSION)+"]");
         
-        Shader vertexShader = Shader.loadShader(GL20.GL_VERTEX_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/VertexShaderTest.glsl");
-        Shader fragmentShader = Shader.loadShader(GL20.GL_FRAGMENT_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/FragmentShaderTest.glsl");
+//        Shader vertexShader = Shader.loadShader(GL20.GL_VERTEX_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/VertexShaderTest.glsl");
+//        Shader fragmentShader = Shader.loadShader(GL20.GL_FRAGMENT_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/FragmentShaderTest.glsl");
         
-        shaderProgram = new ShaderProgram();
-        shaderProgram.attachShader(vertexShader);
-        shaderProgram.attachShader(fragmentShader);
+//        shaderProgram = new ShaderProgram();
+//        shaderProgram.attachShader(vertexShader);
+//        shaderProgram.attachShader(fragmentShader);
         
-        GL20.glBindAttribLocation(shaderProgram.getID(), 0, "in_Position");
-        GL20.glBindAttribLocation(shaderProgram.getID(), 1, "in_Color");
+//        GL20.glBindAttribLocation(shaderProgram.getID(), 0, "in_Position");
+//        GL20.glBindAttribLocation(shaderProgram.getID(), 1, "in_Color");
 //        GL30.glBindFragDataLocation(shaderProgram.getID(), 0, "out_Color");glGetAttribLocation 
         
-        shaderProgram.link();
-        GL20.glValidateProgram(shaderProgram.getID());
+//        shaderProgram.link();
+//        GL20.glValidateProgram(shaderProgram.getID());
 //        GraphicsTest.shaderProgram.link();
 //        GL20.glValidateProgram(GraphicsTest.shaderProgram.getID());
-        GraphicsTest.setupVAO();
         while ( glfwWindowShouldClose(window) == GL_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             
-            GL11.glBegin(GL11.GL_TRIANGLES); {
-                GL11.glColor3f(1, 0, 0);
-                GL11.glVertex3f(50, 50, 0);
-                GL11.glColor3f(0, 1, 0);
-                GL11.glVertex3f(50, 100, 0);
-                GL11.glColor3f(0, 0, 1);
-                GL11.glVertex3f(100, 50, 0);
-            } GL11.glEnd();
+//            GL11.glBegin(GL11.GL_TRIANGLES); {
+//                GL11.glColor3f(1, 0, 0);
+//                GL11.glVertex3f(50, 50, 0);
+//                GL11.glColor3f(0, 1, 0);
+//                GL11.glVertex3f(50, 100, 0);
+//                GL11.glColor3f(0, 0, 1);
+//                GL11.glVertex3f(100, 50, 0);
+//            } GL11.glEnd();
             
             // Run Cycles
             input();
             update();
-            shaderProgram.use();
+//            shaderProgram.use();
             render();
             GL20.glUseProgram(0);
             
@@ -233,10 +232,10 @@ public class MainTest {
     }
     
     private void testRender() {
-//        GraphicsTest.immidateDraw();
-//        GraphicsTest.displayListDraw();
-//        GraphicsTest.vertexArrayDraw();
-//        GraphicsTest.vboDraw();
+        GraphicsTest.immidateDraw();
+        GraphicsTest.displayListDraw();
+        GraphicsTest.vertexArrayDraw();
+        GraphicsTest.vboDraw();
         GraphicsTest.vaoDraw();
     }
     

@@ -24,6 +24,7 @@
 
 package org.ajgl.graphics.shaders;
 
+import org.ajgl.graphics.UtilAnnotations.GlShaderFunction;
 import org.lwjgl.opengl.GL20;
 
 
@@ -32,6 +33,7 @@ import org.lwjgl.opengl.GL20;
  * program in OpenGL.
  * @author Tyler Bucher
  */
+@GlShaderFunction
 public class ShaderProgram {
     
     public final int id;   // The shader program id

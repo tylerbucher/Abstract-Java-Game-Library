@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.ajgl.test.graphics;
+package org.ajgl.math;
 
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
+
 import org.lwjgl.BufferUtils;
 
 /**

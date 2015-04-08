@@ -224,4 +224,37 @@ public class UtilAnnotations {
     public @interface GlBufferTarget {
         
     }
+    
+    /**
+     * For OpenGL Shaders the following functions are acceptable.
+     * <ul>
+     * <li>{@link org.lwjgl.opengl.GL20 glBindAttribLocation}
+     * <li>{@link org.lwjgl.opengl.GL30 glBindFragDataLocation}
+     * <li>{@link org.lwjgl.opengl.GL33 glBindFragDataLocationIndexed}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetActive}
+     * <li>{@link org.lwjgl.opengl.GL31 glGetActive}
+     * <li>{@link org.lwjgl.opengl.GL40 glGetActive}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetAttachedShaders}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetAttribLocation}
+     * <li>{@link org.lwjgl.opengl.GL30 glGetFragDataLocation}
+     * <li>{@link org.lwjgl.opengl.GL33 glGetFragDataIndex}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetProgram}
+     * <li>{@link org.lwjgl.opengl.GL43 glGetProgram}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetShader}
+     * <li>{@link org.lwjgl.opengl.GL41 glGetShader}
+     * <li>{@link org.lwjgl.opengl.GL40 glGetSubroutine}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetUniform}
+     * <li>{@link org.lwjgl.opengl.GL30 glGetUniform}
+     * <li>{@link org.lwjgl.opengl.GL31 glGetUniform}
+     * <li>{@link org.lwjgl.opengl.GL40 glGetUniform}
+     * <li>{@link org.lwjgl.opengl.GL20 glUnifrom}
+     * <li>{@link org.lwjgl.opengl.GL30 glUnifrom}
+     * <li>{@link org.lwjgl.opengl.GL40 glUnifrom}
+     * </ul>
+     * @author Tyler Bucher
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface GlShaderFunction {
+        
+    }
 }

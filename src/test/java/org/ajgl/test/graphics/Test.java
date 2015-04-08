@@ -36,6 +36,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.ajgl.concurrent.Tasker;
+import org.ajgl.math.Matrix4f;
 import org.ajgl.test.graphics.shaders.Shader;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Sys;
