@@ -10,7 +10,7 @@ import java.nio.Buffer;
  * @author Tyler
  *
  */
-public abstract class Vector<B extends Buffer> {
+public abstract class Vector<N extends Number> {
     
-    public abstract B getBuffer();
+    public abstract <B extends Buffer> B getBuffer(Class<B> bufferClass);
 }
