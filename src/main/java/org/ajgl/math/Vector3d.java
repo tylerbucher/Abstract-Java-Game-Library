@@ -42,10 +42,12 @@ public class Vector3d extends Vector2d {
         return super.dot(vector) + (this.z *= vector.z);
     }
     
-    public Vector3d cross(Vector3d vector) {//TODO
+    public Vector3d cross(Vector3d vector) {
+        double cx = (this.y * vector.z) - (this.z * vector.y);
+        double cy = (this.z * vector.x) - (this.x * vector.z);
         double cz = (this.x * vector.y) - (this.y * vector.x);
         
-        return new Vector3d(0.0, 0.0, cz);
+        return new Vector3d(cx, cy, cz);
     }
     
     public Vector3d negate() {
