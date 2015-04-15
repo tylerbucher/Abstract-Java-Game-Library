@@ -1,5 +1,7 @@
 package org.ajgl.math;
 
+import java.nio.Buffer;
+
 public class Matrix2d {
     
     public double m00, m01;
@@ -46,6 +48,14 @@ public class Matrix2d {
         return this;
     }
     
+    public Vector2d multiply(Vector2d vector) {
+        Vector2d newVector = new Vector2d();
+        newVector.x = (vector.x*this.m00) + (vector.y*this.m10);
+        newVector.y = (vector.x*this.m01) + (vector.y*this.m11);
+        
+        return newVector;
+    }
+    
     public Matrix2d multiply(double value) {
         m00 *= value; m01 *= value;
         m10 *= value; m11 *= value;
@@ -53,8 +63,21 @@ public class Matrix2d {
         return this;
     }
     
+    public Matrix2d divide(double value) {
+        m00 /= value; m01 /= value;
+        m10 /= value; m11 /= value;
+        
+        return this;
+    }
+    
     public Matrix2d negate() {
         return this.multiply(-1);
+    }
+    
+    public <B extends Buffer> B getBuffer(Class<B> bufferClass) {
+        double[] array = {m00, m10,
+                          m01, m11};
+        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, array));
     }
     
     public static Matrix2d createMatrix(Vector2d col1, Vector2d col2) {

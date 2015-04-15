@@ -14,6 +14,11 @@ public class Vector3d extends Vector2d {
 
     public double z;
     
+    public Vector3d() {
+        super();
+        this.z = 0;
+    }
+    
     public Vector3d(double x, double y, double z) {
         super(x, y);
         this.z = z;

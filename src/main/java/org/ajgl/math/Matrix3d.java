@@ -1,5 +1,7 @@
 package org.ajgl.math;
 
+import java.nio.Buffer;
+
 public class Matrix3d extends Matrix2d {
     
     public double /*m00, m01,*/ m02;
@@ -67,8 +69,24 @@ public class Matrix3d extends Matrix2d {
     }
     
     @Override
+    public Matrix3d divide(double value) {
+        super.divide(value);        m02 /= value;
+                                    m12 /= value;
+        m20 /= value; m21 /= value; m22 /= value;
+        
+        return this;
+    }
+    
+    @Override
     public Matrix3d negate() {
         return this.multiply(-1);
+    }
+    
+    public <B extends Buffer> B getBuffer(Class<B> bufferClass) {
+        double[] array = {m00, m10, m20,
+                          m01, m11, m21, 
+                          m02, m12, m22};
+        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, array));
     }
     
     public static Matrix3d createMatrix(Vector3d col1, Vector3d col2, Vector3d col3) {

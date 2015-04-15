@@ -6,6 +6,11 @@ public class Vector4d extends Vector3d {
 
     public double w;
     
+    public Vector4d() {
+        super();
+        this.w = 0;
+    }
+    
     public Vector4d(double x, double y, double z, double w) {
         super(x, y, z);
         this.w = w;
