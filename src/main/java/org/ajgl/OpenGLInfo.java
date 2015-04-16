@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
 
 /**
  * @author Tyler
- *
  */
 @Target({ElementType.METHOD})
 public @interface OpenGLInfo {
