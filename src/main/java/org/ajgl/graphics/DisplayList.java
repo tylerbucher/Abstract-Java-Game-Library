@@ -46,7 +46,7 @@ public final class DisplayList {
     /**
      * Creates a display list handler based on the number
      * of display lists.
-     * @param number - The number of display lists to create
+     * @param number - The number of display lists to create.
      * @return The display list handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
@@ -56,8 +56,8 @@ public final class DisplayList {
     
     /**
      * Creates a new list definition.
-     * @param listID - The display list handler
-     * @param compileMode - The OpenGL compile mode
+     * @param listID - The display list handler.
+     * @param compileMode - The OpenGL compile mode.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
     public static void newList(int listID, @GlCompileMode int compileMode) {
@@ -82,11 +82,11 @@ public final class DisplayList {
     }
     
     /**
-     * Draws many display Lists
-     * @param listID - The display list handler
-     * @param number - The number of lists to draw
-     * @param dataType - The OpenGL Data type
-     * @param lists - The lists to draw
+     * Draws many display Lists.
+     * @param listID - The display list handler.
+     * @param number - The number of lists to draw.
+     * @param dataType - The OpenGL Data type.
+     * @param lists - The lists to draw.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
     public static void drawLists(int listID, int number, @GlDataType int dataType, ByteBuffer lists) {

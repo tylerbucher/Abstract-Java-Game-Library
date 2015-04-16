@@ -52,8 +52,8 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, ByteBuffer vertices) {
@@ -68,8 +68,8 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, ShortBuffer vertices) {
@@ -84,8 +84,8 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, IntBuffer vertices) {
@@ -100,8 +100,8 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, FloatBuffer vertices) {
@@ -116,8 +116,8 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, DoubleBuffer vertices) {
@@ -131,9 +131,9 @@ public final class VertexBufferedObject {
     
     /**
      * Draws a vertex buffered object; Uses redundant vertices.
-     * @param beginMode - The OpenGL begin mode
-     * @param first - The start point of the array
-     * @param vertexNumber - The number of vertices
+     * @param beginMode - The OpenGL begin mode.
+     * @param first - The start point of the array.
+     * @param vertexNumber - The number of vertices.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void drawVboArrays(@GlBeginMode int beginMode, int first, int vertexNumber) {
@@ -143,10 +143,10 @@ public final class VertexBufferedObject {
     
     /**
      * Draws a vertex buffered object; Does not use redundant vertices.
-     * @param beginMode - The OpenGL begin mode
-     * @param vertexNumber - The number of vertices
-     * @param dataType - The OpenGL dataType
-     * @param offSet - initial offset for the data
+     * @param beginMode - The OpenGL begin mode.
+     * @param vertexNumber - The number of vertices.
+     * @param dataType - The OpenGL dataType.
+     * @param offSet - initial offset for the data.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void drawVboElements(@GlBeginMode int beginMode, int vertexNumber, @GlDataType int dataType, int offSet) {

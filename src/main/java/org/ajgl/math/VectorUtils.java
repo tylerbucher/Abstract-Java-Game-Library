@@ -47,7 +47,7 @@ public class VectorUtils {
      * @return The generated buffer.
      */
     public static <B extends Buffer> Buffer glGenDataBuffer(Class<B> bufferClass, double... values) {
-        Class<?> clazz = bufferClass.getClass();
+        Class<?> clazz = bufferClass;
         if(clazz == ByteBuffer.class) return MathUtils.createByteBuffer(VectorUtils.arrayCastByte(values));
         else if(clazz == ShortBuffer.class) return MathUtils.createShortBuffer(VectorUtils.arrayCastShort(values));
         else if(clazz == IntBuffer.class) return MathUtils.createIntegerBuffer(VectorUtils.arrayCastInt(values));

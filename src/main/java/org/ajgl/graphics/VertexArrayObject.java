@@ -38,7 +38,7 @@ public class VertexArrayObject {
     
     /**
      * Creates a vertex array handler.
-     * @return The int value of the handler
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "3.0", profile = "OPENGL_CORE_PROFILE")
     public static int createVaoHandler() {

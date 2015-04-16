@@ -31,8 +31,8 @@ import org.lwjgl.opengl.GL11;
 
 
 /**
- * @author Tyler
- *
+ * This class is designed to provide basic and general graphical functions.
+ * @author Tyler Bucher
  */
 public class Graphics {
     
@@ -58,7 +58,7 @@ public class Graphics {
     
     /**
      * Binds the {@code textureID} to the current OpenGL context.
-     * @param textureID - The id of the texture
+     * @param textureID - The id of the texture.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void bindTexture(@GlTextureFormat int textureFormat, int textureID) {

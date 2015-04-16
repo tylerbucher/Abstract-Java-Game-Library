@@ -32,6 +32,7 @@ import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
@@ -41,9 +42,12 @@ import org.ajgl.graphics.Graphics;
 import org.ajgl.graphics.VertexArrayObject;
 import org.ajgl.graphics.VertexArrays;
 import org.ajgl.graphics.VertexBufferedObject;
+import org.ajgl.graphics.shaders.Shader;
+import org.ajgl.graphics.shaders.ShaderProgram;
+import org.ajgl.graphics.shaders.ShaderProgramUtil;
+import org.ajgl.math.Matrix4d;
 import org.ajgl.test.graphics.GraphicsTest;
-import org.ajgl.test.graphics.shaders.Shader;
-import org.ajgl.test.graphics.shaders.ShaderProgram;
+import org.ajgl.test.graphics.shaders.ShaderTest;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Sys;
 import org.lwjgl.glfw.GLFW;
@@ -105,10 +109,15 @@ public class MainTest {
         GLContext.createFromCurrent();      // Bind lwjgl with GLFW
         
         // Initialize openGl
+//        this.legacySetup();
+        this.modernSetup();
+    }
+    
+    private void legacySetup() {
+        // Initialize openGl
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-//        GL11.glViewport(0, 0, WIDTH, HEIGHT);
-        //GL11.glOrtho(0, WIDTH, 0, HEIGHT, WIDTH, -HEIGHT);
+        GL11.glViewport(0, 0, WIDTH, HEIGHT);
         GL11.glOrtho(0, WIDTH, 0, HEIGHT, 1, -1);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         
@@ -117,7 +126,15 @@ public class MainTest {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
-//        GL11.glShadeModel(GL11.GL_SMOOTH);
+    }
+    
+    private void modernSetup() {
+        // Enable alpha transparency (for overlay image)
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        GL11.glShadeModel(GL11.GL_SMOOTH);
     }
     
     private void preWindowSetup() {
@@ -165,7 +182,56 @@ public class MainTest {
     }
     
     public void init() {
-        //=== MYCODE ===
+        this.shaderInit();
+    }
+    
+    private void shaderInit() {
+        try {
+            Shader vertexShader = Shader.loadShader(GL20.GL_VERTEX_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/VertexShaderTest.glsl");
+            Shader fragmentShader = Shader.loadShader(GL20.GL_FRAGMENT_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/FragmentShaderTest.glsl");
+            
+            if(!vertexShader.verify() || !fragmentShader.verify())
+                throw new Exception("shader load error");
+            
+            shaderProgram = new ShaderProgram();
+            shaderProgram.attachShader(vertexShader);
+            shaderProgram.attachShader(fragmentShader);
+          
+            GL20.glBindAttribLocation(shaderProgram.id, 0, "position");
+            GL20.glBindAttribLocation(shaderProgram.id, 1, "color");
+          
+            shaderProgram.link();
+            shaderProgram.validate();
+            
+            if(!shaderProgram.verify())
+                throw new Exception("shader program error");
+            
+            // ================ shader uniform setup ========================
+            GL20.glUseProgram(shaderProgram.id);
+            
+            int uniModel = GL20.glGetUniformLocation(shaderProgram.id, "model");
+            if(uniModel != -1) {
+                Matrix4d model = new Matrix4d();
+                GL20.glUniformMatrix4(uniModel, false, model.getBuffer(FloatBuffer.class));
+            }
+
+            int uniView = GL20.glGetUniformLocation(shaderProgram.id, "view");
+            if(uniView != -1) {
+                Matrix4d view = new Matrix4d();
+                GL20.glUniformMatrix4(uniView, false, view.getBuffer(FloatBuffer.class));
+            }
+
+            int uniProjection = GL20.glGetUniformLocation(shaderProgram.id, "projection");
+            if(uniProjection != -1) {
+                Matrix4d projection = Matrix4d.orthographic(0f, 1200f, 0f, 800f, 1f, -1f);
+                GL20.glUniformMatrix4(uniProjection, false, projection.getBuffer(FloatBuffer.class));
+            }
+            
+            GL20.glUseProgram(0);
+            // ================ shader uniform setup ========================
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public void gameStart() {
@@ -173,40 +239,14 @@ public class MainTest {
         System.out.println("LWJGL Version: ["+Sys.getVersion()+"]");
         System.out.println("OpenGL Version: ["+GL11.glGetString(GL11.GL_VERSION)+"]");
         
-//        Shader vertexShader = Shader.loadShader(GL20.GL_VERTEX_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/VertexShaderTest.glsl");
-//        Shader fragmentShader = Shader.loadShader(GL20.GL_FRAGMENT_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/FragmentShaderTest.glsl");
         
-//        shaderProgram = new ShaderProgram();
-//        shaderProgram.attachShader(vertexShader);
-//        shaderProgram.attachShader(fragmentShader);
-        
-//        GL20.glBindAttribLocation(shaderProgram.getID(), 0, "in_Position");
-//        GL20.glBindAttribLocation(shaderProgram.getID(), 1, "in_Color");
-//        GL30.glBindFragDataLocation(shaderProgram.getID(), 0, "out_Color");glGetAttribLocation 
-        
-//        shaderProgram.link();
-//        GL20.glValidateProgram(shaderProgram.getID());
-//        GraphicsTest.shaderProgram.link();
-//        GL20.glValidateProgram(GraphicsTest.shaderProgram.getID());
         while ( glfwWindowShouldClose(window) == GL_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            
-            
-//            GL11.glBegin(GL11.GL_TRIANGLES); {
-//                GL11.glColor3f(1, 0, 0);
-//                GL11.glVertex3f(50, 50, 0);
-//                GL11.glColor3f(0, 1, 0);
-//                GL11.glVertex3f(50, 100, 0);
-//                GL11.glColor3f(0, 0, 1);
-//                GL11.glVertex3f(100, 50, 0);
-//            } GL11.glEnd();
             
             // Run Cycles
             input();
             update();
-//            shaderProgram.use();
             render();
-            GL20.glUseProgram(0);
             
             // Display Buffer swap
             glfwSwapBuffers(window);
@@ -228,7 +268,8 @@ public class MainTest {
     }
     
     private void render() {
-        testRender();
+//        testRender();
+        shaderTestRender();
     }
     
     private void testRender() {
@@ -237,6 +278,14 @@ public class MainTest {
         GraphicsTest.vertexArrayDraw();
         GraphicsTest.vboDraw();
         GraphicsTest.vaoDraw();
+    }
+    
+    private void shaderTestRender() {
+        GL20.glUseProgram(shaderProgram.id);
+        
+        ShaderTest.immidateDraw();
+        
+        GL20.glUseProgram(0);
     }
     
     public void exit() {

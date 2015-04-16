@@ -51,9 +51,9 @@ public final class VertexArrays {
     
     /**
      * Draws the vertex array; Uses redundant vertices.
-     * @param beginMode - The OpenGL begin mode
-     * @param vertexNumber - The number of vertices
-     * @param first - The start point of the array
+     * @param beginMode - The OpenGL begin mode.
+     * @param vertexNumber - The number of vertices.
+     * @param first - The start point of the array.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
     public static void drawArrays(@GlBeginMode int beginMode, int vertexNumber, int first) {
@@ -62,10 +62,10 @@ public final class VertexArrays {
     
     /**
      * Draws the vertex array; Does not use redundant vertices.
-     * @param beginMode - The OpenGL begin mode
-     * @param dataType - The OpenGL dataType
-     * @param vertexNumber - The number of vertices
-     * @param indices - The index vertices
+     * @param beginMode - The OpenGL begin mode.
+     * @param dataType - The OpenGL dataType.
+     * @param vertexNumber - The number of vertices.
+     * @param indices - The index vertices.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
     public static void drawElements(@GlBeginMode int beginMode, @GlDataType int dataType, int vertexNumber, ByteBuffer indices) {
