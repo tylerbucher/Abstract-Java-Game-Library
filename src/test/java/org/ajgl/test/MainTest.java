@@ -18,46 +18,33 @@ import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
-import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
-import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import org.ajgl.concurrent.Tasker;
-import org.ajgl.graphics.DisplayList;
-import org.ajgl.graphics.Graphics;
-import org.ajgl.graphics.VertexArrayObject;
-import org.ajgl.graphics.VertexArrays;
-import org.ajgl.graphics.VertexBufferedObject;
 import org.ajgl.graphics.shaders.Shader;
 import org.ajgl.graphics.shaders.ShaderProgram;
-import org.ajgl.graphics.shaders.ShaderProgramUtil;
 import org.ajgl.math.Matrix4d;
 import org.ajgl.test.graphics.GraphicsTest;
 import org.ajgl.test.graphics.shaders.ShaderTest;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.Sys;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
 
 
@@ -65,54 +52,51 @@ import org.lwjgl.opengl.GLContext;
  * @author Tyler
  *
  */
+@SuppressWarnings("unused")
 public class MainTest {
     
-    public static ShaderProgram shaderProgram;
+    private int HEIGHT = 800;               // Window Properties
+    private int WIDTH = 1200;               // Window Properties
+    private int RESIZABLE = GL11.GL_FALSE;  // Window Properties
+    private int REFRESH_RATE = 60;          // Window Properties
+    private String TITLE = "AJGL TEST";     // Window Properties
     
-    public static volatile boolean close = false;
-    static boolean closed = false;
-    static Window windowN;
-    static Window windowp;
+    private long window;                        // Primary window
+    private GLFWErrorCallback errorCallback;    // callback reference instances
+    private GLFWKeyCallback   keyCallback;      // callback reference instances
     
-    /** Window Properties **/
-    private int 
-        HEIGHT = 800,
-        WIDTH = 1200,
-        RESIZABLE = GL11.GL_FALSE,
-        REFRESH_RATE = 60,
-        VSYNC = 1;
+    private static Window windowN;  // Concurrent windows
+    private static Window windowp;  // Concurrent windows
     
-    private String TITLE = "AJGL TEST";
+    public static ShaderProgram shaderProgram;  // Shader program for modern OpenGL
     
-    // The window handler
-    private long window;
-    
-    // callback reference instances
-    private GLFWErrorCallback errorCallback;
-    private GLFWKeyCallback   keyCallback;
-    
-    int triangleData, triangleColor;
-    int vaoHandler;
-    
+    /**
+     * Pre OpenGL-initialization.
+     */
     public void preInitGL() {
         
     }
     
+    /**
+     * OpenGL initialization.
+     */
     public void initGL() {
         preWindowSetup();
         windowSetup();
         callbackSetup();
         
         glfwMakeContextCurrent(window);     // Make the OpenGL context current
-//        glfwSwapInterval(VSYNC);            // Enable v-sync
         glfwShowWindow(window);             // Make the window visible
         GLContext.createFromCurrent();      // Bind lwjgl with GLFW
         
         // Initialize openGl
-//        this.legacySetup();
+        //this.legacySetup();
         this.modernSetup();
     }
     
+    /**
+     * Setup Legacy OpenGL.
+     */
     private void legacySetup() {
         // Initialize openGl
         GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -128,6 +112,9 @@ public class MainTest {
         GL11.glDepthFunc(GL11.GL_LEQUAL);
     }
     
+    /**
+     * Setup modern OpenGL.
+     */
     private void modernSetup() {
         // Enable alpha transparency (for overlay image)
         GL11.glEnable(GL11.GL_BLEND);
@@ -137,6 +124,9 @@ public class MainTest {
         GL11.glShadeModel(GL11.GL_SMOOTH);
     }
     
+    /**
+     * Pre-window setup.
+     */
     private void preWindowSetup() {
         // Setup an error callback
         GLFW.glfwSetErrorCallback(errorCallback = errorCallbackPrint(System.err));
@@ -146,14 +136,15 @@ public class MainTest {
             exit();
     }
     
+    /**
+     * Window setup.
+     */
     private void windowSetup() {
         // Configure Window Properties
         glfwDefaultWindowHints();
-        GLFW.glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Keep the window hidden
-        glfwWindowHint(GLFW_RESIZABLE, RESIZABLE); // Do not allow resizing
-        glfwWindowHint(GLFW_REFRESH_RATE, REFRESH_RATE); // Refresh rate
-        glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 1);
-        glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);
+        GLFW.glfwWindowHint(GLFW_VISIBLE, GL_FALSE);        // Keep the window hidden
+        glfwWindowHint(GLFW_RESIZABLE, RESIZABLE);          // Do not allow resizing
+        glfwWindowHint(GLFW_REFRESH_RATE, REFRESH_RATE);    // Refresh rate
         
         // Create the window
         window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, NULL, NULL);
@@ -170,6 +161,9 @@ public class MainTest {
         );
     }
     
+    /**
+     * Callback setup.
+     */
     private void callbackSetup() {
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
@@ -181,10 +175,16 @@ public class MainTest {
         });
     }
     
+    /**
+     * Program initialization.
+     */
     public void init() {
         this.shaderInit();
     }
     
+    /**
+     * Shader setup.
+     */
     private void shaderInit() {
         try {
             Shader vertexShader = Shader.loadShader(GL20.GL_VERTEX_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/VertexShaderTest.glsl");
@@ -234,6 +234,9 @@ public class MainTest {
         }
     }
     
+    /**
+     * Starts the game process.
+     */
     public void gameStart() {
         
         System.out.println("LWJGL Version: ["+Sys.getVersion()+"]");
@@ -258,20 +261,32 @@ public class MainTest {
         exit();
     }
     
+    /**
+     * Input Method
+     */
     private void input() {
         glfwPollEvents();
         Tasker.executeASyncTask("GLFW_MAIN_THREAD");
     }
     
+    /**
+     * Update method for moving objects.
+     */
     private void update() {
         
     }
     
+    /**
+     * Render method.
+     */
     private void render() {
 //        testRender();
         shaderTestRender();
     }
     
+    /**
+     * Fixed pipeline test render.
+     */
     private void testRender() {
         GraphicsTest.immidateDraw();
         GraphicsTest.displayListDraw();
@@ -280,14 +295,24 @@ public class MainTest {
         GraphicsTest.vaoDraw();
     }
     
+    /**
+     * Shader test render.
+     */
     private void shaderTestRender() {
         GL20.glUseProgram(shaderProgram.id);
         
         ShaderTest.immidateDraw();
+        ShaderTest.displayListDraw();
+        ShaderTest.vertexArrayDraw();
+        ShaderTest.vboDraw();
+        ShaderTest.vaoDraw();
         
         GL20.glUseProgram(0);
     }
     
+    /**
+     * Exits the program.
+     */
     public void exit() {
         // Terminate GLFW and release the GLFWerrorfun
         glfwTerminate();
@@ -295,19 +320,11 @@ public class MainTest {
         System.exit(1);
     }
     
+    /**
+     * Main Method.
+     * @param args - Arguments.
+     */
     public static void main(String[] args) {
-//        windowN = new Window(1f, 1f);
-//        windowN.initGL();
-//        windowp = new Window(1f, 1f);
-//        windowp.initGL();
-//        
-        
-        
-        
-//        windowN = new Window(1200, 800, "Test", 0, 0, null);
-//        windowN.setup();
-//        windowN.setThread(new GameThread(windowN));
-//        windowN.startThread();
         
         MainTest test = new MainTest();
         test.preInitGL();
