@@ -35,8 +35,15 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
+import org.ajgl.concurrent.Tasker;
+import org.ajgl.graphics.DisplayList;
 import org.ajgl.graphics.Graphics;
+import org.ajgl.graphics.VertexArrayObject;
+import org.ajgl.graphics.VertexArrays;
 import org.ajgl.graphics.VertexBufferedObject;
+import org.ajgl.test.graphics.GraphicsTest;
+import org.ajgl.test.graphics.shaders.Shader;
+import org.ajgl.test.graphics.shaders.ShaderProgram;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Sys;
 import org.lwjgl.glfw.GLFW;
@@ -45,6 +52,8 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
 
 
@@ -54,6 +63,10 @@ import org.lwjgl.opengl.GLContext;
  */
 public class MainTest {
     
+    public static ShaderProgram shaderProgram;
+    
+    public static volatile boolean close = false;
+    static boolean closed = false;
     static Window windowN;
     static Window windowp;
     
@@ -75,6 +88,7 @@ public class MainTest {
     private GLFWKeyCallback   keyCallback;
     
     int triangleData, triangleColor;
+    int vaoHandler;
     
     public void preInitGL() {
         
@@ -86,13 +100,14 @@ public class MainTest {
         callbackSetup();
         
         glfwMakeContextCurrent(window);     // Make the OpenGL context current
-        glfwSwapInterval(VSYNC);            // Enable v-sync
+//        glfwSwapInterval(VSYNC);            // Enable v-sync
         glfwShowWindow(window);             // Make the window visible
         GLContext.createFromCurrent();      // Bind lwjgl with GLFW
         
         // Initialize openGl
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
+//        GL11.glViewport(0, 0, WIDTH, HEIGHT);
         //GL11.glOrtho(0, WIDTH, 0, HEIGHT, WIDTH, -HEIGHT);
         GL11.glOrtho(0, WIDTH, 0, HEIGHT, 1, -1);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -102,6 +117,7 @@ public class MainTest {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
+//        GL11.glShadeModel(GL11.GL_SMOOTH);
     }
     
     private void preWindowSetup() {
@@ -119,6 +135,8 @@ public class MainTest {
         GLFW.glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Keep the window hidden
         glfwWindowHint(GLFW_RESIZABLE, RESIZABLE); // Do not allow resizing
         glfwWindowHint(GLFW_REFRESH_RATE, REFRESH_RATE); // Refresh rate
+        glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 1);
+        glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);
         
         // Create the window
         window = glfwCreateWindow(WIDTH, HEIGHT, TITLE, NULL, NULL);
@@ -141,7 +159,7 @@ public class MainTest {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {//TODO Dispatch key events
                 if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                    glfwSetWindowShouldClose(window, GL_TRUE); 
+                    Tasker.executeASyncTask("GLFW_MAIN_THREAD");
             }
         });
     }
@@ -150,57 +168,75 @@ public class MainTest {
         //=== MYCODE ===
     }
     
-    public static void gameStart() {
-        System.out.println("LWJGL Version: ["+Sys.getVersion()+"]");
+    public void gameStart() {
         
-//        float[] array = new float[]{50, 50, 50, 100, 100, 50};
-//        FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
-//        buffer.put(array);
-//        buffer.flip();
-//        
-//        float[] arrayC = new float[]{1,0,0, 0,1,0, 0,0,1};
-//        FloatBuffer bufferC = BufferUtils.createFloatBuffer(arrayC.length);
-//        bufferC.put(arrayC);
-//        bufferC.flip();
-//        
-//        triangleData = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, buffer);
-//        triangleColor = VertexBufferedObject.createVboHandler(GL15.GL_DYNAMIC_DRAW, bufferC);
-        while ( glfwWindowShouldClose(windowN.window) == GL_FALSE ) {
+        System.out.println("LWJGL Version: ["+Sys.getVersion()+"]");
+        System.out.println("OpenGL Version: ["+GL11.glGetString(GL11.GL_VERSION)+"]");
+        
+//        Shader vertexShader = Shader.loadShader(GL20.GL_VERTEX_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/VertexShaderTest.glsl");
+//        Shader fragmentShader = Shader.loadShader(GL20.GL_FRAGMENT_SHADER, "src/test/java/org/ajgl/test/graphics/shaders/FragmentShaderTest.glsl");
+        
+//        shaderProgram = new ShaderProgram();
+//        shaderProgram.attachShader(vertexShader);
+//        shaderProgram.attachShader(fragmentShader);
+        
+//        GL20.glBindAttribLocation(shaderProgram.getID(), 0, "in_Position");
+//        GL20.glBindAttribLocation(shaderProgram.getID(), 1, "in_Color");
+//        GL30.glBindFragDataLocation(shaderProgram.getID(), 0, "out_Color");glGetAttribLocation 
+        
+//        shaderProgram.link();
+//        GL20.glValidateProgram(shaderProgram.getID());
+//        GraphicsTest.shaderProgram.link();
+//        GL20.glValidateProgram(GraphicsTest.shaderProgram.getID());
+        while ( glfwWindowShouldClose(window) == GL_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
+            
+//            GL11.glBegin(GL11.GL_TRIANGLES); {
+//                GL11.glColor3f(1, 0, 0);
+//                GL11.glVertex3f(50, 50, 0);
+//                GL11.glColor3f(0, 1, 0);
+//                GL11.glVertex3f(50, 100, 0);
+//                GL11.glColor3f(0, 0, 1);
+//                GL11.glVertex3f(100, 50, 0);
+//            } GL11.glEnd();
+            
             // Run Cycles
             input();
             update();
+//            shaderProgram.use();
             render();
+            GL20.glUseProgram(0);
+            
             // Display Buffer swap
-            glfwSwapBuffers(windowN.window);
-            glfwSwapBuffers(windowp.window);
+            glfwSwapBuffers(window);
         }
         
         // Release window and window call backs
-        glfwDestroyWindow(windowN.window);
-        glfwDestroyWindow(windowp.window);
-        //keyCallback.release();
+        glfwDestroyWindow(window);
+        keyCallback.release();
+        exit();
     }
     
-    private static void input() {
+    private void input() {
         glfwPollEvents();
+        Tasker.executeASyncTask("GLFW_MAIN_THREAD");
     }
     
-    private static void update() {
+    private void update() {
         
     }
     
-    private static void render() {
-        //primitiveRender();
+    private void render() {
+        testRender();
     }
     
-    private static void primitiveRender() {
-        Graphics.enableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
-        
-        VertexBufferedObject.colorPointer(triangleColor, 3, 0, 0, GL11.GL_FLOAT);
-        VertexBufferedObject.drawVboArrays(triangleData, 2, 3, 0, 0, 0, GL11.GL_FLOAT, GL11.GL_TRIANGLES);
-        
-        Graphics.disableClientSideState(GL11.GL_VERTEX_ARRAY, GL11.GL_COLOR_ARRAY);
+    private void testRender() {
+        GraphicsTest.immidateDraw();
+        GraphicsTest.displayListDraw();
+        GraphicsTest.vertexArrayDraw();
+        GraphicsTest.vboDraw();
+        GraphicsTest.vaoDraw();
     }
     
     public void exit() {
@@ -211,16 +247,23 @@ public class MainTest {
     }
     
     public static void main(String[] args) {
-        windowN = new Window(1f, 1f);
-        windowN.initGL();
-        windowp = new Window(1f, 1f);
-        windowp.initGL();
+//        windowN = new Window(1f, 1f);
+//        windowN.initGL();
+//        windowp = new Window(1f, 1f);
+//        windowp.initGL();
+//        
         
-        MainTest.gameStart();
-        //MainTest test = new MainTest();
-//        test.preInitGL();
-//        test.initGL();
-//        test.init();
-//        test.gameStart();
+        
+        
+//        windowN = new Window(1200, 800, "Test", 0, 0, null);
+//        windowN.setup();
+//        windowN.setThread(new GameThread(windowN));
+//        windowN.startThread();
+        
+        MainTest test = new MainTest();
+        test.preInitGL();
+        test.initGL();
+        test.init();
+        test.gameStart();
     }
 }

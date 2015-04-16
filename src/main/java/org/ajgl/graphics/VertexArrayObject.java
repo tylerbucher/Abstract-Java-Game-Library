@@ -25,36 +25,32 @@
 package org.ajgl.graphics;
 
 import org.ajgl.OpenGLInfo;
-import org.ajgl.graphics.UtilAnnotations.GlBeginFunction;
-import org.ajgl.graphics.UtilAnnotations.GlBeginMode;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 
 /**
- * This class draws shapes to the screen through OpenGL. The 
- * rendering method that this class uses is "Primitive". Please 
- * note that this class should never be used unless you have some
- * god-awful reason to use it.
+ * This class is designed to be supporting class for Vertex Buffered Objects.
+ * This class encapsulates the vertex buffered object, and does not directly
+ * draw any objects.
  * @author Tyler Bucher
  */
-@Deprecated
-@GlBeginFunction
-public final class Immediate {
+public class VertexArrayObject {
     
     /**
-     * Begin a new drawing mode.
-     * @param beginMode - The {@link UtilAnnotations#BeginMode BeginMode} to use
+     * Creates a vertex array handler.
+     * @return The int value of the handler
      */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void beginDraw(@GlBeginMode int beginMode) {
-        GL11.glBegin(beginMode);
+    @OpenGLInfo(doc = false, openGLVersion = "3.0", profile = "OPENGL_CORE_PROFILE")
+    public static int createVaoHandler() {
+        return GL30.glGenVertexArrays();
     }
     
     /**
-     * Ends the current drawing mode.
+     * Binds a Vertex array object.
+     * @param arrayHandler - The vertex array handler to be bound.
      */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void endDraw() {
-        GL11.glEnd();
+    @OpenGLInfo(doc = false, openGLVersion = "3.0", profile = "OPENGL_CORE_PROFILE")
+    public static void bindVao(int arrayHandler) {
+        GL30.glBindVertexArray(arrayHandler);
     }
 }

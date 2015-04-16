@@ -25,6 +25,7 @@
 package org.ajgl.graphics;
 
 import org.ajgl.OpenGLInfo;
+import org.ajgl.graphics.UtilAnnotations.GlTextureFormat;
 import org.lwjgl.opengl.GL11;
 
 
@@ -39,6 +40,7 @@ public class Graphics {
      * Enables a OpenGL state.
      * @param state - The list of OpenGL states to enable.
      */
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void enableClientSideState(int... state) {
         for(int i=0;i<state.length;i++)
             GL11.glEnableClientState(state[i]);
@@ -48,6 +50,7 @@ public class Graphics {
      * Disables a OpenGL state.
      * @param state - The list of OpenGL states to disable.
      */
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void disableClientSideState(int... state) {
         for(int i=0;i<state.length;i++)
             GL11.glDisableClientState(state[i]);
@@ -57,8 +60,8 @@ public class Graphics {
      * Binds the {@code textureID} to the current OpenGL context.
      * @param textureID - The id of the texture
      */
-    @OpenGLInfo(fwdCompatible = true, openGLVersion = "1.1", status = "Release")
-    public static void bindTexture(int textureID) {
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
+    public static void bindTexture(@GlTextureFormat int textureFormat, int textureID) {
+        GL11.glBindTexture(textureFormat, textureID);
     }
 }

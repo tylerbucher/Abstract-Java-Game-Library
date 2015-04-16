@@ -4,12 +4,15 @@
 package org.ajgl;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
 /**
  * @author Tyler
  */
+@Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.METHOD})
 public @interface OpenGLInfo {
     
@@ -20,13 +23,12 @@ public @interface OpenGLInfo {
     String openGLVersion();
     
     /**
-     * States the current status of this method.
+     * States the OpenGL profile.
      */
-    String status();
+    String profile();
     
     /**
-     * States weather or not this method is forward 
-     * Compatible.
+     * True if this method has been documented on the wiki.
      */
-    boolean fwdCompatible();
+    boolean doc();
 }
