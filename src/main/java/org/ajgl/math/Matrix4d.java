@@ -29,7 +29,6 @@ import java.nio.Buffer;
 /**
  * This class is designed to be a 4x4 matrix.
  * @author Tyler Bucher
- *
  */
 public class Matrix4d extends Matrix3d {
 
@@ -248,11 +247,11 @@ public class Matrix4d extends Matrix3d {
     
     /**
      * Creates a perspective matrix.
-     * @param fovy - Fov in the vertical directon.
+     * @param fovy - Field of view in the y direction.
      * @param aspect - Aspect ratio.
-     * @param near
-     * @param far
-     * @return
+     * @param near - Near clipping plane.
+     * @param far - Far clipping plane.
+     * @return The perspective matrix.
      */
     public static Matrix4d perspective(double fovy, double aspect, double near, double far) {
         Matrix4d perspective = new Matrix4d();
