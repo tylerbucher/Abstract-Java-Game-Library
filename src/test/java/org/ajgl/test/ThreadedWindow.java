@@ -4,22 +4,17 @@
 package org.ajgl.test;
 
 import static org.lwjgl.glfw.Callbacks.errorCallbackPrint;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
-import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
-import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 
-import org.ajgl.concurrent.Tasker;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
 
 
 /**
  * @author Tyler
  *
  */
-public class Window implements Display{
+public abstract class ThreadedWindow extends Thread implements Display {
     
     private int height;
     private int width;
@@ -29,9 +24,8 @@ public class Window implements Display{
     private long window;   // The window handler
     
     private GLFWErrorCallback errorCallback;   // callback reference instances
-    private GLFWKeyCallback   keyCallback;
     
-    public Window() {
+    public ThreadedWindow() {
         this.height = 800;
         this.width = 1200;
         this.title = "Abstract Java Game Library";
@@ -39,7 +33,7 @@ public class Window implements Display{
         this.share = 0;
     } 
     
-    public Window(int width, int height, String title, long monitor, long share) {
+    public ThreadedWindow(int width, int height, String title, long monitor, long share, Thread thread) {
         this.height = height;
         this.width = width;
         this.title = title;
@@ -53,12 +47,22 @@ public class Window implements Display{
             return false;
         return true;
     }
+    
+    public abstract void run();
+    
+    public void startThread() {
+        if(!this.isAlive()) {
+            try{
+                this.start();
+            } catch(IllegalThreadStateException e) {
+                return;
+            }
+        }
+    }
 
     public void errorCallbackSetup() {
         // Setup an error callback
-        if(errorCallback == null)
-            errorCallback = errorCallbackPrint(System.err);
-        GLFW.glfwSetErrorCallback(errorCallback);
+        GLFW.glfwSetErrorCallback(errorCallback = errorCallbackPrint(System.err));
     }
     
     public boolean windowSetup() {
@@ -77,27 +81,15 @@ public class Window implements Display{
             errorCallback.release();
             return false;
         }
-        // Callback setup
-        keyCallbackSetup();
+        
         // Setup window position
         postWindowCreation();
+        
         return true;
     }
     
     public void preWindowCreation() {
         GLFW.glfwDefaultWindowHints();
-    }
-    
-    public void keyCallbackSetup() {
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        if(keyCallback == null)
-            keyCallback = new GLFWKeyCallback() {
-                @Override
-                public void invoke(long window, int key, int scancode, int action, int mods) {
-                    
-                }
-            };
-        glfwSetKeyCallback(window, keyCallback);
     }
     
     public void postWindowCreation() {
@@ -115,21 +107,9 @@ public class Window implements Display{
      * @param errorCallback the errorCallback to set
      */
     public synchronized void setErrorCallback(GLFWErrorCallback errorCallback) {
-        if(this.errorCallback != null)
-            if(!this.errorCallback.isDestroyed())
-                this.errorCallback.release();
+        if(!this.errorCallback.isDestroyed())
+            this.errorCallback.release();
         this.errorCallback = errorCallback;
-    }
-    
-    public synchronized GLFWKeyCallback getKeyCallback() {
-        return keyCallback;
-    }
-    
-    public synchronized void setKeyCallback(GLFWKeyCallback keyCallback) {
-        if(this.keyCallback != null)
-            if(!this.keyCallback.isDestroyed())
-                this.keyCallback.release();
-        this.keyCallback = keyCallback;
     }
     
     /**
@@ -178,6 +158,5 @@ public class Window implements Display{
     @Override
     public synchronized long getWindowHandler() {
         return window;
-    }
-    
+    }   
 }

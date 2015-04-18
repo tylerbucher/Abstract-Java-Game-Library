@@ -25,68 +25,35 @@
 package org.ajgl.graphics;
 
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 
 import org.ajgl.OpenGLInfo;
 import org.ajgl.graphics.UtilAnnotations.GlBeginMode;
+import org.ajgl.graphics.UtilAnnotations.GlBufferFunction;
 import org.ajgl.graphics.UtilAnnotations.GlDataType;
 import org.lwjgl.opengl.GL11;
 
 
 /**
- * This class draws shapes to the screen through OpenGL. The 
+ * <p>This class draws shapes to the screen through OpenGL. The 
  * rendering method that this class uses is "Vertex Arrays". Please 
  * note that of this moment (03/8/2015) OpenGL has not deprecated vertex 
- * arrays. But they are not often used in modern OpenGL.
+ * arrays. But they are not often used in modern OpenGL.</p>
+ * <p>The VertexArrays class has been tagged with the GlBufferFunction
+ * because it uses all of the same functions. There in one major difference 
+ * that you should take not of, the difference is that you do not need to call
+ * {@link org.lwjgl.opengl.GL15#glBindBuffer(int, int) glBindBuffer} for any 
+ * reason. The reason is because vertex arrays pass the buffer directly to
+ * the pointer function.</p>
  * @author Tyler Bucher
  */
+@GlBufferFunction
 public final class VertexArrays {
     
     /**
-     * Sets the color pointer of the vertex array. You need to enable 
-     * {@link org.lwjgl.opengl.GL11#GL_COLOR_ARRAY GL_COLOR_ARRAY} before 
-     * you can use this method.
-     * @param size - The number of points per color data (i.e. 3-RGB, 4-RGBA)
-     * @param stride - The stride offset; used for interleaving data
-     * @param vertices - The color vertices
-     */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void colorPointer(int size, int stride, FloatBuffer vertices) {
-        GL11.glColorPointer(size, stride, vertices);
-    }
-    
-    /**
-     * Sets the texture pointer of the vertex array. You need to enable 
-     * {@link org.lwjgl.opengl.GL11#GL_TEXTURE_COORD_ARRAY GL_TEXTURE_COORD_ARRAY} before 
-     * you can use this method.
-     * @param size - The number of points per texture data (i.e. 1-1D, 2-2D, 3-3D)
-     * @param stride - The stride offset; used for interleaving data
-     * @param vertices - The texture vertices
-     */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void texturePointer(int size, int stride, FloatBuffer vertices) {
-        GL11.glTexCoordPointer(size, stride, vertices);
-    }
-    
-    /**
-     * Sets the vertex pointer of the vertex array. You need to enable 
-     * {@link org.lwjgl.opengl.GL11#GL_VERTEX_ARRAY GL_VERTEX_ARRAY} before 
-     * you can use this method.
-     * @param vertexPointData - The number of points per vertex data (i.e. 1-1D, 2-2D, 3-3D)
-     * @param stride - The stride offset; used for interleaving data
-     * @param vertices - The vertex vertices
-     */
-    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
-    public static void vertexPointer(int vertexPointData, int stride, FloatBuffer vertices) {
-        // point to and draw vertex array
-        GL11.glVertexPointer(vertexPointData, stride, vertices);
-    }
-    
-    /**
      * Draws the vertex array; Uses redundant vertices.
-     * @param beginMode - The OpenGL begin mode
-     * @param vertexNumber - The number of vertices
-     * @param first - The start point of the array
+     * @param beginMode - The OpenGL begin mode.
+     * @param vertexNumber - The number of vertices.
+     * @param first - The start point of the array.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
     public static void drawArrays(@GlBeginMode int beginMode, int vertexNumber, int first) {
@@ -95,10 +62,10 @@ public final class VertexArrays {
     
     /**
      * Draws the vertex array; Does not use redundant vertices.
-     * @param beginMode - The OpenGL begin mode
-     * @param dataType - The OpenGL dataType
-     * @param vertexNumber - The number of vertices
-     * @param indices - The index vertices
+     * @param beginMode - The OpenGL begin mode.
+     * @param dataType - The OpenGL dataType.
+     * @param vertexNumber - The number of vertices.
+     * @param indices - The index vertices.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_COMPAT_PROFILE")
     public static void drawElements(@GlBeginMode int beginMode, @GlDataType int dataType, int vertexNumber, ByteBuffer indices) {

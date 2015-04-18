@@ -1,28 +1,7 @@
 /**
- * The MIT License (MIT)
  * 
- * Copyright (c) 2015 Tyler Bucher
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
  */
-
-package org.ajgl.test.graphics;
+package org.ajgl.test.graphics.shaders;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -39,29 +18,28 @@ import org.lwjgl.opengl.GL15;
 
 
 /**
- * This class is designed to test all of the 
- * fixed pipeline OpenGL drawing functions.
- * @author Tyler Bucher
+ * @author Tyler
+ *
  */
-@SuppressWarnings("deprecation")
-public class GraphicsTest {
+public class ShaderTest {
+
     
     // ======================================= Immediate Mode ===============================================
     public static void immidateDraw() {
         int beginMode = GL11.GL_TRIANGLES;
-        float[] vertices = {10, 10, 50, 10, 10, 50};
+        float[] vertices = {10,10,0, 50,10,0, 10,50,0};
         float[] colorVertices = {1,0,0, 0,1,0, 0,0,1};
         
         Immediate.beginDraw(beginMode); {
             // First point
             GL11.glColor3f(colorVertices[0], colorVertices[1], colorVertices[2]);
-            GL11.glVertex2f(vertices[0], vertices[1]);
+            GL11.glVertex3f(vertices[0], vertices[1], vertices[2]);
             // Second point
             GL11.glColor3f(colorVertices[3], colorVertices[4], colorVertices[5]);
-            GL11.glVertex2f(vertices[2], vertices[3]);
+            GL11.glVertex3f(vertices[3], vertices[4], vertices[5]);
             // Third point
             GL11.glColor3f(colorVertices[6], colorVertices[7], colorVertices[8]);
-            GL11.glVertex2f(vertices[4], vertices[5]);
+            GL11.glVertex3f(vertices[6], vertices[7], vertices[8]);
         } Immediate.endDraw();
     }
     // ======================================= Immediate Mode ===============================================
@@ -215,4 +193,5 @@ public class GraphicsTest {
         } VertexArrayObject.bindVao(0); // Unbind VAO
     }
     // ======================================= Vertex Array Object ==========================================
+
 }

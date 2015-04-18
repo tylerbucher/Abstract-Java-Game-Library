@@ -1,6 +1,27 @@
 /**
+ * The MIT License (MIT)
  * 
+ * Copyright (c) 2015 Tyler Bucher
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
 package org.ajgl.graphics;
 
 import java.lang.annotation.ElementType;
@@ -174,6 +195,66 @@ public class UtilAnnotations {
      */
     @Retention(RetentionPolicy.SOURCE)
     public @interface GlBufferFunction {
+        
+    }
+    
+    /**
+     * The Following constants are OpenGL buffer data targets.
+     * <ul>
+     * <li>{@link org.lwjgl.opengl.GL15#GL_ARRAY_BUFFER GL_ARRAY_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL42#GL_ATOMIC_COUNTER_BUFFER GL_ATOMIC_COUNTER_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_COPY_READ_BUFFER GL_COPY_READ_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_COPY_WRITE_BUFFER GL_COPY_WRITE_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL43#GL_DISPATCH_INDIRECT_BUFFER GL_DISPATCH_INDIRECT_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL40#GL_DRAW_INDIRECT_BUFFER GL_DRAW_INDIRECT_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL15#GL_ELEMENT_ARRAY_BUFFER GL_ELEMENT_ARRAY_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL21#GL_PIXEL_PACK_BUFFER GL_PIXEL_PACK_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL21#GL_PIXEL_UNPACK_BUFFER GL_PIXEL_UNPACK_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL44#GL_QUERY_BUFFER GL_QUERY_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL43#GL_SHADER_STORAGE_BUFFER GL_SHADER_STORAGE_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_TEXTURE_BUFFER GL_TEXTURE_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL30#GL_TRANSFORM_FEEDBACK_BUFFER GL_TRANSFORM_FEEDBACK_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_UNIFORM_BUFFER GL_UNIFORM_BUFFER}
+     * </ul>
+     * @author Tyler Bucher
+     * @see {@link org.lwjgl.opengl.GL15 glBufferData}
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @Target({ElementType.PARAMETER})
+    public @interface GlBufferTarget {
+        
+    }
+    
+    /**
+     * For OpenGL Shaders the following functions are acceptable.
+     * <ul>
+     * <li>{@link org.lwjgl.opengl.GL20 glBindAttribLocation}
+     * <li>{@link org.lwjgl.opengl.GL30 glBindFragDataLocation}
+     * <li>{@link org.lwjgl.opengl.GL33 glBindFragDataLocationIndexed}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetActive}
+     * <li>{@link org.lwjgl.opengl.GL31 glGetActive}
+     * <li>{@link org.lwjgl.opengl.GL40 glGetActive}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetAttachedShaders}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetAttribLocation}
+     * <li>{@link org.lwjgl.opengl.GL30 glGetFragDataLocation}
+     * <li>{@link org.lwjgl.opengl.GL33 glGetFragDataIndex}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetProgram}
+     * <li>{@link org.lwjgl.opengl.GL43 glGetProgram}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetShader}
+     * <li>{@link org.lwjgl.opengl.GL41 glGetShader}
+     * <li>{@link org.lwjgl.opengl.GL40 glGetSubroutine}
+     * <li>{@link org.lwjgl.opengl.GL20 glGetUniform}
+     * <li>{@link org.lwjgl.opengl.GL30 glGetUniform}
+     * <li>{@link org.lwjgl.opengl.GL31 glGetUniform}
+     * <li>{@link org.lwjgl.opengl.GL40 glGetUniform}
+     * <li>{@link org.lwjgl.opengl.GL20 glUnifrom}
+     * <li>{@link org.lwjgl.opengl.GL30 glUnifrom}
+     * <li>{@link org.lwjgl.opengl.GL40 glUnifrom}
+     * </ul>
+     * @author Tyler Bucher
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface GlShaderFunction {
         
     }
 }

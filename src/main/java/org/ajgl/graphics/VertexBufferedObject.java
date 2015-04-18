@@ -24,11 +24,16 @@
 
 package org.ajgl.graphics;
 
+import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
 import org.ajgl.OpenGLInfo;
 import org.ajgl.graphics.UtilAnnotations.GlBeginMode;
 import org.ajgl.graphics.UtilAnnotations.GlBufferFunction;
+import org.ajgl.graphics.UtilAnnotations.GlBufferTarget;
 import org.ajgl.graphics.UtilAnnotations.GlDataType;
 import org.ajgl.graphics.UtilAnnotations.GlDrawMode;
 import org.lwjgl.opengl.GL11;
@@ -47,75 +52,88 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      * @param drawMode - The OpenGL draw mode of the object.
-     * @param vertices - The vertices of the object
-     * @return The int value of the handler. 
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static int createVboHandler(@GlDrawMode int drawMode, FloatBuffer vertices) {
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, ByteBuffer vertices) {
         // Initialize vertex VBO handler
         int handler = GL15.glGenBuffers();
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, handler);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, drawMode);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        GL15.glBindBuffer(bufferTarget, handler);
+        GL15.glBufferData(bufferTarget, vertices, drawMode);
+        GL15.glBindBuffer(bufferTarget, 0);
         return handler;
     }
     
     /**
-     * Binds the color vertices. You need to enable 
-     * {@link org.lwjgl.opengl.GL11#GL_COLOR_ARRAY GL_COLOR_ARRAY} before 
-     * you can use this method.
-     * @param colorHandler - The vertex buffered object color handler
-     * @param colorPointData - The number of points per color data (i.e. 3-RGB, 4-RGBA)
-     * @param stride - The stride offset; used for interleaving data
-     * @param offSet - initial offset for the data
-     * @param dataType - The OpenGL dataType
+     * Creates a vertex buffer object handler.
+     * @param drawMode - The OpenGL draw mode of the object.
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static void colorPointer(int colorHandler, int colorPointData, int stride, int offSet, @GlDataType int dataType) {
-        // bind color data
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, colorHandler);
-        GL11.glColorPointer(colorPointData, dataType, stride, offSet);
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, ShortBuffer vertices) {
+        // Initialize vertex VBO handler
+        int handler = GL15.glGenBuffers();
+        GL15.glBindBuffer(bufferTarget, handler);
+        GL15.glBufferData(bufferTarget, vertices, drawMode);
+        GL15.glBindBuffer(bufferTarget, 0);
+        return handler;
     }
     
     /**
-     * Binds the local texture vertices. You need to enable 
-     * {@link org.lwjgl.opengl.GL11#GL_TEXTURE_COORD_ARRAY GL_TEXTURE_COORD_ARRAY} before 
-     * you can use this method.
-     * @param textureHandler - The vertex buffered object texture handler
-     * @param texturePointData - The number of points per texture data (i.e. 1-1D, 2-2D, 3-3D)
-     * @param stride - The stride offset; used for interleaving data
-     * @param offSet - initial offset for the data
-     * @param dataType - The OpenGL dataType
+     * Creates a vertex buffer object handler.
+     * @param drawMode - The OpenGL draw mode of the object.
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static void texturePointer(int textureHandler, int texturePointData, int stride, int offSet, @GlDataType int dataType) {
-        // bind color data
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, textureHandler);
-        GL11.glTexCoordPointer(texturePointData, dataType, stride, offSet);
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, IntBuffer vertices) {
+        // Initialize vertex VBO handler
+        int handler = GL15.glGenBuffers();
+        GL15.glBindBuffer(bufferTarget, handler);
+        GL15.glBufferData(bufferTarget, vertices, drawMode);
+        GL15.glBindBuffer(bufferTarget, 0);
+        return handler;
     }
     
     /**
-     * Binds the vertices. You need to enable 
-     * {@link org.lwjgl.opengl.GL11#GL_VERTEX_ARRAY GL_VERTEX_ARRAY} before 
-     * you can use this method.
-     * @param vertexHandler - The vertex buffered object vertex handler
-     * @param vertexPointData - The number of points per vertex data (i.e. 1-1D, 2-2D, 3-3D)
-     * @param stride - The stride offset; used for interleaving data
-     * @param offSet - initial offset for the data
-     * @param dataType - The OpenGL dataType
+     * Creates a vertex buffer object handler.
+     * @param drawMode - The OpenGL draw mode of the object.
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
-    public static void vertexPointer(int vertexHandler, int vertexPointData, int stride, int offSet, @GlDataType int dataType) {
-        // bind vertex data
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexHandler);
-        GL11.glVertexPointer(vertexPointData, dataType, stride, offSet);
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, FloatBuffer vertices) {
+        // Initialize vertex VBO handler
+        int handler = GL15.glGenBuffers();
+        GL15.glBindBuffer(bufferTarget, handler);
+        GL15.glBufferData(bufferTarget, vertices, drawMode);
+        GL15.glBindBuffer(bufferTarget, 0);
+        return handler;
+    }
+    
+    /**
+     * Creates a vertex buffer object handler.
+     * @param drawMode - The OpenGL draw mode of the object.
+     * @param vertices - The vertices of the object.
+     * @return The int value of the handler.
+     */
+    @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
+    public static int createVboHandler(@GlBufferTarget int bufferTarget, @GlDrawMode int drawMode, DoubleBuffer vertices) {
+        // Initialize vertex VBO handler
+        int handler = GL15.glGenBuffers();
+        GL15.glBindBuffer(bufferTarget, handler);
+        GL15.glBufferData(bufferTarget, vertices, drawMode);
+        GL15.glBindBuffer(bufferTarget, 0);
+        return handler;
     }
     
     /**
      * Draws a vertex buffered object; Uses redundant vertices.
-     * @param beginMode - The OpenGL begin mode
-     * @param first - The start point of the array
-     * @param vertexNumber - The number of vertices
+     * @param beginMode - The OpenGL begin mode.
+     * @param first - The start point of the array.
+     * @param vertexNumber - The number of vertices.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void drawVboArrays(@GlBeginMode int beginMode, int first, int vertexNumber) {
@@ -125,10 +143,10 @@ public final class VertexBufferedObject {
     
     /**
      * Draws a vertex buffered object; Does not use redundant vertices.
-     * @param beginMode - The OpenGL begin mode
-     * @param vertexNumber - The number of vertices
-     * @param dataType - The OpenGL dataType
-     * @param offSet - initial offset for the data
+     * @param beginMode - The OpenGL begin mode.
+     * @param vertexNumber - The number of vertices.
+     * @param dataType - The OpenGL dataType.
+     * @param offSet - initial offset for the data.
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void drawVboElements(@GlBeginMode int beginMode, int vertexNumber, @GlDataType int dataType, int offSet) {
