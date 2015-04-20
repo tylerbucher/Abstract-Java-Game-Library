@@ -24,34 +24,19 @@
 
 package org.ajgl.concurrent;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 
 /**
- * @author Tyler
- *
+ * This annotation should be attached to methods that receive an event.
+ * @author Tyler Bucher
  */
-public abstract class Task implements Comparable<Task> {
-    
-    private String flag;
-    private int priority;
-    
-    public Task(String flag, int priority) {
-        this.flag = flag;
-        this.priority = priority;
-    }
-    
-    public abstract void execute();
-    
-    public String getFlag() {
-        return flag;
-    }
-    
-    public int getPriority() {
-        return priority;
-    }
-    
-    @Override
-    public int compareTo(Task task)
-    {
-         return this.priority - task.priority;
-    }
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EventHandler {
+    Class<? extends Event> value(); // The class of the received event
+    int priority();                 // States the priority of the event
 }

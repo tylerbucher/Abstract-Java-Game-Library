@@ -26,32 +26,41 @@ package org.ajgl.concurrent;
 
 
 /**
- * @author Tyler
- *
+ * This class was designed to be extended by other higher level Events.
+ * @author Tyler Bucher
  */
-public abstract class Task implements Comparable<Task> {
+public abstract class Event implements Comparable<Event>{
     
-    private String flag;
-    private int priority;
+    private boolean canceled = false;   // States weather the event has been canceled
+    public final String name;           // States the name of the event
     
-    public Task(String flag, int priority) {
-        this.flag = flag;
-        this.priority = priority;
+    
+    public Event() {
+        this.name = "Event";
     }
     
-    public abstract void execute();
-    
-    public String getFlag() {
-        return flag;
+    /**
+     * Creates an event with a name and priority.
+     * @param name - The name of the event.
+     * @param priority - The priority of the event.
+     */
+    public Event(String name) {
+        this.name = name;
     }
     
-    public int getPriority() {
-        return priority;
+    /**
+     * Sets the event canceled or uncanceled.
+     * @param canceled - True to set the event canceled, false otherwise.
+     */
+    public void setCanceled(boolean canceled) {
+        this.canceled = canceled;
     }
     
-    @Override
-    public int compareTo(Task task)
-    {
-         return this.priority - task.priority;
+    /**
+     * Returns true if the Event was canceled.
+     * @return True if the event was canceled.
+     */
+    public boolean isCanceled() {
+        return canceled;
     }
 }
