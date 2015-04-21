@@ -105,7 +105,7 @@ public final class EventDispatcher {
             list.add(m);    // TODO
             
             Collections.sort(list, new Comparator<Method>() {
-
+                @Override
                 public int compare(Method method1, Method mehtod2) {
                     int method1Priority = method1.getAnnotation(EventHandler.class).priority();
                     int method2Priority = mehtod2.getAnnotation(EventHandler.class).priority();

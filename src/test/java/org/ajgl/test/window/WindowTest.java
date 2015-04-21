@@ -10,7 +10,6 @@ import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
 import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
-import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
@@ -63,7 +62,7 @@ public class WindowTest extends Window {
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         this.setKeyCallback(new GLFWKeyCallback() {
             @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {//TODO Dispatch key events
+            public void invoke(long window, int key, int scancode, int action, int mods) {
                 if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                     Tasker.executeASyncTask("GLFW_MAIN_THREAD");
             }
