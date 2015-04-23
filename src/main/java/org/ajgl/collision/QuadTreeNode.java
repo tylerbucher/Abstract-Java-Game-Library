@@ -24,6 +24,7 @@
 
 package org.ajgl.collision;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -32,7 +33,7 @@ import java.util.Vector;
  *
  * @param <T>
  */
-public class QuadTreeNode<T> {
+public class QuadTreeNode<T> extends DataTreeNode<T> {
     
     public static int maxObjects;       // The max objects the nodes can have
     
@@ -62,5 +63,35 @@ public class QuadTreeNode<T> {
     
     public boolean isParent() {
         return parent;
+    }
+
+    @Override
+    public void add(double x, double y, double z, T object) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void remove(T object) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public List<T> getCollisions(T object) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    protected void split() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void draw() {
+        // TODO Auto-generated method stub
+        
     }
 }
