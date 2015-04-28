@@ -11,20 +11,20 @@ public abstract class BruteForce<T> {
         objectList = new ArrayList<T>();
     }
     
-    public boolean checkCollision(T object) {
+    public boolean isObjectColliding(T object) {
         for(T t : objectList)
-            if(this.check(object, t))
+            if(checkObject(object, t))
                 return true;
         return false;
     }
     
-    public List<T> getCollisions(T object) {
+    public List<T> getObjectCollisions(T object) {
         List<T> collList = new ArrayList<T>();
         for(T t : objectList)
-            if(this.check(object, t))
+            if(checkObject(object, t))
                 collList.add(t);
         return collList;
     }
     
-    public abstract boolean check(T checker, T checkie);
+    protected abstract boolean checkObject(T checker, T checkie);
 }
