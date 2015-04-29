@@ -106,19 +106,19 @@ public class MainTest {
             int uniModel = GL20.glGetUniformLocation(shaderProgram.id, "model");
             if(uniModel != -1) {
                 Matrix4d model = new Matrix4d();
-                GL20.glUniformMatrix4(uniModel, false, model.getBuffer(FloatBuffer.class));
+                GL20.glUniformMatrix4fv(uniModel, false, model.getBuffer(FloatBuffer.class));
             }
 
             int uniView = GL20.glGetUniformLocation(shaderProgram.id, "view");
             if(uniView != -1) {
                 Matrix4d view = new Matrix4d();
-                GL20.glUniformMatrix4(uniView, false, view.getBuffer(FloatBuffer.class));
+                GL20.glUniformMatrix4fv(uniView, false, view.getBuffer(FloatBuffer.class));
             }
 
             int uniProjection = GL20.glGetUniformLocation(shaderProgram.id, "projection");
             if(uniProjection != -1) {
                 Matrix4d projection = Matrix4d.orthographic(0f, 1200f, 0f, 800f, 1f, -1f);
-                GL20.glUniformMatrix4(uniProjection, false, projection.getBuffer(FloatBuffer.class));
+                GL20.glUniformMatrix4fv(uniProjection, false, projection.getBuffer(FloatBuffer.class));
             }
             
             GL20.glUseProgram(0);
