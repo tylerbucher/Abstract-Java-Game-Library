@@ -38,16 +38,16 @@ public abstract class QuadTreeNode<T> {
     }
 
     public void add(T object) {
-        if(parent) {
+        if(parent)
             for(int i=0;i<4;i++)
                 if(contains(children[i], object))
                     children[i].add(object);
-            //return;
-        }
+        
         objectList.add(object);
         
         if(objectList.size() > maxObjects && currentLevel < maxLevels) {
             split();
+            parent = true;
             
             for(int j=0;j<objectList.size();j++) {
                 for(int k=0;k<4;k++)
@@ -60,20 +60,38 @@ public abstract class QuadTreeNode<T> {
     }
 
     public void remove(T object) {
-        // TODO Auto-generated method stub
+        if(parent)
+            for(int i=0;i<4;i++)
+                if(contains(children[i], object)) {
+                    children[i].remove(object);
+                    return;
+                }
         
+        objectList.remove(object);
     }
     
     public boolean isObjectColliding(T object) {
+        
         return false;
+    }
+    
+    public List<T> getPossibleObjectCollisions(T object) {
+        
+        return null;
     }
 
     public List<T> getCollisions(T object) {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    protected QuadTreeNode<T> getNode(T object) {
+        
+    }
 
     protected abstract void split();
     
     public abstract boolean contains(QuadTreeNode<T> node, T object);
+    
+    protected abstract boolean checkObject(T checker, T checkie);
 }
