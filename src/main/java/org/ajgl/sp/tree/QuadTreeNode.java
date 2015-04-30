@@ -38,10 +38,12 @@ public abstract class QuadTreeNode<T> {
     }
 
     public void add(T object) {
-        if(parent)
+        if(parent) {
             for(int i=0;i<4;i++)
-                if(contains(children[i], object))
+                if(intersects(object, children[i]))
                     children[i].add(object);
+            return;
+        }
         
         objectList.add(object);
         
@@ -49,49 +51,61 @@ public abstract class QuadTreeNode<T> {
             split();
             parent = true;
             
-            for(int j=0;j<objectList.size();j++) {
-                for(int k=0;k<4;k++)
-                    if(contains(children[k], objectList.get(j))) {
-                        children[k].add(object);
-                        objectList.remove(j);//objectList.set(j, null);
-                    }
-            }
+            for(T t : objectList)
+                add(t);
+            objectList.clear();
         }
     }
 
     public void remove(T object) {
-        if(parent)
+        if(parent) {
             for(int i=0;i<4;i++)
-                if(contains(children[i], object)) {
+                if(intersects(object, children[i]))
                     children[i].remove(object);
-                    return;
-                }
+            return;
+        }
         
         objectList.remove(object);
     }
     
     public boolean isObjectColliding(T object) {
-        
+        if(parent)
+            for(int i=0;i<4;i++)
+                if(intersects(object, children[i]))
+                    children[i].isObjectColliding(object);
+        else
+            for(T t : objectList)
+                if(checkObject(object, t))
+                    return true;
         return false;
     }
     
-    public List<T> getPossibleObjectCollisions(T object) {
-        
-        return null;
+    public void getPossibleObjectCollisions(T object, List<T> collisionList) {
+        if(parent) {
+            for(int i=0;i<4;i++)
+                if(intersects(object, children[i]))
+                    children[i].getPossibleObjectCollisions(object, collisionList);
+            return;
+        }
+        collisionList.addAll(objectList);
     }
 
-    public List<T> getCollisions(T object) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    protected QuadTreeNode<T> getNode(T object) {
+    public void getCollisions(T object, List<T> collisionList) {
+        if(parent) {
+            for(int i=0;i<4;i++)
+                if(intersects(object, children[i]))
+                    children[i].isObjectColliding(object);
+            return;
+        }
         
+        for(T t : objectList)
+            if(checkObject(object, t))
+                collisionList.add(t);
     }
 
     protected abstract void split();
     
-    public abstract boolean contains(QuadTreeNode<T> node, T object);
+    public abstract boolean intersects(T object, QuadTreeNode<T> node);
     
     protected abstract boolean checkObject(T checker, T checkie);
 }

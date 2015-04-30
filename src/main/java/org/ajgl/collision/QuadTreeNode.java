@@ -43,7 +43,7 @@ public class QuadTreeNode<T> extends DataTreeNode<T> {
     
     private boolean parent;             // States if this node is a parent
     private QuadTreeNode<T>[] children; // The child nodes of this node
-    private Vector<T> objectList;       // The object list of this node
+    public Vector<T> objectList;       // The object list of this node
     
     /**
      * Creates a new QuadTree node (Usually a child node).
@@ -66,12 +66,6 @@ public class QuadTreeNode<T> extends DataTreeNode<T> {
     }
 
     @Override
-    public void add(double x, double y, double z, T object) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public void remove(T object) {
         // TODO Auto-generated method stub
         
@@ -91,6 +85,12 @@ public class QuadTreeNode<T> extends DataTreeNode<T> {
 
     @Override
     public void draw() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void add(double x, double y, double z, T object) {
         // TODO Auto-generated method stub
         
     }

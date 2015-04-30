@@ -4,6 +4,8 @@ import java.util.List;
 
 public abstract class QuadTree<O, N extends QuadTreeNode<O>> {
     
+    private N rootNode;
+    
     public boolean isObjectColliding(O object) {
         
         return false;
