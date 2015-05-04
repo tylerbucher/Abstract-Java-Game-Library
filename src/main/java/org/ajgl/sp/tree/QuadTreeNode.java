@@ -3,19 +3,20 @@ package org.ajgl.sp.tree;
 import java.util.List;
 import java.util.Vector;
 
-public abstract class QuadTreeNode<T> {
+public class QuadTreeNode<T> {
 
     
-    public static int maxObjects;       // The max objects the nodes can have
-    public static int maxLevels;        // The max levels the QuadTree can have
+    public static int maxObjects;           // The max objects the nodes can have
+    public static int maxLevels;            // The max levels the QuadTree can have
     
-    private double x, y;                // The x and y position of this node
-    private double width, height;       // The width and height of the node
-    private final int currentLevel;     // States the current level of this node
+    public final int currentLevel;          // States the current level of this node
+    public Vector<T> objectList;            // The object list of this node
     
-    private boolean parent;             // States if this node is a parent
-    private QuadTreeNode<T>[] children; // The child nodes of this node
-    private Vector<T> objectList;       // The object list of this node
+    protected boolean parent;               // States if this node is a parent
+    protected QuadTreeNode<T>[] children;   // The child nodes of this node
+    
+    private double x, y;                    // The x and y position of this node
+    private double width, height;           // The width and height of the node
     
     /**
      * Creates a new QuadTree node (Usually a child node).
@@ -37,43 +38,9 @@ public abstract class QuadTreeNode<T> {
         return parent;
     }
 
-    public void add(T object) {
-        if(parent) {
-            for(int i=0;i<4;i++)
-                if(intersects(object, children[i]))
-                    children[i].add(object);
-            return;
-        }
-        
-        objectList.add(object);
-        
-        if(objectList.size() > maxObjects && currentLevel < maxLevels) {
-            split();
-            parent = true;
-            
-            for(T t : objectList)
-                add(t);
-            objectList.clear();
-        }
-    }
-
-    public void remove(T object) {
-        if(parent) {
-            for(int i=0;i<4;i++)
-                if(intersects(object, children[i]))
-                    children[i].remove(object);
-            return;
-        }
-        
-        objectList.remove(object);
-    }
+    
     
     public boolean isObjectColliding(T object) {
-        if(parent)
-            for(int i=0;i<4;i++)
-                if(intersects(object, children[i]))
-                    children[i].isObjectColliding(object);
-        else
             for(T t : objectList)
                 if(checkObject(object, t))
                     return true;
@@ -101,11 +68,24 @@ public abstract class QuadTreeNode<T> {
         for(T t : objectList)
             if(checkObject(object, t))
                 collisionList.add(t);
+        
     }
 
-    protected abstract void split();
+    @SuppressWarnings("unchecked")
+    protected void split() {
+        parent = true;
+        children = (QuadTreeNode<T>[]) new QuadTreeNode<?>[4];
+        double hWidth = width/2, hHeight = height/2;
+        
+        children[0] = new QuadTreeNode<T>(x,y+hHeight,hWidth,hHeight,currentLevel+1);
+        children[1] = new QuadTreeNode<T>(x+hWidth,y+hHeight,hWidth,hHeight,currentLevel+1);
+        children[2] = new QuadTreeNode<T>(x,y,hWidth,hHeight,currentLevel+1);
+        children[3] = new QuadTreeNode<T>(x+hWidth,y,hWidth,hHeight,currentLevel+1);
+    }
     
-    public abstract boolean intersects(T object, QuadTreeNode<T> node);
+    public QuadTreeNode<T>[] getChildren() {
+        return children;
+    }
     
     protected abstract boolean checkObject(T checker, T checkie);
 }
