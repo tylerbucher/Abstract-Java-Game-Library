@@ -3,7 +3,7 @@ package org.ajgl.sp.tree;
 import java.util.List;
 import java.util.Vector;
 
-public abstract class QuadTreeNode<O> {
+public abstract class OctaTreeNode<O> {
 
     public static int maxObjects;           // The max objects the nodes can have
     public static int maxLevels;            // The max levels the QuadTree can have
@@ -12,10 +12,10 @@ public abstract class QuadTreeNode<O> {
     public Vector<O> objectList;            // The object list of this node
     
     protected boolean parent;               // States if this node is a parent
-    protected QuadTreeNode<O>[] children;   // The child nodes of this node
+    protected OctaTreeNode<O>[] children;   // The child nodes of this node
     
-    protected double x, y;                    // The x and y position of this node
-    protected double width, height;           // The width and height of the node
+    protected double x, y, z;               // The x and y position of this node
+    protected double width, height, depth;  // The width and height of the node
     
     /**
      * Creates a new QuadTree node (Usually a child node).
@@ -25,15 +25,18 @@ public abstract class QuadTreeNode<O> {
      * @param height - The height of this node.
      * @param currentLevel - The current depth level of the node.
      */
-    protected QuadTreeNode(double x, double y, double width, double height, int currentLevel) {
+    public OctaTreeNode(double x, double y, double z, double width, double height, double depth, int currentLevel) {
         this.x = x;
         this.y = y;
+        this.z = z;
         this.width = width;
         this.height = height;
+        this.depth = depth;
         this.currentLevel = currentLevel;
     }
+    
 
-    public QuadTreeNode<O>[] getChildren() {
+    public OctaTreeNode<O>[] getChildren() {
         return children;
     }
     

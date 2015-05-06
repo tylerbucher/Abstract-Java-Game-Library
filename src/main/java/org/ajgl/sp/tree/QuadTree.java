@@ -1,16 +1,17 @@
 package org.ajgl.sp.tree;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class QuadTree<O, T extends QuadTreeNode<O>> {
+public abstract class QuadTree<O> {
     
-    private T rootNode;
+    private QuadTreeNode<O> rootNode;
     
     public void insert(O object) {
         insert(object, rootNode);
     }
     
-    public <N extends QuadTreeNode<O>> void insert(O object, N node) {
+    private void insert(O object, QuadTreeNode<O> node) {
         if(node.parent) {
             for(int i=0;i<4;i++)
                 if(intersects(object, node.children[i]))
@@ -29,7 +30,11 @@ public abstract class QuadTree<O, T extends QuadTreeNode<O>> {
         }
     }
     
-    public <N extends QuadTreeNode<O>> void remove(O object, N node) {
+    public void remove(O object) {
+        remove(object, rootNode);
+    }
+    
+    private void remove(O object, QuadTreeNode<O> node) {
         if(node.parent) {
             for(int i=0;i<4;i++)
                 if(intersects(object, node.children[i]))
@@ -40,28 +45,52 @@ public abstract class QuadTree<O, T extends QuadTreeNode<O>> {
         node.objectList.remove(object);
     }
     
-    public <N extends QuadTreeNode<O>> boolean isObjectColliding(O object, N node) {
+    public boolean isObjectColliding(O object) {
+        return isObjectColliding(object, rootNode);
+    }
+    
+    private boolean isObjectColliding(O object, QuadTreeNode<O> node) {
         if(node.parent) {
             for(int i=0;i<4;i++)
                 if(intersects(object, node.children[i]))
                     isObjectColliding(object, node);
         } else {
-            node.isObjectColliding(object);
+            return node.isObjectColliding(object);
         }
         return false;
     }
-
+    
     public List<O> getPossibleObjectCollisions(O object) {
-        
-        return null;
+        List<O> collisionList = new ArrayList<O>();
+        getPossibleObjectCollisions(object, rootNode, collisionList);
+        return collisionList;
+    }
+
+    private void getPossibleObjectCollisions(O object, QuadTreeNode<O> node, List<O> collisionList) {
+        if(node.parent) {
+            for(int i=0;i<4;i++)
+                if(intersects(object, node.children[i]))
+                    getPossibleObjectCollisions(object, node.children[i], collisionList);
+            return;
+        }
+        collisionList.addAll(node.objectList);
     }
     
     public List<O> getObjectCollisions(O object) {
-        
-        return null;
+        List<O> collisionList = new ArrayList<O>();
+        getCollisions(object, rootNode, collisionList);
+        return collisionList;
     }
     
-    public abstract <N extends QuadTreeNode<O>> boolean intersects(O object, N node);
+    private void getCollisions(O object, QuadTreeNode<O> node, List<O> collisionList) {
+        if(node.parent) {
+            for(int i=0;i<4;i++)
+                if(intersects(object, node.children[i]))
+                    getCollisions(object, node.children[i], collisionList);
+            return;
+        }
+        node.getCollisions(object, collisionList);
+    }
     
-    protected abstract boolean checkObject(O checker, O checkie);
+    public abstract boolean intersects(O object, QuadTreeNode<O> node);
 }
