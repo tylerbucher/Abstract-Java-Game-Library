@@ -22,9 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math;
+package org.ajgl.math.matrix4;
 
 import java.nio.Buffer;
+
+import org.ajgl.math.VectorUtils;
+import org.ajgl.math.matrix3.Matrix3d;
+import org.ajgl.math.vector.Vector4d;
 
 /**
  * This class is designed to be a 4x4 matrix.

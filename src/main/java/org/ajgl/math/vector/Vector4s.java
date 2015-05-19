@@ -22,45 +22,47 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math;
+package org.ajgl.math.vector;
 
 import java.nio.Buffer;
 
+import org.ajgl.math.VectorUtils;
 
 /**
- * This class is designed to be a 3d vector.
+ * This class is designed to be a 4d vector.
  * @author Tyler Bucher
  */
-public class Vector3d extends Vector2d {
+public class Vector4s extends Vector3s {
 
-    public double z;    // 3rd dimensional value
+    public short w;    // 4th dimensional value
     
     /**
-     * Default Vector3d constructor.
+     * Default Vector4d constructor.
      */
-    public Vector3d() {
+    public Vector4s() {
         super();
-        this.z = 0;
+        this.w = 0;
     }
     
     /**
-     * Creates a Vector3d with three values.
+     * Creates a Vector4d with four values.
      * @param x - x value.
      * @param y - y value.
      * @param z - z value.
+     * @param w - w value.
      */
-    public Vector3d(double x, double y, double z) {
-        super(x, y);
-        this.z = z;
+    public Vector4s(short x, short y, short z, short w) {
+        super(x, y, z);
+        this.w = w;
     }
     
     /**
      * Duplicates a vector to the current vector.
      * @param vector - Vector to be duplicated.
      */
-    public Vector3d(Vector3d vector) {
+    public Vector4s(Vector4s vector) {
         super(vector);
-        this.z = vector.z;
+        this.w = vector.w;
     }
     
     /**
@@ -68,9 +70,8 @@ public class Vector3d extends Vector2d {
      * @param vector - the vector to be added.
      * @return This vector.
      */
-    public Vector3d add(Vector3d vector) {
+    public Vector4s add(Vector4s vector) {
         super.add(vector);
-        this.z += vector.z;
         
         return this;
     }
@@ -80,9 +81,8 @@ public class Vector3d extends Vector2d {
      * @param vector - Vector to be subtracted.
      * @return This vector.
      */
-    public Vector3d subtract(Vector3d vector) {
+    public Vector4s subtract(Vector4s vector) {
         super.subtract(vector);
-        this.z += -vector.z;
         
         return this;
     }
@@ -92,8 +92,8 @@ public class Vector3d extends Vector2d {
      * @param vector - Vector to be dotted with.
      * @return The resulting number.
      */
-    public double dot(Vector3d vector) {
-        return super.dot(vector) + (this.z *= vector.z);
+    public short dot(Vector4s vector) {
+        return super.dot(vector);
     }
     
     /**
@@ -101,21 +101,20 @@ public class Vector3d extends Vector2d {
      * @param vector - Vector to be crossed with.
      * @return The resulting vector.
      */
-    public Vector3d cross(Vector3d vector) {
-        double cx = (this.y * vector.z) - (this.z * vector.y);
-        double cy = (this.z * vector.x) - (this.x * vector.z);
-        double cz = (this.x * vector.y) - (this.y * vector.x);
+    public Vector4s cross(Vector4s vector) {
+        short cx = (short) ((this.y * vector.z) - (this.z * vector.y));
+        short cy = (short) ((this.z * vector.x) - (this.x * vector.z));
+        short cz = (short) ((this.x * vector.y) - (this.y * vector.x));
         
-        return new Vector3d(cx, cy, cz);
+        return new Vector4s(cx, cy, cz, vector.w);
     }
     
     /**
      * Negates this vector.
      */
     @Override
-    public Vector3d negate() {
+    public Vector4s negate() {
         super.negate();
-        z = -z;
         
         return this;
     }
@@ -124,22 +123,8 @@ public class Vector3d extends Vector2d {
      * Normalizes this vector.
      */
     @Override
-    public Vector3d normalize() {
-        double mag = this.getMagnitude();
-        this.x /= mag;
-        this.y /= mag;
-        this.z /= mag;
-        
-        return this;
-    }
-    
-    /**
-     * Scales this vector by a value scalar value.
-     */
-    @Override
-    public Vector3d scale(double value) {
-        super.scale(value);
-        this.z *= value;
+    public Vector4s normalize() {
+        super.normalize();
         
         return this;
     }
@@ -148,8 +133,8 @@ public class Vector3d extends Vector2d {
      * Returns the magnitude of this vector.
      */
     @Override
-    public double getMagnitude() {
-        return Math.sqrt((x*x)+(y*y)+(z*z));
+    public short getMagnitude() {
+        return (short) Math.sqrt((x*x)+(y*y)+(z*z));
     }
     
     /**
@@ -157,6 +142,6 @@ public class Vector3d extends Vector2d {
      */
     @Override
     public <B extends Buffer> B getBuffer(Class<B> bufferClass) {
-        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, x, y, z));
+        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, x, y, z, w));
     }
 }

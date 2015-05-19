@@ -20,7 +20,7 @@ import java.nio.FloatBuffer;
 import org.ajgl.concurrent.Tasker;
 import org.ajgl.graphics.shaders.Shader;
 import org.ajgl.graphics.shaders.ShaderProgram;
-import org.ajgl.math.Matrix4d;
+import org.ajgl.math.matrix4.Matrix4d;
 import org.ajgl.test.graphics.shaders.ShaderTest;
 import org.ajgl.test.window.ConcurrentWindowTest;
 import org.ajgl.test.window.WindowTest;

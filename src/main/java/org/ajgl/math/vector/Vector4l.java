@@ -22,44 +22,47 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math;
+package org.ajgl.math.vector;
 
 import java.nio.Buffer;
 
+import org.ajgl.math.VectorUtils;
+
 /**
- * This class is designed to be a 2d vector.
+ * This class is designed to be a 4d vector.
  * @author Tyler Bucher
  */
-public class Vector2d {
-    
-    public double x;    // 1st dimensional value
-    public double y;    // 2nd dimensional value
+public class Vector4l extends Vector3l {
+
+    public long w;    // 4th dimensional value
     
     /**
-     * Default Vector2d constructor.
+     * Default Vector4d constructor.
      */
-    public Vector2d() {
-        this.x = 0;
-        this.y = 0;
+    public Vector4l() {
+        super();
+        this.w = 0;
     }
     
     /**
-     * Creates a Vector2d with three values.
+     * Creates a Vector4d with four values.
      * @param x - x value.
      * @param y - y value.
+     * @param z - z value.
+     * @param w - w value.
      */
-    public Vector2d(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public Vector4l(long x, long y, long z, long w) {
+        super(x, y, z);
+        this.w = w;
     }
     
     /**
      * Duplicates a vector to the current vector.
      * @param vector - Vector to be duplicated.
      */
-    public Vector2d(Vector2d vector) {
-        this.x = vector.x;
-        this.y = vector.y;
+    public Vector4l(Vector4l vector) {
+        super(vector);
+        this.w = vector.w;
     }
     
     /**
@@ -67,9 +70,8 @@ public class Vector2d {
      * @param vector - the vector to be added.
      * @return This vector.
      */
-    public Vector2d add(Vector2d vector) {
-        this.x += vector.x;
-        this.y += vector.y;
+    public Vector4l add(Vector4l vector) {
+        super.add(vector);
         
         return this;
     }
@@ -79,9 +81,8 @@ public class Vector2d {
      * @param vector - Vector to be subtracted.
      * @return This vector.
      */
-    public Vector2d subtract(Vector2d vector) {
-        this.x += -vector.x;
-        this.y += -vector.y;
+    public Vector4l subtract(Vector4l vector) {
+        super.subtract(vector);
         
         return this;
     }
@@ -91,8 +92,8 @@ public class Vector2d {
      * @param vector - Vector to be dotted with.
      * @return The resulting number.
      */
-    public double dot(Vector2d vector) {
-        return (this.x *= vector.x) + (this.y *= vector.y);
+    public long dot(Vector4l vector) {
+        return super.dot(vector);
     }
     
     /**
@@ -100,18 +101,20 @@ public class Vector2d {
      * @param vector - Vector to be crossed with.
      * @return The resulting vector.
      */
-    public Vector3d cross(Vector2d vector) {
-        double cz = (this.x * vector.y) - (this.y * vector.x);
+    public Vector4l cross(Vector4l vector) {
+        long cx = (this.y * vector.z) - (this.z * vector.y);
+        long cy = (this.z * vector.x) - (this.x * vector.z);
+        long cz = (this.x * vector.y) - (this.y * vector.x);
         
-        return new Vector3d(0.0, 0.0, cz);
+        return new Vector4l(cx, cy, cz, vector.w);
     }
     
     /**
      * Negates this vector.
      */
-    public Vector2d negate() {
-        x = -x;
-        y = -y;
+    @Override
+    public Vector4l negate() {
+        super.negate();
         
         return this;
     }
@@ -119,20 +122,9 @@ public class Vector2d {
     /**
      * Normalizes this vector.
      */
-    public Vector2d normalize() {
-        double mag = this.getMagnitude();
-        this.x /= mag;
-        this.y /= mag;
-        
-        return this;
-    }
-    
-    /**
-     * Scales this vector by a value scalar value.
-     */
-    public Vector2d scale(double value) {
-        this.x *= value;
-        this.y *= value;
+    @Override
+    public Vector4l normalize() {
+        super.normalize();
         
         return this;
     }
@@ -140,14 +132,16 @@ public class Vector2d {
     /**
      * Returns the magnitude of this vector.
      */
-    public double getMagnitude() {
-        return Math.hypot(x, y);
+    @Override
+    public long getMagnitude() {
+        return (long) Math.sqrt((x*x)+(y*y)+(z*z));
     }
     
     /**
      * Returns the buffer version of this vector.
      */
+    @Override
     public <B extends Buffer> B getBuffer(Class<B> bufferClass) {
-        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, x, y));
+        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, x, y, z, w));
     }
 }
