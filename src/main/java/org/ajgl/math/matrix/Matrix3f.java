@@ -22,27 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math.matrix2;
+package org.ajgl.math.matrix;
 
 import java.nio.FloatBuffer;
 
-import org.ajgl.math.vector.Vector2d;
-import org.ajgl.math.vector.Vector2f;
+import org.ajgl.math.vector.Vector3f;
 import org.lwjgl.BufferUtils;
 
 /**
- * This class is designed to be a 2x2 matrix.
+ * This class is designed to be a 3x3 matrix.
  * @author Tyler Bucher
  */
-public class Matrix2f {
+public class Matrix3f extends Matrix2f {
     
-    public float m00, m01; // First row
-    public float m10, m11; // Second row
+    public float /*m00, m01,*/ m02;    // First row
+    public float /*m10, m11,*/ m12;    // Second row
+    public float   m20, m21,   m22;    // Third row
     
     /**
      * Default Matrix constructor.
      */
-    public Matrix2f() {
+    public Matrix3f() {
         this.loadIdentity();
     }
     
@@ -50,16 +50,18 @@ public class Matrix2f {
      * Copies a matrix to this matrix.
      * @param matrix - Matrix to be copied.
      */
-    public Matrix2f(Matrix2f matrix) {
-        Matrix2f.copyMatrix(matrix, this);
+    public Matrix3f(Matrix3f matrix) {
+        Matrix3f.copyMatrix(matrix, this);
     }
     
     /**
      * Loads the identity matrix.
      */
-    public Matrix2f loadIdentity() {
-        m00 = 1; m01 = 0;
-        m10 = 0; m11 = 1;
+    @Override
+    public Matrix3f loadIdentity() {
+        super.loadIdentity(); m02 = 0;
+                              m12 = 0;
+        m20 = 0; m21 = 0;     m22 = 1;
         
         return this;
     }
@@ -69,9 +71,10 @@ public class Matrix2f {
      * @param matrix - Matrix to be added.
      * @return This matrix.
      */
-    public Matrix2f add(Matrix2f matrix) {
-        m00 += matrix.m00; m01 += matrix.m01;
-        m10 += matrix.m10; m11 += matrix.m11;
+    public Matrix3f add(Matrix3f matrix) {
+        super.add(matrix);                    m02 += matrix.m02;
+                                              m12 += matrix.m12;
+        m20 += matrix.m20; m21 += matrix.m21; m22 += matrix.m22;
         
         return this;
     }
@@ -81,9 +84,10 @@ public class Matrix2f {
      * @param matrix - Matrix to be subtracted.
      * @return This matrix.
      */
-    public Matrix2f subtract(Matrix2f matrix) {
-        m00 -= matrix.m00; m01 -= matrix.m01;
-        m10 -= matrix.m10; m11 -= matrix.m11;
+    public Matrix3f subtract(Matrix3f matrix) {
+        super.subtract(matrix);               m02 -= matrix.m02;
+                                              m12 -= matrix.m12;
+        m20 -= matrix.m20; m21 -= matrix.m21; m22 -= matrix.m22;
         
         return this;
     }
@@ -93,14 +97,20 @@ public class Matrix2f {
      * @param matrix - Matrix to be multiplied.
      * @return This Matrix.
      */
-    public Matrix2f multiply(Matrix2f matrix) {
-        Matrix2f orig = new Matrix2f(this);
+    public Matrix3f multiply(Matrix3f matrix) {
+        Matrix3f orig = new Matrix3f(this);
         
-        m00 = (orig.m00*matrix.m00)+(orig.m01*matrix.m10);
-        m10 = (orig.m10*matrix.m00)+(orig.m11*matrix.m10);
+        m00 = (orig.m00*matrix.m00)+(orig.m01*matrix.m10)+(orig.m02*matrix.m20);
+        m10 = (orig.m10*matrix.m00)+(orig.m11*matrix.m10)+(orig.m12*matrix.m20);
+        m20 = (orig.m20*matrix.m00)+(orig.m21*matrix.m10)+(orig.m22*matrix.m20);
         
-        m01 = (orig.m00*matrix.m01)+(orig.m01*matrix.m11);
-        m11 = (orig.m10*matrix.m01)+(orig.m11*matrix.m11);
+        m01 = (orig.m00*matrix.m01)+(orig.m01*matrix.m11)+(orig.m02*matrix.m21);
+        m11 = (orig.m10*matrix.m01)+(orig.m11*matrix.m11)+(orig.m12*matrix.m21);
+        m21 = (orig.m20*matrix.m01)+(orig.m21*matrix.m11)+(orig.m22*matrix.m21);
+        
+        m02 = (orig.m00*matrix.m02)+(orig.m01*matrix.m12)+(orig.m02*matrix.m22);
+        m12 = (orig.m10*matrix.m02)+(orig.m11*matrix.m12)+(orig.m12*matrix.m22);
+        m22 = (orig.m20*matrix.m02)+(orig.m21*matrix.m12)+(orig.m22*matrix.m22);
         
         return this;
     }
@@ -108,17 +118,11 @@ public class Matrix2f {
     /**
      * Multiplies this matrix by a scalar value.
      */
-    public Vector2f multiply(Vector2d vector) {
-        Vector2f newVector = new Vector2f();
-        newVector.x = (float) ((vector.x*this.m00) + (vector.y*this.m10));
-        newVector.y = (float) ((vector.x*this.m01) + (vector.y*this.m11));
-        
-        return newVector;
-    }
-    
-    public Matrix2f multiply(float value) {
-        m00 *= value; m01 *= value;
-        m10 *= value; m11 *= value;
+    @Override
+    public Matrix3f multiply(float value) {
+        super.multiply(value);      m02 *= value;
+                                    m12 *= value;
+        m20 *= value; m21 *= value; m22 *= value;
         
         return this;
     }
@@ -126,9 +130,11 @@ public class Matrix2f {
     /**
      * Divides this matrix by a scalar value.
      */
-    public Matrix2f divide(float value) {
-        m00 /= value; m01 /= value;
-        m10 /= value; m11 /= value;
+    @Override
+    public Matrix3f divide(float value) {
+        super.divide(value);        m02 /= value;
+                                    m12 /= value;
+        m20 /= value; m21 /= value; m22 /= value;
         
         return this;
     }
@@ -136,7 +142,8 @@ public class Matrix2f {
     /**
      * Negates this matrix.
      */
-    public Matrix2f negate() {
+    @Override
+    public Matrix3f negate() {
         return this.multiply(-1);
     }
     
@@ -144,8 +151,9 @@ public class Matrix2f {
      * Returns the buffer version of this matrix.
      */
     public FloatBuffer getBuffer() {
-        float[] array = {m00, m10,
-                         m01, m11};
+        float[] array = {m00, m10, m20,
+                          m01, m11, m21, 
+                          m02, m12, m22};
         FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
         buffer.put(array);
         buffer.flip();
@@ -159,10 +167,11 @@ public class Matrix2f {
      * @param col3 - Third column.
      * @return The new matrix.
      */
-    public static Matrix2f createMatrix(Vector2f col1, Vector2f col2) {
-        Matrix2f matrix = new Matrix2f();
-        matrix.m00 = col1.x; matrix.m01 = col2.x;
-        matrix.m10 = col1.y; matrix.m11 = col2.y;
+    public static Matrix3f createMatrix(Vector3f col1, Vector3f col2, Vector3f col3) {
+        Matrix3f matrix = new Matrix3f();
+        matrix.m00 = col1.x; matrix.m01 = col2.x; matrix.m02 = col3.x;
+        matrix.m10 = col1.y; matrix.m11 = col2.y; matrix.m12 = col3.y;
+        matrix.m20 = col1.z; matrix.m21 = col2.z; matrix.m22 = col3.z;
         
         return matrix;
     }
@@ -173,9 +182,10 @@ public class Matrix2f {
      * @param des - destination matrix.
      * @return The destination matrix.
      */
-    public static Matrix2f copyMatrix(Matrix2f src, Matrix2f des) {
-        des.m00 = src.m00; des.m01 = src.m01;
-        des.m10 = src.m10; des.m11 = src.m11;
+    public static Matrix3f copyMatrix(Matrix3f src, Matrix3f des) {
+        des.m00 = src.m00; des.m01 = src.m01; des.m02 = src.m02;
+        des.m10 = src.m10; des.m11 = src.m11; des.m12 = src.m12;
+        des.m20 = src.m20; des.m21 = src.m21; des.m22 = src.m22;
         
         return des;
     }

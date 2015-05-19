@@ -16,11 +16,14 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.glClear;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.ajgl.concurrent.Tasker;
 import org.ajgl.graphics.shaders.Shader;
 import org.ajgl.graphics.shaders.ShaderProgram;
-import org.ajgl.math.matrix4.Matrix4d;
+import org.ajgl.math.matrix.Matrix4d;
+import org.ajgl.math.matrix.Matrix4f;
 import org.ajgl.test.graphics.shaders.ShaderTest;
 import org.ajgl.test.window.ConcurrentWindowTest;
 import org.ajgl.test.window.WindowTest;
@@ -105,20 +108,20 @@ public class MainTest {
             
             int uniModel = GL20.glGetUniformLocation(shaderProgram.id, "model");
             if(uniModel != -1) {
-                Matrix4d model = new Matrix4d();
-                GL20.glUniformMatrix4fv(uniModel, false, model.getBuffer(FloatBuffer.class));
+                Matrix4f model = new Matrix4f();
+                GL20.glUniformMatrix4(uniModel, false, model.getBuffer());
             }
 
             int uniView = GL20.glGetUniformLocation(shaderProgram.id, "view");
             if(uniView != -1) {
-                Matrix4d view = new Matrix4d();
-                GL20.glUniformMatrix4fv(uniView, false, view.getBuffer(FloatBuffer.class));
+                Matrix4f view = new Matrix4f();
+                GL20.glUniformMatrix4(uniView, false, view.getBuffer());
             }
 
             int uniProjection = GL20.glGetUniformLocation(shaderProgram.id, "projection");
             if(uniProjection != -1) {
-                Matrix4d projection = Matrix4d.orthographic(0f, 1200f, 0f, 800f, 1f, -1f);
-                GL20.glUniformMatrix4fv(uniProjection, false, projection.getBuffer(FloatBuffer.class));
+                Matrix4f projection = Matrix4f.orthographic(0f, 1200f, 0f, 800f, 1f, -1f);
+                GL20.glUniformMatrix4(uniProjection, false, projection.getBuffer());
             }
             
             GL20.glUseProgram(0);
@@ -145,6 +148,19 @@ public class MainTest {
         
         long handle = windowTest.getWindowHandler();
         
+        ArrayList<Double> keyList = new ArrayList<>();
+        ArrayList<Double> valueList = new ArrayList<>();
+        
+        for(double d=0.0;d<=6.28;d+=0.01256) {
+            double theta = d;
+            double radius = 200*Math.cos(5*theta);
+            double x = radius*Math.cos(theta);
+            double y = radius*Math.sin(theta);
+            
+            keyList.add(x+500);
+            valueList.add(y+500);
+        }
+        
         
         while ( glfwWindowShouldClose(handle) == GL_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -153,6 +169,17 @@ public class MainTest {
             input();
             update();
             render();
+            
+            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+            GL11.glLineWidth(1.0f);
+            GL11.glBegin(GL11.GL_POLYGON); {
+                for(int i=0;i<keyList.size();i++) {
+                    GL20.glVertexAttrib3d(1, 1f, 1f, 1f);
+                    GL20.glVertexAttrib3d(0, keyList.get(i).doubleValue(), valueList.get(i).doubleValue(), 0f);
+                }
+            } GL11.glEnd();
+            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+            GL20.glUseProgram(0);
             
             // Display Buffer swap
             glfwSwapBuffers(handle);
@@ -199,7 +226,7 @@ public class MainTest {
         ShaderTest.vboDraw();
         ShaderTest.vaoDraw();
         
-        GL20.glUseProgram(0);
+        //GL20.glUseProgram(0);
     }
     
     /**

@@ -22,11 +22,10 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math.matrix3;
+package org.ajgl.math.matrix;
 
 import java.nio.ByteBuffer;
 
-import org.ajgl.math.matrix2.Matrix2b;
 import org.ajgl.math.vector.Vector3b;
 import org.lwjgl.BufferUtils;
 

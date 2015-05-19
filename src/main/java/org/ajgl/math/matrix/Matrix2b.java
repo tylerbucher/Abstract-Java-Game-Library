@@ -22,26 +22,26 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math.matrix2;
+package org.ajgl.math.matrix;
 
-import java.nio.LongBuffer;
+import java.nio.ByteBuffer;
 
-import org.ajgl.math.vector.Vector2l;
+import org.ajgl.math.vector.Vector2b;
 import org.lwjgl.BufferUtils;
 
 /**
  * This class is designed to be a 2x2 matrix.
  * @author Tyler Bucher
  */
-public class Matrix2l {
+public class Matrix2b {
     
-    public long m00, m01; // First row
-    public long m10, m11; // Second row
+    public byte m00, m01; // First row
+    public byte m10, m11; // Second row
     
     /**
      * Default Matrix constructor.
      */
-    public Matrix2l() {
+    public Matrix2b() {
         this.loadIdentity();
     }
     
@@ -49,14 +49,14 @@ public class Matrix2l {
      * Copies a matrix to this matrix.
      * @param matrix - Matrix to be copied.
      */
-    public Matrix2l(Matrix2l matrix) {
-        Matrix2l.copyMatrix(matrix, this);
+    public Matrix2b(Matrix2b matrix) {
+        Matrix2b.copyMatrix(matrix, this);
     }
     
     /**
      * Loads the identity matrix.
      */
-    public Matrix2l loadIdentity() {
+    public Matrix2b loadIdentity() {
         m00 = 1; m01 = 0;
         m10 = 0; m11 = 1;
         
@@ -68,7 +68,7 @@ public class Matrix2l {
      * @param matrix - Matrix to be added.
      * @return This matrix.
      */
-    public Matrix2l add(Matrix2l matrix) {
+    public Matrix2b add(Matrix2b matrix) {
         m00 += matrix.m00; m01 += matrix.m01;
         m10 += matrix.m10; m11 += matrix.m11;
         
@@ -80,7 +80,7 @@ public class Matrix2l {
      * @param matrix - Matrix to be subtracted.
      * @return This matrix.
      */
-    public Matrix2l subtract(Matrix2l matrix) {
+    public Matrix2b subtract(Matrix2b matrix) {
         m00 -= matrix.m00; m01 -= matrix.m01;
         m10 -= matrix.m10; m11 -= matrix.m11;
         
@@ -92,14 +92,14 @@ public class Matrix2l {
      * @param matrix - Matrix to be multiplied.
      * @return This Matrix.
      */
-    public Matrix2l multiply(Matrix2l matrix) {
-        Matrix2l orig = new Matrix2l(this);
+    public Matrix2b multiply(Matrix2b matrix) {
+        Matrix2b orig = new Matrix2b(this);
         
-        m00 = (orig.m00*matrix.m00)+(orig.m01*matrix.m10);
-        m10 = (orig.m10*matrix.m00)+(orig.m11*matrix.m10);
+        m00 = (byte) ((orig.m00*matrix.m00)+(orig.m01*matrix.m10));
+        m10 = (byte) ((orig.m10*matrix.m00)+(orig.m11*matrix.m10));
         
-        m01 = (orig.m00*matrix.m01)+(orig.m01*matrix.m11);
-        m11 = (orig.m10*matrix.m01)+(orig.m11*matrix.m11);
+        m01 = (byte) ((orig.m00*matrix.m01)+(orig.m01*matrix.m11));
+        m11 = (byte) ((orig.m10*matrix.m01)+(orig.m11*matrix.m11));
         
         return this;
     }
@@ -107,15 +107,15 @@ public class Matrix2l {
     /**
      * Multiplies this matrix by a scalar value.
      */
-    public Vector2l multiply(Vector2l vector) {
-        Vector2l newVector = new Vector2l();
-        newVector.x = (vector.x*this.m00) + (vector.y*this.m10);
-        newVector.y = (vector.x*this.m01) + (vector.y*this.m11);
+    public Vector2b multiply(Vector2b vector) {
+        Vector2b newVector = new Vector2b();
+        newVector.x = (byte) ((vector.x*this.m00) + (vector.y*this.m10));
+        newVector.y = (byte) ((vector.x*this.m01) + (vector.y*this.m11));
         
         return newVector;
     }
     
-    public Matrix2l multiply(long value) {
+    public Matrix2b multiply(byte value) {
         m00 *= value; m01 *= value;
         m10 *= value; m11 *= value;
         
@@ -125,7 +125,7 @@ public class Matrix2l {
     /**
      * Divides this matrix by a scalar value.
      */
-    public Matrix2l divide(long value) {
+    public Matrix2b divide(byte value) {
         m00 /= value; m01 /= value;
         m10 /= value; m11 /= value;
         
@@ -135,17 +135,17 @@ public class Matrix2l {
     /**
      * Negates this matrix.
      */
-    public Matrix2l negate() {
-        return this.multiply(-1);
+    public Matrix2b negate() {
+        return this.multiply((byte) -1);
     }
     
     /**
      * Returns the buffer version of this matrix.
      */
-    public LongBuffer getBuffer() {
-        long[] array = {m00, m10,
+    public ByteBuffer getBuffer() {
+        byte[] array = {m00, m10,
                           m01, m11};
-        LongBuffer buffer = BufferUtils.createLongBuffer(array.length);
+        ByteBuffer buffer = BufferUtils.createByteBuffer(array.length);
         buffer.put(array);
         buffer.flip();
         return buffer;
@@ -158,8 +158,8 @@ public class Matrix2l {
      * @param col3 - Third column.
      * @return The new matrix.
      */
-    public static Matrix2l createMatrix(Vector2l col1, Vector2l col2) {
-        Matrix2l matrix = new Matrix2l();
+    public static Matrix2b createMatrix(Vector2b col1, Vector2b col2) {
+        Matrix2b matrix = new Matrix2b();
         matrix.m00 = col1.x; matrix.m01 = col2.x;
         matrix.m10 = col1.y; matrix.m11 = col2.y;
         
@@ -172,7 +172,7 @@ public class Matrix2l {
      * @param des - destination matrix.
      * @return The destination matrix.
      */
-    public static Matrix2l copyMatrix(Matrix2l src, Matrix2l des) {
+    public static Matrix2b copyMatrix(Matrix2b src, Matrix2b des) {
         des.m00 = src.m00; des.m01 = src.m01;
         des.m10 = src.m10; des.m11 = src.m11;
         

@@ -22,26 +22,26 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math.matrix2;
+package org.ajgl.math.matrix;
 
-import java.nio.DoubleBuffer;
+import java.nio.ShortBuffer;
 
-import org.ajgl.math.vector.Vector2d;
+import org.ajgl.math.vector.Vector2s;
 import org.lwjgl.BufferUtils;
 
 /**
  * This class is designed to be a 2x2 matrix.
  * @author Tyler Bucher
  */
-public class Matrix2d {
+public class Matrix2s {
     
-    public double m00, m01; // First row
-    public double m10, m11; // Second row
+    public short m00, m01; // First row
+    public short m10, m11; // Second row
     
     /**
      * Default Matrix constructor.
      */
-    public Matrix2d() {
+    public Matrix2s() {
         this.loadIdentity();
     }
     
@@ -49,14 +49,14 @@ public class Matrix2d {
      * Copies a matrix to this matrix.
      * @param matrix - Matrix to be copied.
      */
-    public Matrix2d(Matrix2d matrix) {
-        Matrix2d.copyMatrix(matrix, this);
+    public Matrix2s(Matrix2s matrix) {
+        Matrix2s.copyMatrix(matrix, this);
     }
     
     /**
      * Loads the identity matrix.
      */
-    public Matrix2d loadIdentity() {
+    public Matrix2s loadIdentity() {
         m00 = 1; m01 = 0;
         m10 = 0; m11 = 1;
         
@@ -68,7 +68,7 @@ public class Matrix2d {
      * @param matrix - Matrix to be added.
      * @return This matrix.
      */
-    public Matrix2d add(Matrix2d matrix) {
+    public Matrix2s add(Matrix2s matrix) {
         m00 += matrix.m00; m01 += matrix.m01;
         m10 += matrix.m10; m11 += matrix.m11;
         
@@ -80,7 +80,7 @@ public class Matrix2d {
      * @param matrix - Matrix to be subtracted.
      * @return This matrix.
      */
-    public Matrix2d subtract(Matrix2d matrix) {
+    public Matrix2s subtract(Matrix2s matrix) {
         m00 -= matrix.m00; m01 -= matrix.m01;
         m10 -= matrix.m10; m11 -= matrix.m11;
         
@@ -92,14 +92,14 @@ public class Matrix2d {
      * @param matrix - Matrix to be multiplied.
      * @return This Matrix.
      */
-    public Matrix2d multiply(Matrix2d matrix) {
-        Matrix2d orig = new Matrix2d(this);
+    public Matrix2s multiply(Matrix2s matrix) {
+        Matrix2s orig = new Matrix2s(this);
         
-        m00 = (orig.m00*matrix.m00)+(orig.m01*matrix.m10);
-        m10 = (orig.m10*matrix.m00)+(orig.m11*matrix.m10);
+        m00 = (short) ((orig.m00*matrix.m00)+(orig.m01*matrix.m10));
+        m10 = (short) ((orig.m10*matrix.m00)+(orig.m11*matrix.m10));
         
-        m01 = (orig.m00*matrix.m01)+(orig.m01*matrix.m11);
-        m11 = (orig.m10*matrix.m01)+(orig.m11*matrix.m11);
+        m01 = (short) ((orig.m00*matrix.m01)+(orig.m01*matrix.m11));
+        m11 = (short) ((orig.m10*matrix.m01)+(orig.m11*matrix.m11));
         
         return this;
     }
@@ -107,15 +107,15 @@ public class Matrix2d {
     /**
      * Multiplies this matrix by a scalar value.
      */
-    public Vector2d multiply(Vector2d vector) {
-        Vector2d newVector = new Vector2d();
-        newVector.x = (vector.x*this.m00) + (vector.y*this.m10);
-        newVector.y = (vector.x*this.m01) + (vector.y*this.m11);
+    public Vector2s multiply(Vector2s vector) {
+        Vector2s newVector = new Vector2s();
+        newVector.x = (short) ((vector.x*this.m00) + (vector.y*this.m10));
+        newVector.y = (short) ((vector.x*this.m01) + (vector.y*this.m11));
         
         return newVector;
     }
     
-    public Matrix2d multiply(double value) {
+    public Matrix2s multiply(short value) {
         m00 *= value; m01 *= value;
         m10 *= value; m11 *= value;
         
@@ -125,7 +125,7 @@ public class Matrix2d {
     /**
      * Divides this matrix by a scalar value.
      */
-    public Matrix2d divide(double value) {
+    public Matrix2s divide(short value) {
         m00 /= value; m01 /= value;
         m10 /= value; m11 /= value;
         
@@ -135,17 +135,17 @@ public class Matrix2d {
     /**
      * Negates this matrix.
      */
-    public Matrix2d negate() {
-        return this.multiply(-1);
+    public Matrix2s negate() {
+        return this.multiply((short) -1);
     }
     
     /**
      * Returns the buffer version of this matrix.
      */
-    public DoubleBuffer getBuffer() {
-        double[] array = {m00, m10,
-                          m01, m11};
-        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(array.length);
+    public ShortBuffer getBuffer() {
+        short[] array = {m00, m10,
+                         m01, m11};
+        ShortBuffer buffer = BufferUtils.createShortBuffer(array.length);
         buffer.put(array);
         buffer.flip();
         return buffer;
@@ -158,8 +158,8 @@ public class Matrix2d {
      * @param col3 - Third column.
      * @return The new matrix.
      */
-    public static Matrix2d createMatrix(Vector2d col1, Vector2d col2) {
-        Matrix2d matrix = new Matrix2d();
+    public static Matrix2s createMatrix(Vector2s col1, Vector2s col2) {
+        Matrix2s matrix = new Matrix2s();
         matrix.m00 = col1.x; matrix.m01 = col2.x;
         matrix.m10 = col1.y; matrix.m11 = col2.y;
         
@@ -172,7 +172,7 @@ public class Matrix2d {
      * @param des - destination matrix.
      * @return The destination matrix.
      */
-    public static Matrix2d copyMatrix(Matrix2d src, Matrix2d des) {
+    public static Matrix2s copyMatrix(Matrix2s src, Matrix2s des) {
         des.m00 = src.m00; des.m01 = src.m01;
         des.m10 = src.m10; des.m11 = src.m11;
         

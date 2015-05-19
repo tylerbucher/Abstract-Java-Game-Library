@@ -22,26 +22,26 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math.matrix2;
+package org.ajgl.math.matrix;
 
-import java.nio.IntBuffer;
+import java.nio.DoubleBuffer;
 
-import org.ajgl.math.vector.Vector2i;
+import org.ajgl.math.vector.Vector2d;
 import org.lwjgl.BufferUtils;
 
 /**
  * This class is designed to be a 2x2 matrix.
  * @author Tyler Bucher
  */
-public class Matrix2i {
+public class Matrix2d {
     
-    public int m00, m01; // First row
-    public int m10, m11; // Second row
+    public double m00, m01; // First row
+    public double m10, m11; // Second row
     
     /**
      * Default Matrix constructor.
      */
-    public Matrix2i() {
+    public Matrix2d() {
         this.loadIdentity();
     }
     
@@ -49,14 +49,14 @@ public class Matrix2i {
      * Copies a matrix to this matrix.
      * @param matrix - Matrix to be copied.
      */
-    public Matrix2i(Matrix2i matrix) {
-        Matrix2i.copyMatrix(matrix, this);
+    public Matrix2d(Matrix2d matrix) {
+        Matrix2d.copyMatrix(matrix, this);
     }
     
     /**
      * Loads the identity matrix.
      */
-    public Matrix2i loadIdentity() {
+    public Matrix2d loadIdentity() {
         m00 = 1; m01 = 0;
         m10 = 0; m11 = 1;
         
@@ -68,7 +68,7 @@ public class Matrix2i {
      * @param matrix - Matrix to be added.
      * @return This matrix.
      */
-    public Matrix2i add(Matrix2i matrix) {
+    public Matrix2d add(Matrix2d matrix) {
         m00 += matrix.m00; m01 += matrix.m01;
         m10 += matrix.m10; m11 += matrix.m11;
         
@@ -80,7 +80,7 @@ public class Matrix2i {
      * @param matrix - Matrix to be subtracted.
      * @return This matrix.
      */
-    public Matrix2i subtract(Matrix2i matrix) {
+    public Matrix2d subtract(Matrix2d matrix) {
         m00 -= matrix.m00; m01 -= matrix.m01;
         m10 -= matrix.m10; m11 -= matrix.m11;
         
@@ -92,8 +92,8 @@ public class Matrix2i {
      * @param matrix - Matrix to be multiplied.
      * @return This Matrix.
      */
-    public Matrix2i multiply(Matrix2i matrix) {
-        Matrix2i orig = new Matrix2i(this);
+    public Matrix2d multiply(Matrix2d matrix) {
+        Matrix2d orig = new Matrix2d(this);
         
         m00 = (orig.m00*matrix.m00)+(orig.m01*matrix.m10);
         m10 = (orig.m10*matrix.m00)+(orig.m11*matrix.m10);
@@ -107,15 +107,15 @@ public class Matrix2i {
     /**
      * Multiplies this matrix by a scalar value.
      */
-    public Vector2i multiply(Vector2i vector) {
-        Vector2i newVector = new Vector2i();
+    public Vector2d multiply(Vector2d vector) {
+        Vector2d newVector = new Vector2d();
         newVector.x = (vector.x*this.m00) + (vector.y*this.m10);
         newVector.y = (vector.x*this.m01) + (vector.y*this.m11);
         
         return newVector;
     }
     
-    public Matrix2i multiply(int value) {
+    public Matrix2d multiply(double value) {
         m00 *= value; m01 *= value;
         m10 *= value; m11 *= value;
         
@@ -125,7 +125,7 @@ public class Matrix2i {
     /**
      * Divides this matrix by a scalar value.
      */
-    public Matrix2i divide(int value) {
+    public Matrix2d divide(double value) {
         m00 /= value; m01 /= value;
         m10 /= value; m11 /= value;
         
@@ -135,17 +135,17 @@ public class Matrix2i {
     /**
      * Negates this matrix.
      */
-    public Matrix2i negate() {
+    public Matrix2d negate() {
         return this.multiply(-1);
     }
     
     /**
      * Returns the buffer version of this matrix.
      */
-    public IntBuffer getBuffer() {
-        int[] array = {m00, m10,
+    public DoubleBuffer getBuffer() {
+        double[] array = {m00, m10,
                           m01, m11};
-        IntBuffer buffer = BufferUtils.createIntBuffer(array.length);
+        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(array.length);
         buffer.put(array);
         buffer.flip();
         return buffer;
@@ -158,8 +158,8 @@ public class Matrix2i {
      * @param col3 - Third column.
      * @return The new matrix.
      */
-    public static Matrix2i createMatrix(Vector2i col1, Vector2i col2) {
-        Matrix2i matrix = new Matrix2i();
+    public static Matrix2d createMatrix(Vector2d col1, Vector2d col2) {
+        Matrix2d matrix = new Matrix2d();
         matrix.m00 = col1.x; matrix.m01 = col2.x;
         matrix.m10 = col1.y; matrix.m11 = col2.y;
         
@@ -172,7 +172,7 @@ public class Matrix2i {
      * @param des - destination matrix.
      * @return The destination matrix.
      */
-    public static Matrix2i copyMatrix(Matrix2i src, Matrix2i des) {
+    public static Matrix2d copyMatrix(Matrix2d src, Matrix2d des) {
         des.m00 = src.m00; des.m01 = src.m01;
         des.m10 = src.m10; des.m11 = src.m11;
         

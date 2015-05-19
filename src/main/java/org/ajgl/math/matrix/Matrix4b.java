@@ -22,29 +22,28 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math.matrix4;
+package org.ajgl.math.matrix;
 
-import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
-import org.ajgl.math.VectorUtils;
-import org.ajgl.math.matrix3.Matrix3d;
-import org.ajgl.math.vector.Vector4d;
+import org.ajgl.math.vector.Vector4b;
+import org.lwjgl.BufferUtils;
 
 /**
  * This class is designed to be a 4x4 matrix.
  * @author Tyler Bucher
  */
-public class Matrix4d extends Matrix3d {
+public class Matrix4b extends Matrix3b {
 
-    public double /*m00, m01, m02,*/ m03;   // First row
-    public double /*m10, m11, m12,*/ m13;   // Second row
-    public double /*m20, m21, m22,*/ m23;   // Third row
-    public double   m30, m31, m32,   m33;   // Forth row
+    public byte /*m00, m01, m02,*/ m03;   // First row
+    public byte /*m10, m11, m12,*/ m13;   // Second row
+    public byte /*m20, m21, m22,*/ m23;   // Third row
+    public byte   m30, m31, m32,   m33;   // Forth row
     
     /**
      * Default Matrix constructor.
      */
-    public Matrix4d() {
+    public Matrix4b() {
         this.loadIdentity();
     }
     
@@ -52,15 +51,15 @@ public class Matrix4d extends Matrix3d {
      * Copies a matrix to this matrix.
      * @param matrix - Matrix to be copied.
      */
-    public Matrix4d(Matrix4d matrix) {
-        Matrix4d.copyMatrix(matrix, this);
+    public Matrix4b(Matrix4b matrix) {
+        Matrix4b.copyMatrix(matrix, this);
     }
     
     /**
      * Loads the identity matrix.
      */
     @Override
-    public Matrix4d loadIdentity() {
+    public Matrix4b loadIdentity() {
         super.loadIdentity();      m03 = 0;
                                    m13 = 0;
                                    m23 = 0;
@@ -74,7 +73,7 @@ public class Matrix4d extends Matrix3d {
      * @param matrix - Matrix to be added.
      * @return This matrix.
      */
-    public Matrix4d add(Matrix4d matrix) {
+    public Matrix4b add(Matrix4b matrix) {
         super.add(matrix);                                       m03 += matrix.m03;
                                                                  m13 += matrix.m13;
                                                                  m23 += matrix.m23;
@@ -88,7 +87,7 @@ public class Matrix4d extends Matrix3d {
      * @param matrix - Matrix to be subtracted.
      * @return This matrix.
      */
-    public Matrix4d subtract(Matrix4d matrix) {
+    public Matrix4b subtract(Matrix4b matrix) {
         super.add(matrix);                                       m03 -= matrix.m03;
                                                                  m13 -= matrix.m13;
                                                                  m23 -= matrix.m23;
@@ -102,28 +101,28 @@ public class Matrix4d extends Matrix3d {
      * @param matrix - Matrix to be multiplied.
      * @return This Matrix.
      */
-    public Matrix4d multiply(Matrix4d matrix) {
-        Matrix4d orig = new Matrix4d(this);
+    public Matrix4b multiply(Matrix4b matrix) {
+        Matrix4b orig = new Matrix4b(this);
         
-        m00 = (orig.m00*matrix.m00)+(orig.m01*matrix.m10)+(orig.m02*matrix.m20)+(orig.m03*matrix.m30);
-        m10 = (orig.m10*matrix.m00)+(orig.m11*matrix.m10)+(orig.m12*matrix.m20)+(orig.m13*matrix.m30);
-        m20 = (orig.m20*matrix.m00)+(orig.m21*matrix.m10)+(orig.m22*matrix.m20)+(orig.m23*matrix.m30);
-        m30 = (orig.m20*matrix.m00)+(orig.m21*matrix.m10)+(orig.m22*matrix.m20)+(orig.m33*matrix.m30);
+        m00 = (byte) ((orig.m00*matrix.m00)+(orig.m01*matrix.m10)+(orig.m02*matrix.m20)+(orig.m03*matrix.m30));
+        m10 = (byte) ((orig.m10*matrix.m00)+(orig.m11*matrix.m10)+(orig.m12*matrix.m20)+(orig.m13*matrix.m30));
+        m20 = (byte) ((orig.m20*matrix.m00)+(orig.m21*matrix.m10)+(orig.m22*matrix.m20)+(orig.m23*matrix.m30));
+        m30 = (byte) ((orig.m20*matrix.m00)+(orig.m21*matrix.m10)+(orig.m22*matrix.m20)+(orig.m33*matrix.m30));
         
-        m01 = (orig.m00*matrix.m01)+(orig.m01*matrix.m11)+(orig.m02*matrix.m21)+(orig.m03*matrix.m31);
-        m11 = (orig.m10*matrix.m01)+(orig.m11*matrix.m11)+(orig.m12*matrix.m21)+(orig.m13*matrix.m31);
-        m21 = (orig.m20*matrix.m01)+(orig.m21*matrix.m11)+(orig.m22*matrix.m21)+(orig.m23*matrix.m31);
-        m31 = (orig.m30*matrix.m01)+(orig.m31*matrix.m11)+(orig.m32*matrix.m21)+(orig.m33*matrix.m31);
+        m01 = (byte) ((orig.m00*matrix.m01)+(orig.m01*matrix.m11)+(orig.m02*matrix.m21)+(orig.m03*matrix.m31));
+        m11 = (byte) ((orig.m10*matrix.m01)+(orig.m11*matrix.m11)+(orig.m12*matrix.m21)+(orig.m13*matrix.m31));
+        m21 = (byte) ((orig.m20*matrix.m01)+(orig.m21*matrix.m11)+(orig.m22*matrix.m21)+(orig.m23*matrix.m31));
+        m31 = (byte) ((orig.m30*matrix.m01)+(orig.m31*matrix.m11)+(orig.m32*matrix.m21)+(orig.m33*matrix.m31));
         
-        m02 = (orig.m00*matrix.m02)+(orig.m01*matrix.m12)+(orig.m02*matrix.m22)+(orig.m03*matrix.m32);
-        m12 = (orig.m10*matrix.m02)+(orig.m11*matrix.m12)+(orig.m12*matrix.m22)+(orig.m13*matrix.m32);
-        m22 = (orig.m20*matrix.m02)+(orig.m21*matrix.m12)+(orig.m22*matrix.m22)+(orig.m23*matrix.m32);
-        m32 = (orig.m30*matrix.m02)+(orig.m31*matrix.m12)+(orig.m32*matrix.m22)+(orig.m33*matrix.m32);
+        m02 = (byte) ((orig.m00*matrix.m02)+(orig.m01*matrix.m12)+(orig.m02*matrix.m22)+(orig.m03*matrix.m32));
+        m12 = (byte) ((orig.m10*matrix.m02)+(orig.m11*matrix.m12)+(orig.m12*matrix.m22)+(orig.m13*matrix.m32));
+        m22 = (byte) ((orig.m20*matrix.m02)+(orig.m21*matrix.m12)+(orig.m22*matrix.m22)+(orig.m23*matrix.m32));
+        m32 = (byte) ((orig.m30*matrix.m02)+(orig.m31*matrix.m12)+(orig.m32*matrix.m22)+(orig.m33*matrix.m32));
         
-        m03 = (orig.m00*matrix.m03)+(orig.m01*matrix.m13)+(orig.m02*matrix.m23)+(orig.m03*matrix.m33);
-        m13 = (orig.m10*matrix.m03)+(orig.m11*matrix.m13)+(orig.m12*matrix.m23)+(orig.m13*matrix.m33);
-        m23 = (orig.m20*matrix.m03)+(orig.m21*matrix.m13)+(orig.m22*matrix.m23)+(orig.m23*matrix.m33);
-        m33 = (orig.m30*matrix.m03)+(orig.m31*matrix.m13)+(orig.m32*matrix.m23)+(orig.m33*matrix.m33);
+        m03 = (byte) ((orig.m00*matrix.m03)+(orig.m01*matrix.m13)+(orig.m02*matrix.m23)+(orig.m03*matrix.m33));
+        m13 = (byte) ((orig.m10*matrix.m03)+(orig.m11*matrix.m13)+(orig.m12*matrix.m23)+(orig.m13*matrix.m33));
+        m23 = (byte) ((orig.m20*matrix.m03)+(orig.m21*matrix.m13)+(orig.m22*matrix.m23)+(orig.m23*matrix.m33));
+        m33 = (byte) ((orig.m30*matrix.m03)+(orig.m31*matrix.m13)+(orig.m32*matrix.m23)+(orig.m33*matrix.m33));
         
         return this;
     }
@@ -132,7 +131,7 @@ public class Matrix4d extends Matrix3d {
      * Multiplies this matrix by a scalar value.
      */
     @Override
-    public Matrix4d multiply(double value) {
+    public Matrix4b multiply(byte value) {
         super.multiply(value);                     m03 *= value;
                                                    m13 *= value;
                                                    m23 *= value;
@@ -145,7 +144,7 @@ public class Matrix4d extends Matrix3d {
      * Divides this matrix by a scalar value.
      */
     @Override
-    public Matrix4d divide(double value) {
+    public Matrix4b divide(byte value) {
         super.divide(value);                      m03 /= value;
                                                   m13 /= value;
                                                   m23 /= value;
@@ -158,20 +157,23 @@ public class Matrix4d extends Matrix3d {
      * Negates this matrix.
      */
     @Override
-    public Matrix4d negate() {
-        return this.multiply(-1);
+    public Matrix4b negate() {
+        return this.multiply((byte) -1);
     }
     
     /**
      * Returns the buffer version of this matrix.
      */
     @Override
-    public <B extends Buffer> B getBuffer(Class<B> bufferClass) {
-        double[] array = {m00, m10, m20, m30,
+    public ByteBuffer getBuffer() {
+        byte[] array = {m00, m10, m20, m30,
                           m01, m11, m21, m31,
                           m02, m12, m22, m32,
                           m03, m13, m32, m33};
-        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, array));
+        ByteBuffer buffer = BufferUtils.createByteBuffer(array.length);
+        buffer.put(array);
+        buffer.flip();
+        return buffer;
     }
     
     /**
@@ -182,8 +184,8 @@ public class Matrix4d extends Matrix3d {
      * @param col4 - Fourth column.
      * @return The new matrix.
      */
-    public static Matrix4d createMatrix(Vector4d col1, Vector4d col2, Vector4d col3, Vector4d col4) {
-        Matrix4d matrix = new Matrix4d();
+    public static Matrix4b createMatrix(Vector4b col1, Vector4b col2, Vector4b col3, Vector4b col4) {
+        Matrix4b matrix = new Matrix4b();
         matrix.m00 = col1.x; matrix.m01 = col2.x; matrix.m02 = col3.x; matrix.m03 = col4.x;
         matrix.m10 = col1.y; matrix.m11 = col2.y; matrix.m12 = col3.y; matrix.m13 = col4.y;
         matrix.m20 = col1.z; matrix.m21 = col2.z; matrix.m22 = col3.z; matrix.m23 = col4.z;
@@ -198,7 +200,7 @@ public class Matrix4d extends Matrix3d {
      * @param des - destination matrix.
      * @return The destination matrix.
      */
-    public static Matrix4d copyMatrix(Matrix4d src, Matrix4d des) {
+    public static Matrix4b copyMatrix(Matrix4b src, Matrix4b des) {
         des.m00 = src.m00; des.m01 = src.m01; des.m02 = src.m02; des.m03 = src.m03;
         des.m10 = src.m10; des.m11 = src.m11; des.m12 = src.m12; des.m13 = src.m13;
         des.m20 = src.m20; des.m21 = src.m21; des.m22 = src.m22; des.m23 = src.m23;
@@ -217,13 +219,13 @@ public class Matrix4d extends Matrix3d {
      * @param far - Far clipping plane.
      * @return The orthographic matrix.
      */
-    public static Matrix4d orthographic(double left, double right, double bottom, double top, double near, double far) {
-        Matrix4d ortho = new Matrix4d();
+    public static Matrix4b orthographic(byte left, byte right, byte bottom, byte top, byte near, byte far) {
+        Matrix4b ortho = new Matrix4b();
 
-        ortho.m00 = 2f / (right - left); ortho.m03 = -(right + left) / (right - left);
-        ortho.m11 = 2f / (top - bottom); ortho.m13 = -(top + bottom) / (top - bottom);
-        ortho.m22 = -2f / (far - near);  ortho.m23 = -(far + near) / (far - near);
-        ortho.m33 = 1f;
+        ortho.m00 = (byte) (2 / (right - left)); ortho.m03 = (byte) (-(right + left) / (right - left));
+        ortho.m11 = (byte) (2 / (top - bottom)); ortho.m13 = (byte) (-(top + bottom) / (top - bottom));
+        ortho.m22 = (byte) (-2 / (far - near));  ortho.m23 = (byte) (-(far + near) / (far - near));
+        ortho.m33 = 1;
 
         return ortho;
     }
@@ -238,13 +240,13 @@ public class Matrix4d extends Matrix3d {
      * @param far - Far frustrum plane.
      * @return The frustrum matrix.
      */
-    public static Matrix4d frustum(double left, double right, double bottom, double top, double near, double far) {
-        Matrix4d frustum = new Matrix4d();
+    public static Matrix4b frustum(byte left, byte right, byte bottom, byte top, byte near, byte far) {
+        Matrix4b frustum = new Matrix4b();
 
-        frustum.m00 = (2f * near) / (right - left); frustum.m02 = (right + left) / (right - left);
-        frustum.m11 = (2f * near) / (top - bottom); frustum.m12 = (top + bottom) / (top - bottom);
-        frustum.m22 = -(far + near) / (far - near); frustum.m23 = -(2f * far * near) / (far - near);
-        frustum.m32 = -1f;                          frustum.m33 = 0f;
+        frustum.m00 = (byte) ((2 * near) / (right - left)); frustum.m02 = (byte) ((right + left) / (right - left));
+        frustum.m11 = (byte) ((2 * near) / (top - bottom)); frustum.m12 = (byte) ((top + bottom) / (top - bottom));
+        frustum.m22 = (byte) (-(far + near) / (far - near)); frustum.m23 = (byte) (-(2 * far * near) / (far - near));
+        frustum.m32 = -1;                          frustum.m33 = 0;
 
         return frustum;
     }
@@ -257,15 +259,15 @@ public class Matrix4d extends Matrix3d {
      * @param far - Far clipping plane.
      * @return The perspective matrix.
      */
-    public static Matrix4d perspective(double fovy, double aspect, double near, double far) {
-        Matrix4d perspective = new Matrix4d();
+    public static Matrix4b perspective(byte fovy, byte aspect, byte near, byte far) {
+        Matrix4b perspective = new Matrix4b();
 
-        double f = 1f / Math.tan(Math.toRadians(fovy) / 2f);
+        byte f = (byte) (1 / Math.tan(Math.toRadians(fovy) / 2));
 
-        perspective.m00 = f / aspect;
+        perspective.m00 = (byte) (f / aspect);
         perspective.m11 = f;
-        perspective.m22 = (far + near) / (near - far); perspective.m23 = (2f * far * near) / (near - far);
-        perspective.m32 = -1f;                         perspective.m33 = 0f;
+        perspective.m22 = (byte) ((far + near) / (near - far)); perspective.m23 = (byte) ((2 * far * near) / (near - far));
+        perspective.m32 = -1;                         perspective.m33 = 0;
 
         return perspective;
     }

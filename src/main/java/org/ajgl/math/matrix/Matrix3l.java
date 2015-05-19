@@ -22,28 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math.matrix3;
+package org.ajgl.math.matrix;
 
-import java.nio.DoubleBuffer;
+import java.nio.LongBuffer;
 
-import org.ajgl.math.matrix2.Matrix2d;
-import org.ajgl.math.vector.Vector3d;
+import org.ajgl.math.vector.Vector3l;
 import org.lwjgl.BufferUtils;
 
 /**
  * This class is designed to be a 3x3 matrix.
  * @author Tyler Bucher
  */
-public class Matrix3d extends Matrix2d {
+public class Matrix3l extends Matrix2l {
     
-    public double /*m00, m01,*/ m02;    // First row
-    public double /*m10, m11,*/ m12;    // Second row
-    public double   m20, m21,   m22;    // Third row
+    public long /*m00, m01,*/ m02;    // First row
+    public long /*m10, m11,*/ m12;    // Second row
+    public long   m20, m21,   m22;    // Third row
     
     /**
      * Default Matrix constructor.
      */
-    public Matrix3d() {
+    public Matrix3l() {
         this.loadIdentity();
     }
     
@@ -51,15 +50,15 @@ public class Matrix3d extends Matrix2d {
      * Copies a matrix to this matrix.
      * @param matrix - Matrix to be copied.
      */
-    public Matrix3d(Matrix3d matrix) {
-        Matrix3d.copyMatrix(matrix, this);
+    public Matrix3l(Matrix3l matrix) {
+        Matrix3l.copyMatrix(matrix, this);
     }
     
     /**
      * Loads the identity matrix.
      */
     @Override
-    public Matrix3d loadIdentity() {
+    public Matrix3l loadIdentity() {
         super.loadIdentity(); m02 = 0;
                               m12 = 0;
         m20 = 0; m21 = 0;     m22 = 1;
@@ -72,7 +71,7 @@ public class Matrix3d extends Matrix2d {
      * @param matrix - Matrix to be added.
      * @return This matrix.
      */
-    public Matrix3d add(Matrix3d matrix) {
+    public Matrix3l add(Matrix3l matrix) {
         super.add(matrix);                    m02 += matrix.m02;
                                               m12 += matrix.m12;
         m20 += matrix.m20; m21 += matrix.m21; m22 += matrix.m22;
@@ -85,7 +84,7 @@ public class Matrix3d extends Matrix2d {
      * @param matrix - Matrix to be subtracted.
      * @return This matrix.
      */
-    public Matrix3d subtract(Matrix3d matrix) {
+    public Matrix3l subtract(Matrix3l matrix) {
         super.subtract(matrix);               m02 -= matrix.m02;
                                               m12 -= matrix.m12;
         m20 -= matrix.m20; m21 -= matrix.m21; m22 -= matrix.m22;
@@ -98,8 +97,8 @@ public class Matrix3d extends Matrix2d {
      * @param matrix - Matrix to be multiplied.
      * @return This Matrix.
      */
-    public Matrix3d multiply(Matrix3d matrix) {
-        Matrix3d orig = new Matrix3d(this);
+    public Matrix3l multiply(Matrix3l matrix) {
+        Matrix3l orig = new Matrix3l(this);
         
         m00 = (orig.m00*matrix.m00)+(orig.m01*matrix.m10)+(orig.m02*matrix.m20);
         m10 = (orig.m10*matrix.m00)+(orig.m11*matrix.m10)+(orig.m12*matrix.m20);
@@ -120,7 +119,7 @@ public class Matrix3d extends Matrix2d {
      * Multiplies this matrix by a scalar value.
      */
     @Override
-    public Matrix3d multiply(double value) {
+    public Matrix3l multiply(long value) {
         super.multiply(value);      m02 *= value;
                                     m12 *= value;
         m20 *= value; m21 *= value; m22 *= value;
@@ -132,7 +131,7 @@ public class Matrix3d extends Matrix2d {
      * Divides this matrix by a scalar value.
      */
     @Override
-    public Matrix3d divide(double value) {
+    public Matrix3l divide(long value) {
         super.divide(value);        m02 /= value;
                                     m12 /= value;
         m20 /= value; m21 /= value; m22 /= value;
@@ -144,18 +143,18 @@ public class Matrix3d extends Matrix2d {
      * Negates this matrix.
      */
     @Override
-    public Matrix3d negate() {
+    public Matrix3l negate() {
         return this.multiply(-1);
     }
     
     /**
      * Returns the buffer version of this matrix.
      */
-    public DoubleBuffer getBuffer() {
-        double[] array = {m00, m10, m20,
+    public LongBuffer getBuffer() {
+        long[] array = {m00, m10, m20,
                           m01, m11, m21, 
                           m02, m12, m22};
-        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(array.length);
+        LongBuffer buffer = BufferUtils.createLongBuffer(array.length);
         buffer.put(array);
         buffer.flip();
         return buffer;
@@ -168,8 +167,8 @@ public class Matrix3d extends Matrix2d {
      * @param col3 - Third column.
      * @return The new matrix.
      */
-    public static Matrix3d createMatrix(Vector3d col1, Vector3d col2, Vector3d col3) {
-        Matrix3d matrix = new Matrix3d();
+    public static Matrix3l createMatrix(Vector3l col1, Vector3l col2, Vector3l col3) {
+        Matrix3l matrix = new Matrix3l();
         matrix.m00 = col1.x; matrix.m01 = col2.x; matrix.m02 = col3.x;
         matrix.m10 = col1.y; matrix.m11 = col2.y; matrix.m12 = col3.y;
         matrix.m20 = col1.z; matrix.m21 = col2.z; matrix.m22 = col3.z;
@@ -183,7 +182,7 @@ public class Matrix3d extends Matrix2d {
      * @param des - destination matrix.
      * @return The destination matrix.
      */
-    public static Matrix3d copyMatrix(Matrix3d src, Matrix3d des) {
+    public static Matrix3l copyMatrix(Matrix3l src, Matrix3l des) {
         des.m00 = src.m00; des.m01 = src.m01; des.m02 = src.m02;
         des.m10 = src.m10; des.m11 = src.m11; des.m12 = src.m12;
         des.m20 = src.m20; des.m21 = src.m21; des.m22 = src.m22;
