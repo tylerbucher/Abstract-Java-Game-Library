@@ -109,19 +109,19 @@ public class MainTest {
             int uniModel = GL20.glGetUniformLocation(shaderProgram.id, "model");
             if(uniModel != -1) {
                 Matrix4f model = new Matrix4f();
-                GL20.glUniformMatrix4(uniModel, false, model.getBuffer());
+                GL20.glUniformMatrix4fv(uniModel, false, model.getBuffer());
             }
 
             int uniView = GL20.glGetUniformLocation(shaderProgram.id, "view");
             if(uniView != -1) {
                 Matrix4f view = new Matrix4f();
-                GL20.glUniformMatrix4(uniView, false, view.getBuffer());
+                GL20.glUniformMatrix4fv(uniView, false, view.getBuffer());
             }
 
             int uniProjection = GL20.glGetUniformLocation(shaderProgram.id, "projection");
             if(uniProjection != -1) {
                 Matrix4f projection = Matrix4f.orthographic(0f, 1200f, 0f, 800f, 1f, -1f);
-                GL20.glUniformMatrix4(uniProjection, false, projection.getBuffer());
+                GL20.glUniformMatrix4fv(uniProjection, false, projection.getBuffer());
             }
             
             GL20.glUseProgram(0);
@@ -153,7 +153,7 @@ public class MainTest {
         
         for(double d=0.0;d<=6.28;d+=0.01256) {
             double theta = d;
-            double radius = 200*Math.cos(5*theta);
+            double radius = 200*Math.sin(5*theta);
             double x = radius*Math.cos(theta);
             double y = radius*Math.sin(theta);
             
