@@ -24,9 +24,9 @@
 
 package org.ajgl.math.vector;
 
-import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
-import org.ajgl.math.VectorUtils;
+import org.lwjgl.BufferUtils;
 
 /**
  * This class is designed to be a 2d vector.
@@ -149,7 +149,17 @@ public class Vector2b {
     /**
      * Returns the buffer version of this vector.
      */
-    public <B extends Buffer> B getBuffer(Class<B> bufferClass) {
-        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, x, y));
+    public ByteBuffer getBuffer() {
+        byte[] array = {x, y};
+        
+        ByteBuffer buffer = BufferUtils.createByteBuffer(array.length);
+        buffer.put(array);
+        buffer.flip();
+        return buffer;
+    }
+    
+    @Override
+    public String toString() {
+        return "Vector2b[x: "+x+"  y: "+y+"]";
     }
 }
