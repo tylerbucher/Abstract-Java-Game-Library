@@ -15,16 +15,14 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.glClear;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.ajgl.concurrent.Tasker;
 import org.ajgl.graphics.shaders.Shader;
 import org.ajgl.graphics.shaders.ShaderProgram;
-import org.ajgl.math.matrix.Matrix4d;
 import org.ajgl.math.matrix.Matrix4f;
 import org.ajgl.test.graphics.shaders.ShaderTest;
+import org.ajgl.test.math.VectorTest;
 import org.ajgl.test.window.ConcurrentWindowTest;
 import org.ajgl.test.window.WindowTest;
 import org.lwjgl.Sys;
@@ -244,6 +242,15 @@ public class MainTest {
      * @param args - Arguments.
      */
     public static void main(String[] args) {
+        System.out.println("start");
+        VectorTest.add();
+        VectorTest.subtract();
+        VectorTest.cross();
+        VectorTest.dot();
+        VectorTest.scale();
+        VectorTest.negate();
+        VectorTest.normalize();
+        VectorTest.magnitude();
         
         threadedWindowTest = new ConcurrentWindowTest(1200, 800, "AJGL_2 Concurrent Window Test", 0, 0);
         threadedWindowTest.setup();

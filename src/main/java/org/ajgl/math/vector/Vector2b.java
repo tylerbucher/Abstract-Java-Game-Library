@@ -157,9 +157,9 @@ public class Vector2b {
         buffer.flip();
         return buffer;
     }
-    
+
     @Override
     public String toString() {
-        return "Vector2b[x: "+x+"  y: "+y+"]";
+        return "Vector2b [x=" + x + ", y=" + y + "]";
     }
 }

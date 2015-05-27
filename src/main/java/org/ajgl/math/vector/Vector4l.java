@@ -24,9 +24,9 @@
 
 package org.ajgl.math.vector;
 
-import java.nio.Buffer;
+import java.nio.LongBuffer;
 
-import org.ajgl.math.VectorUtils;
+import org.lwjgl.BufferUtils;
 
 /**
  * This class is designed to be a 4d vector.
@@ -141,7 +141,17 @@ public class Vector4l extends Vector3l {
      * Returns the buffer version of this vector.
      */
     @Override
-    public <B extends Buffer> B getBuffer(Class<B> bufferClass) {
-        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, x, y, z, w));
+    public LongBuffer getBuffer() {
+        long[] array = {x, y, z, w};
+        
+        LongBuffer buffer = BufferUtils.createLongBuffer(array.length);
+        buffer.put(array);
+        buffer.flip();
+        return buffer;
+    }
+    
+    @Override
+    public String toString() {
+        return "Vector4l [x=" + x + ", y=" + y + ", z=" + z + ", w=" + w + "]";
     }
 }

@@ -24,9 +24,9 @@
 
 package org.ajgl.math.vector;
 
-import java.nio.Buffer;
+import java.nio.DoubleBuffer;
 
-import org.ajgl.math.VectorUtils;
+import org.lwjgl.BufferUtils;
 
 /**
  * This class is designed to be a 4d vector.
@@ -141,7 +141,17 @@ public class Vector4d extends Vector3d {
      * Returns the buffer version of this vector.
      */
     @Override
-    public <B extends Buffer> B getBuffer(Class<B> bufferClass) {
-        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, x, y, z, w));
+    public DoubleBuffer getBuffer() {
+        double[] array = {x, y, z, w};
+        
+        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(array.length);
+        buffer.put(array);
+        buffer.flip();
+        return buffer;
+    }
+    
+    @Override
+    public String toString() {
+        return "Vector4d [x=" + x + ", y=" + y + ", z=" + z + ", w=" + w + "]";
     }
 }

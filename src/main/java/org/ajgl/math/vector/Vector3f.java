@@ -24,9 +24,9 @@
 
 package org.ajgl.math.vector;
 
-import java.nio.Buffer;
+import java.nio.FloatBuffer;
 
-import org.ajgl.math.VectorUtils;
+import org.lwjgl.BufferUtils;
 
 
 /**
@@ -158,7 +158,17 @@ public class Vector3f extends Vector2f {
      * Returns the buffer version of this vector.
      */
     @Override
-    public <B extends Buffer> B getBuffer(Class<B> bufferClass) {
-        return bufferClass.cast(VectorUtils.glGenDataBuffer(bufferClass, x, y, z));
+    public FloatBuffer getBuffer() {
+        float[] array = {x, y, z};
+        
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
+        buffer.put(array);
+        buffer.flip();
+        return buffer;
+    }
+    
+    @Override
+    public String toString() {
+        return "Vector3f [x=" + x + ", y=" + y + ", z=" + z + "]";
     }
 }
