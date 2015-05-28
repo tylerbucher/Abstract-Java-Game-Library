@@ -178,4 +178,10 @@ public class Matrix2l {
         
         return des;
     }
+    
+    @Override
+    public String toString() {
+        return "Matrix2b [m00=" + m00 + ", m01=" + m01 + ",\n" +
+                "          m10=" + m10 + ", m11=" + m11 + "]";
+    }
 }

@@ -26,7 +26,6 @@ package org.ajgl.math.matrix;
 
 import java.nio.FloatBuffer;
 
-import org.ajgl.math.vector.Vector2d;
 import org.ajgl.math.vector.Vector2f;
 import org.lwjgl.BufferUtils;
 
@@ -108,7 +107,7 @@ public class Matrix2f {
     /**
      * Multiplies this matrix by a scalar value.
      */
-    public Vector2f multiply(Vector2d vector) {
+    public Vector2f multiply(Vector2f vector) {
         Vector2f newVector = new Vector2f();
         newVector.x = (float) ((vector.x*this.m00) + (vector.y*this.m10));
         newVector.y = (float) ((vector.x*this.m01) + (vector.y*this.m11));
@@ -178,5 +177,11 @@ public class Matrix2f {
         des.m10 = src.m10; des.m11 = src.m11;
         
         return des;
+    }
+    
+    @Override
+    public String toString() {
+        return "Matrix2b [m00=" + m00 + ", m01=" + m01 + ",\n" +
+                "          m10=" + m10 + ", m11=" + m11 + "]";
     }
 }

@@ -22,6 +22,7 @@ import org.ajgl.graphics.shaders.Shader;
 import org.ajgl.graphics.shaders.ShaderProgram;
 import org.ajgl.math.matrix.Matrix4f;
 import org.ajgl.test.graphics.shaders.ShaderTest;
+import org.ajgl.test.math.MatrixTest;
 import org.ajgl.test.math.VectorTest;
 import org.ajgl.test.window.ConcurrentWindowTest;
 import org.ajgl.test.window.WindowTest;
@@ -46,7 +47,28 @@ public class MainTest {
      * Pre OpenGL-initialization.
      */
     public static void preInitGL() {
-        
+        //VectorTest();
+        matrixTest();
+    }
+    
+    public static void VectorTest() {
+        VectorTest.add();
+        VectorTest.subtract();
+        VectorTest.cross();
+        VectorTest.dot();
+        VectorTest.scale();
+        VectorTest.negate();
+        VectorTest.normalize();
+        VectorTest.magnitude();
+    }
+    
+    public static void matrixTest() {
+        MatrixTest.add();
+        MatrixTest.subtract();
+        MatrixTest.multiplyMatrix();
+        MatrixTest.multiplyVector();
+        MatrixTest.multiplyValue();
+        MatrixTest.divide();
     }
     
     /**
@@ -243,14 +265,7 @@ public class MainTest {
      */
     public static void main(String[] args) {
         System.out.println("start");
-        VectorTest.add();
-        VectorTest.subtract();
-        VectorTest.cross();
-        VectorTest.dot();
-        VectorTest.scale();
-        VectorTest.negate();
-        VectorTest.normalize();
-        VectorTest.magnitude();
+        
         
         threadedWindowTest = new ConcurrentWindowTest(1200, 800, "AJGL_2 Concurrent Window Test", 0, 0);
         threadedWindowTest.setup();
