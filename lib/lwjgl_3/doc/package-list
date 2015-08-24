@@ -1,8 +1,0 @@
-org.ajgl
-org.ajgl.collision
-org.ajgl.event
-org.ajgl.event.keyboard
-org.ajgl.event.mouse
-org.ajgl.graphics
-org.ajgl.primary
-org.ajgl.util

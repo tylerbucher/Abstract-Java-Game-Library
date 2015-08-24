@@ -24,14 +24,7 @@
 
 package org.ajgl.math;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
-
-import org.lwjgl.BufferUtils;
+import java.util.List;
 
 /**
  * This class is a utility class designed to provide
@@ -40,135 +33,10 @@ import org.lwjgl.BufferUtils;
  */
 public class MathUtils {
     
-    /**
-     * Creates a buffer from the following values.
-     * @param values - The values to be put into a buffer.
-     * @return The buffer.
-     */
-    public static ByteBuffer createByteBuffer(byte... values) {
-        ByteBuffer buffer = BufferUtils.createByteBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
-    }
-    
-    /**
-     * Creates a buffer from the following values.
-     * @param values - The values to be put into a buffer.
-     * @return The buffer.
-     */
-    public static ShortBuffer createShortBuffer(short... values) {
-        ShortBuffer buffer = BufferUtils.createShortBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
-    }
-    
-    /**
-     * Creates a buffer from the following values.
-     * @param values - The values to be put into a buffer.
-     * @return The buffer.
-     */
-    public static IntBuffer createIntegerBuffer(int... values) {
-        IntBuffer buffer = BufferUtils.createIntBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
-    }
-    
-    /**
-     * Creates a buffer from the following values.
-     * @param values - The values to be put into a buffer.
-     * @return The buffer.
-     */
-    public static LongBuffer createLongBuffer(long... values) {
-        LongBuffer buffer = BufferUtils.createLongBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
-    }
-    
-    /**
-     * Creates a buffer from the following values.
-     * @param values - The values to be put into a buffer.
-     * @return The buffer.
-     */
-    public static FloatBuffer createFloatBuffer(float... values) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
-    }
-    
-    /**
-     * Creates a buffer from the following values.
-     * @param values - The values to be put into a buffer.
-     * @return The buffer.
-     */
-    public static DoubleBuffer createDoubleBuffer(double... values) {
-        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
-    }
-    
-    /**
-     * Casts a double array to a byte array.
-     * @param values - Values to be casted.
-     * @return the casted values.
-     */
-    public static byte[] arrayCastByte(double... values) {
-        byte[] array = new byte[values.length];
-        for(int i=0;i<values.length;i++)
-            array[i] = (byte) values[i];
-        return array;
-    }
-    
-    /**
-     * Casts a double array to a short array.
-     * @param values - Values to be casted.
-     * @return the casted values.
-     */
-    public static short[] arrayCastShort(double... values) {
-        short[] array = new short[values.length];
-        for(int i=0;i<values.length;i++)
-            array[i] = (short) values[i];
-        return array;
-    }
-    
-    /**
-     * Casts a double array to a int array.
-     * @param values - Values to be casted.
-     * @return the casted values.
-     */
-    public static int[] arrayCastInt(double... values) {
-        int[] array = new int[values.length];
-        for(int i=0;i<values.length;i++)
-            array[i] = (int) values[i];
-        return array;
-    }
-    
-    /**
-     * Casts a double array to a long array.
-     * @param values - Values to be casted.
-     * @return the casted values.
-     */
-    public static long[] arrayCastLong(double... values) {
-        long[] array = new long[values.length];
-        for(int i=0;i<values.length;i++)
-            array[i] = (long) values[i];
-        return array;
-    }
-    
-    /**
-     * Casts a double array to a float array.
-     * @param values - Values to be casted.
-     * @return the casted values.
-     */
-    public static float[] arrayCastFloat(double... values) {
-        float[] array = new float[values.length];
-        for(int i=0;i<values.length;i++)
-            array[i] = (float) values[i];
-        return array;
+    public static float[] convertFloat(List<Float> list) {
+        float[] newArray = new float[list.size()];
+        for(int i=0;i<list.size();i++)
+            newArray[i] = list.get(i).floatValue();
+        return newArray;
     }
 }

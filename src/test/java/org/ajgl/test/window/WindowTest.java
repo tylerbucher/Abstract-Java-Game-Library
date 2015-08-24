@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 
 import org.ajgl.Window;
 import org.ajgl.concurrent.Tasker;
+import org.ajgl.test.MainTest;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWvidmode;
@@ -53,6 +54,7 @@ public class WindowTest extends Window {
     public void preWindowCreation() {
         GLFW.glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GL_FALSE);         // Keep the window hidden
+        //glfwWindowHint();
         glfwWindowHint(GLFW_RESIZABLE, GL11.GL_FALSE);  // Do not allow resizing
         glfwWindowHint(GLFW_REFRESH_RATE, 60);          // Window refresh rate
     }
@@ -63,8 +65,10 @@ public class WindowTest extends Window {
         this.setKeyCallback(new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
-                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
                     Tasker.executeASyncTask("GLFW_MAIN_THREAD");
+                    GLFW.glfwSetWindowShouldClose(MainTest.threadedWindowTest.getWindowHandler(), 1);
+                }
             }
         });
         super.keyCallbackSetup();
@@ -72,6 +76,7 @@ public class WindowTest extends Window {
     
     @Override
     public void postWindowCreation() {
+        /*
         // Get the resolution of the primary monitor
         ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         // Center our window
@@ -80,5 +85,6 @@ public class WindowTest extends Window {
             (GLFWvidmode.width(vidmode) - this.getWidth()) / 2,
             (GLFWvidmode.height(vidmode) - this.getHeight()) / 2
         );
+        */
     }
 }

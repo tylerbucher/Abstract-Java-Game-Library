@@ -24,12 +24,11 @@
 
 package org.ajgl.concurrent;
 
-
 /**
  * This class was designed to be extended by other higher level Events.
  * @author Tyler Bucher
  */
-public abstract class Event implements Comparable<Event>{
+public class Event {
     
     private boolean canceled = false;   // States weather the event has been canceled
     public final String name;           // States the name of the event

@@ -44,6 +44,15 @@ public final class EventDispatcher {
     private static final Map<Class<?>, Object> instanceMap = new HashMap<>();
     /*** The hash map of events and their corresponding methods */
     private static final Map<Class<? extends Event>, List<Method>> eventMap = new HashMap<>();
+    /*** The Comparator for the type method, used in sorting. (Lowest priority has final say)*/
+    private static Comparator<Method> methodComparator = new Comparator<Method>(){
+        @Override
+        public int compare(Method method1, Method mehtod2) {
+            int method1Priority = method1.getAnnotation(EventHandler.class).priority();
+            int method2Priority = mehtod2.getAnnotation(EventHandler.class).priority();
+            return method1Priority - method2Priority;
+        }
+    };
     
     /**
      * Dispatches events to the proper plugins and methods.
@@ -104,14 +113,7 @@ public final class EventDispatcher {
             List<Method> list = eventMap.get(m.getAnnotation(EventHandler.class).value());
             list.add(m);    // TODO
             
-            Collections.sort(list, new Comparator<Method>() {
-                @Override
-                public int compare(Method method1, Method mehtod2) {
-                    int method1Priority = method1.getAnnotation(EventHandler.class).priority();
-                    int method2Priority = mehtod2.getAnnotation(EventHandler.class).priority();
-                    return method1Priority - method2Priority;
-                }
-            });
+            Collections.sort(list, methodComparator);
         }
     }
     

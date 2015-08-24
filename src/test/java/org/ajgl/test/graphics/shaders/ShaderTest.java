@@ -36,6 +36,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 
 /**
@@ -229,5 +230,56 @@ public class ShaderTest {
         } VertexArrayObject.bindVao(0); // Unbind VAO
     }
     // ======================================= Vertex Array Object ==========================================
+    
+ // ======================================= Vertex Array Object 2 ==========================================
+    private static float[] graphicsData;
+    private static int vboHandler;
+    private static int vaoHandler;
+    
+    static {
+        graphicsData = new float[]{300,300,0, 1,0,0, 400,300,0, 1,0,0, 400,400,0, 1,0,0, 300,400,0, 1,0,0, 
+                600,600,0, 0,1,0, 700,600,0, 0,1,0, 700,700,0, 0,1,0, 600,700,0, 0,1,0};
+        vboHandler = createVboHandler(graphicsData);
+        vaoHandler = GL30.glGenVertexArrays();
+        
+        GL30.glBindVertexArray(vaoHandler); {
+            // Enable pointers
+            GL20.glEnableVertexAttribArray(0);
+            GL20.glEnableVertexAttribArray(1);
+            // Vertex pointer
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboHandler);
+            GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 6*Float.BYTES, 0);
+            // Color pointer
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboHandler);
+            GL20.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, 6*Float.BYTES, 3*Float.BYTES);
+            // Unbind
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+            // Disable pointers
+            GL20.glDisableVertexAttribArray(0);
+            GL20.glDisableVertexAttribArray(1);
+        } GL30.glBindVertexArray(0);
+    }
+    
+    public static void vaoDraw2() {
+        GL30.glBindVertexArray(vaoHandler); {
+            // Enable pointers
+            GL20.glEnableVertexAttribArray(0);
+            GL20.glEnableVertexAttribArray(1);
+            // draw VBO
+            VertexBufferedObject.drawVboArrays(GL11.GL_QUADS, 0, 8);
+            //VertexBufferedObject.drawVboArrays(GL11.GL_QUADS, 24, 4);
+            // Disable pointers
+            GL20.glDisableVertexAttribArray(0);
+            GL20.glDisableVertexAttribArray(1);
+        } GL30.glBindVertexArray(0);
+    }
+    
+    private static int createVboHandler(float[] data) {
+        FloatBuffer dataBufferVBO = BufferUtils.createFloatBuffer(data.length);
+        dataBufferVBO.put(data);
+        dataBufferVBO.flip();
+        return VertexBufferedObject.createVboHandler(GL15.GL_ARRAY_BUFFER, GL15.GL_DYNAMIC_DRAW, dataBufferVBO);
+    }
+    // ======================================= Vertex Array Object 2 ==========================================
 
 }

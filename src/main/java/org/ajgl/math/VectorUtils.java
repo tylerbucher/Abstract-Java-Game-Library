@@ -24,15 +24,6 @@
 
 package org.ajgl.math;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
-
-
 /**
  * This class is a utility class designed to 
  * help with vector related tasks.
@@ -40,20 +31,4 @@ import java.nio.ShortBuffer;
  */
 public class VectorUtils {
     
-    /**
-     * Generates a specific buffer with values.
-     * @param bufferClass - The buffer to receive.
-     * @param values - Values to be added to the buffer.
-     * @return The generated buffer.
-     */
-    public static <B extends Buffer> Buffer glGenDataBuffer(Class<B> bufferClass, double... values) {
-        Class<?> clazz = bufferClass;
-        if(clazz == ByteBuffer.class) return MathUtils.createByteBuffer(MathUtils.arrayCastByte(values));
-        else if(clazz == ShortBuffer.class) return MathUtils.createShortBuffer(MathUtils.arrayCastShort(values));
-        else if(clazz == IntBuffer.class) return MathUtils.createIntegerBuffer(MathUtils.arrayCastInt(values));
-        else if(clazz == LongBuffer.class) return MathUtils.createLongBuffer(MathUtils.arrayCastLong(values));
-        else if(clazz == FloatBuffer.class) return MathUtils.createFloatBuffer(MathUtils.arrayCastFloat(values));
-        else if(clazz == DoubleBuffer.class) return MathUtils.createDoubleBuffer(values);
-        else return null;
-    }
 }

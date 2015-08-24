@@ -27,6 +27,7 @@ package org.ajgl.test.graphics;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.ajgl.game.core2d.Rectangle;
 import org.ajgl.graphics.DisplayList;
 import org.ajgl.graphics.Graphics;
 import org.ajgl.graphics.Immediate;
@@ -36,6 +37,8 @@ import org.ajgl.graphics.VertexBufferedObject;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 
 /**
@@ -197,7 +200,7 @@ public class GraphicsTest {
             GL11.glVertexPointer(3, GL11.GL_FLOAT, 0, 0);
             // Color pointer
             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbobcolorhandler);
-            GL11.glColorPointer(3, GL11.GL_FLOAT, 0, 0);
+            GL11.glColorPointer(3, GL11.GL_FLOAT, 0,  0);
             // Unbind
             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         } VertexArrayObject.bindVao(0);  // Unbind VAO

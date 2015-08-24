@@ -38,7 +38,7 @@ import java.util.Set;
  */
 public final class Tasker {
     
-    private static Map<String, List<Task>> aSyncMap = new HashMap<>();
+    private static Map<String, List<Task>> aSyncMap = new HashMap<>();// Highest priority goes first
     
     public static synchronized void postASyncTask(Task task) {
         String flag = task.getFlag();
