@@ -58,18 +58,26 @@ public class MainWindow extends Window {
         this.setKeyCallback(new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
-                if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
-                    Tasker.executeASyncTask("GLFW_MAIN_THREAD");
-                    GLFW.glfwSetWindowShouldClose(MainTest.threadedWindowTest.getWindowHandler(), 1);
-                }
-                
                 if(key == GLFW.GLFW_KEY_GRAVE_ACCENT && action == GLFW_RELEASE) {
                     MainGameTest.drawConsole ^= true;
-                    GLFW.glfwSetCursor(MainGameTest.windowTest.getWindowHandler(), MainGameTest.iBeamCursor);
+                    MainGameTest.consoleActive ^= true;
+                    //GLFW.glfwSetCursor(MainGameTest.windowTest.getWindowHandler(), MainGameTest.iBeamCursor);
                 }
                 
-                if(key == GLFW.GLFW_KEY_P && action == GLFW_RELEASE) {
-                    MainGameTest.console.text.addChar('t');
+                if(!MainGameTest.consoleActive) {
+                    if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
+                        Tasker.executeASyncTask("GLFW_MAIN_THREAD");
+                        GLFW.glfwSetWindowShouldClose(MainGameTest.windowTest.getWindowHandler(), 1);
+                    }
+                    return;
+                }
+                
+                if(action == GLFW_RELEASE && key >= 32 && key < 128 && key != GLFW.GLFW_KEY_GRAVE_ACCENT) {
+                    MainGameTest.console.text.addChar((char) key);
+                }
+                
+                if(key == GLFW.GLFW_KEY_BACKSPACE && action == GLFW_RELEASE) {
+                    MainGameTest.console.text.removeLastChar();
                 }
             }
         });

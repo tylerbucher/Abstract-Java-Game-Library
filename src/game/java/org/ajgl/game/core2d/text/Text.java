@@ -146,6 +146,8 @@ public class Text {
             y.put(0, y.get(0)+fontDropH);
             x.put(0, fontPosition[0]);
         }
+        if(!(c >= 32 && c < 128)) 
+            return;
         STBTruetype.stbtt_GetBakedQuad(characterData, BITMAP_W, BITMAP_H, c - 32, x, y, q.buffer(), 1);
         
         graphicsData.add(q.getX0()); graphicsData.add(q.getY0()); graphicsData.add(0.0f);
@@ -164,6 +166,17 @@ public class Text {
         graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(1.0f);
         graphicsData.add(q.getS0()); graphicsData.add(q.getT1());
         
+        vao.bufferUpdate(MathUtils.convertFloat(graphicsData));
+    }
+    
+    public void removeLastChar() {
+        y.put(0, y.get(0) - y.get(0)>>2);
+        x.put(0, x.get(0)>>2);
+        
+        for(int i=1;i<=36;i++) 
+            graphicsData.remove(graphicsData.size()-i);
+        
+        graphicsData.trimToSize();
         vao.bufferUpdate(MathUtils.convertFloat(graphicsData));
     }
     

@@ -60,6 +60,7 @@ public class MainGameTest {
     public static MRectangle rect;
     public static ChatConsole console;
     
+    public static boolean consoleActive;
     public static String text = "test";
     
     /**
@@ -152,6 +153,7 @@ public class MainGameTest {
                 new float[]{xpos, ypos, xpos, ypos, xpos, ypos, xpos, ypos})) {
             if(GLFW.glfwGetMouseButton(windowHandle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
                 drawCaret ^= true;
+                drawText ^= true;
             }
         }
         rect.move();
@@ -167,10 +169,13 @@ public class MainGameTest {
         
         if(drawConsole)
             console.console.draw();
-        if(drawCaret)
-            console.caret.draw();
-        if(drawText)
+//        if(drawCaret)
+//            console.caret.draw();
+        console.drawCaret();
+        if(drawConsole) {
+            GL20.glUseProgram(OpenGL.shaderProgram_VCT.id);
             console.text.draw();
+        }
         
         GL20.glUseProgram(0);
     }
