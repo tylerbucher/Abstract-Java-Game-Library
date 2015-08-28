@@ -32,6 +32,7 @@ import org.ajgl.concurrent.Tasker;
 import org.ajgl.game.core2d.MRectangle;
 import org.ajgl.game.core2d.Rectangle;
 import org.ajgl.game.development.ChatConsole;
+import org.ajgl.util.FPSCounter;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Sys;
 import org.lwjgl.glfw.GLFW;
@@ -178,6 +179,7 @@ public class MainGameTest {
         }
         
         GL20.glUseProgram(0);
+        System.out.println("FPS: "+FPSCounter.getFPS());
     }
     
     /**

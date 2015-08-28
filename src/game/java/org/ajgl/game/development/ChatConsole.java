@@ -55,13 +55,11 @@ public class ChatConsole {
     boolean setDrawTime = true;
     public void drawCaret() {
         if((System.nanoTime() - curTime) >= CARET_BLINK_TIME) {
-            System.out.println("wait");
             if(setDrawTime) {
                 drawTime = System.nanoTime();
                 setDrawTime = false;
             }
             if((System.nanoTime() - drawTime) <= CARET_DRAW_TIME) {
-                System.out.println("draw");
                 caret.draw();
             } else {
                 setDrawTime = true;
