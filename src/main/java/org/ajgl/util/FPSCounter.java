@@ -1,12 +1,12 @@
 package org.ajgl.util;
 
+import org.lwjgl.glfw.GLFW;
+
 public class FPSCounter {
-	private static long startTime = System.currentTimeMillis();
-//	private static elapsiedTime;
 	
 	public static int getFPS() {
-		int fps = (int) (1.0 / (System.currentTimeMillis() - startTime));
-		startTime = System.currentTimeMillis();
-		return fps/1000;
+		int fps = (int) (1.0 / GLFW.glfwGetTime());
+		GLFW.glfwSetTime(0.0);
+		return fps;
 	}
 }
