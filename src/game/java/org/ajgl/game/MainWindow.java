@@ -14,6 +14,7 @@ import org.ajgl.Window;
 import org.ajgl.concurrent.Tasker;
 import org.ajgl.test.MainTest;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWCharModsCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.opengl.GL11;
 
@@ -23,6 +24,8 @@ import org.lwjgl.opengl.GL11;
  *
  */
 public class MainWindow extends Window {
+	
+	private GLFWKeyCallback   keyCallback;      // key callback reference instance
     
     /**
      * Default window constructor.
@@ -53,7 +56,7 @@ public class MainWindow extends Window {
     }
     
     @Override
-    public void keyCallbackSetup() {
+    public void callbackSetup() {
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         this.setKeyCallback(new GLFWKeyCallback() {
             @Override
@@ -72,16 +75,27 @@ public class MainWindow extends Window {
                     return;
                 }
                 
-                if(action == GLFW_RELEASE && key >= 32 && key < 128 && key != GLFW.GLFW_KEY_GRAVE_ACCENT) {
-                    MainGameTest.console.text.addChar((char) key);
-                }
-                
                 if(key == GLFW.GLFW_KEY_BACKSPACE && action == GLFW_RELEASE) {
                     MainGameTest.console.text.removeLastChar();
                 }
             }
         });
-        super.keyCallbackSetup();
+        
+        this.setCharModsCallback(new GLFWCharModsCallback() {
+			@Override
+			public void invoke(long window, int codepoint, int mods) {
+				if(MainGameTest.consoleActive) {
+					if(codepoint >= 32 && codepoint < 128 && codepoint != GLFW.GLFW_KEY_GRAVE_ACCENT) {
+	                    MainGameTest.console.text.addChar((char) codepoint);
+	                }
+				}
+			}
+        });
+        super.callbackSetup();
+    }
+    
+    public void charCallbackSetup() {
+    	
     }
     
     @Override

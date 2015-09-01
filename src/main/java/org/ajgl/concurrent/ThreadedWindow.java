@@ -30,8 +30,15 @@ import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 
 import org.ajgl.Display;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWCharCallback;
+import org.lwjgl.glfw.GLFWCharModsCallback;
+import org.lwjgl.glfw.GLFWCursorEnterCallback;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
+import org.lwjgl.glfw.GLFWDropCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.lwjgl.glfw.GLFWScrollCallback;
 
 
 /**
@@ -47,8 +54,15 @@ public abstract class ThreadedWindow extends Thread implements Display {
     private long share;     // Window handler to share OpenGL context with
     private long window;    // The window handler
     
-    private GLFWErrorCallback errorCallback;    // error callback reference instance
-    private GLFWKeyCallback   keyCallback;      // key callback reference instance
+    private GLFWErrorCallback 		errorCallback;    		// error callback reference instance
+    private GLFWKeyCallback   		keyCallback;      		// key callback reference instance
+    private GLFWCharCallback		charCallback;			// char callback reference instance
+    private GLFWCharModsCallback	charModsCallback;		// char modifications callback reference instance
+    private GLFWMouseButtonCallback mouseButtonCallback;	// mouse button callback reference instance
+    private GLFWCursorPosCallback 	cursorPosCallback;		// cursor position callback reference instance
+    private GLFWCursorEnterCallback cursorEnterCallback;	// cursor enter callback reference instance
+    private GLFWScrollCallback		scrollCallback;			// scroll callback reference instance
+    private GLFWDropCallback		dropCallback;			// drop callback reference instance
     
     /**
      * Default window constructor.
@@ -111,7 +125,7 @@ public abstract class ThreadedWindow extends Thread implements Display {
             return false;
         }
         // Callback setup
-        keyCallbackSetup();
+        callbackSetup();
         // Setup window position
         postWindowCreation();
         return true;
@@ -123,16 +137,23 @@ public abstract class ThreadedWindow extends Thread implements Display {
     }
     
     @Override
-    public void keyCallbackSetup() {
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        if(keyCallback == null)
-            keyCallback = new GLFWKeyCallback() {
-                @Override
-                public void invoke(long window, int key, int scancode, int action, int mods) {
-                    
-                }
-            };
-        glfwSetKeyCallback(window, keyCallback);
+    public void callbackSetup() {
+//        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
+//        if(keyCallback == null)
+//            keyCallback = new GLFWKeyCallback() {
+//                @Override
+//                public void invoke(long window, int key, int scancode, int action, int mods) {
+//                    
+//                }
+//            };
+        GLFW.glfwSetKeyCallback(window, keyCallback);
+        GLFW.glfwSetCharCallback(window, charCallback);
+        GLFW.glfwSetCharModsCallback(window, charModsCallback);
+        GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallback);
+        GLFW.glfwSetCursorPosCallback(window, cursorPosCallback);
+        GLFW.glfwSetCursorEnterCallback(window, cursorEnterCallback);
+        GLFW.glfwSetScrollCallback(window, scrollCallback);
+        GLFW.glfwSetDropCallback(window, dropCallback);
     }
     
     @Override
@@ -146,25 +167,116 @@ public abstract class ThreadedWindow extends Thread implements Display {
     }
     
     @Override
+    public synchronized GLFWKeyCallback getKeyCallback() {
+        return keyCallback;
+    }
+    
+    @Override
+    public synchronized GLFWCharCallback getCharCallback() {
+		return charCallback;
+	}
+    
+    @Override
+	public synchronized GLFWCharModsCallback getCharModsCallback() {
+		return charModsCallback;
+	}
+    
+    @Override
+	public synchronized GLFWMouseButtonCallback getMouseButtonCallback() {
+		return mouseButtonCallback;
+	}
+    
+    @Override
+	public synchronized GLFWCursorPosCallback getCursorPosCallback() {
+		return cursorPosCallback;
+	}
+    
+    @Override
+	public synchronized GLFWCursorEnterCallback getCursorEnterCallback() {
+		return cursorEnterCallback;
+	}
+    
+    @Override
+	public synchronized GLFWScrollCallback getScrollCallback() {
+		return scrollCallback;
+	}
+    
+    @Override
+	public synchronized GLFWDropCallback getDropCallback() {
+		return dropCallback;
+	}
+    
+    @Override
     public synchronized void setErrorCallback(GLFWErrorCallback errorCallback) {
         if(this.errorCallback != null)
             if(!this.errorCallback.isDestroyed())
                 this.errorCallback.release();
         this.errorCallback = errorCallback;
     }
-    
-    @Override
-    public synchronized GLFWKeyCallback getKeyCallback() {
-        return keyCallback;
-    }
-    
-    @Override
+
+	@Override
     public synchronized void setKeyCallback(GLFWKeyCallback keyCallback) {
         if(this.keyCallback != null)
             if(!this.keyCallback.isDestroyed())
                 this.keyCallback.release();
         this.keyCallback = keyCallback;
     }
+    
+	@Override
+    public synchronized void setCharCallback(GLFWCharCallback charCallback) {
+		if(this.charCallback != null)
+            if(!this.charCallback.isDestroyed())
+                this.charCallback.release();
+		this.charCallback = charCallback;
+	}
+	
+	@Override
+	public synchronized void setCharModsCallback(GLFWCharModsCallback charModsCallback) {
+		if(this.charModsCallback != null)
+            if(!this.charModsCallback.isDestroyed())
+                this.charModsCallback.release();
+		this.charModsCallback = charModsCallback;
+	}
+	
+	@Override
+	public synchronized void setMouseButtonCallback(GLFWMouseButtonCallback mouseButtonCallback) {
+		if(this.mouseButtonCallback != null)
+            if(!this.mouseButtonCallback.isDestroyed())
+                this.mouseButtonCallback.release();
+		this.mouseButtonCallback = mouseButtonCallback;
+	}
+	
+	@Override
+	public synchronized void setCursorPosCallback(GLFWCursorPosCallback cursorPosCallback) {
+		if(this.cursorPosCallback != null)
+            if(!this.cursorPosCallback.isDestroyed())
+                this.cursorPosCallback.release();
+		this.cursorPosCallback = cursorPosCallback;
+	}
+	
+	@Override
+	public synchronized void setCursorEnterCallback(GLFWCursorEnterCallback cursorEnterCallback) {
+		if(this.cursorEnterCallback != null)
+            if(!this.cursorEnterCallback.isDestroyed())
+                this.cursorEnterCallback.release();
+		this.cursorEnterCallback = cursorEnterCallback;
+	}
+	
+	@Override
+	public synchronized void setScrollCallback(GLFWScrollCallback scrollCallback) {
+		if(this.scrollCallback != null)
+            if(!this.scrollCallback.isDestroyed())
+                this.scrollCallback.release();
+		this.scrollCallback = scrollCallback;
+	}
+	
+	@Override
+	public synchronized void setDropCallback(GLFWDropCallback dropCallback) {
+		if(this.dropCallback != null)
+            if(!this.dropCallback.isDestroyed())
+                this.dropCallback.release();
+		this.dropCallback = dropCallback;
+	}
     
     public void preInitGL() {
         

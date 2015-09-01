@@ -24,8 +24,15 @@
 
 package org.ajgl;
 
+import org.lwjgl.glfw.GLFWCharCallback;
+import org.lwjgl.glfw.GLFWCharModsCallback;
+import org.lwjgl.glfw.GLFWCursorEnterCallback;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
+import org.lwjgl.glfw.GLFWDropCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.lwjgl.glfw.GLFWScrollCallback;
 
 
 /**
@@ -57,9 +64,9 @@ public interface Display {
     public void preWindowCreation();
     
     /**
-     * Key call back setup.
+     * General call back setup.
      */
-    public void keyCallbackSetup();
+    public void callbackSetup();
     
     /**
      * Post window creation.
@@ -73,22 +80,106 @@ public interface Display {
     public GLFWErrorCallback getErrorCallback();
     
     /**
-     * Sets the displays error callback.
-     * @param errorCallback - The error Callback to set.
-     */
-    public void setErrorCallback(GLFWErrorCallback errorCallback);
-    
-    /**
      * Gets the current key callback.
      * @return The current key callback.
      */
     public GLFWKeyCallback getKeyCallback();
     
     /**
+     * Gets the current char callback.
+     * @return The current char callback.
+     */
+    public GLFWCharCallback getCharCallback();
+    
+    /**
+     * Gets the current char modifications callback.
+     * @return The current char modifications callback.
+     */
+    public GLFWCharModsCallback getCharModsCallback();
+    
+    /**
+     * Gets the current mouse button callback.
+     * @return The current mouse button callback.
+     */
+    public GLFWMouseButtonCallback getMouseButtonCallback();
+    
+    /**
+     * Gets the current cursor position callback.
+     * @return The current cursor position callback.
+     */
+    public GLFWCursorPosCallback getCursorPosCallback();
+    
+    /**
+     * Gets the current cursor enter callback.
+     * @return The current cursor enter callback.
+     */
+    public GLFWCursorEnterCallback getCursorEnterCallback();
+    
+    /**
+     * Gets the current scroll callback.
+     * @return The current scroll callback.
+     */
+    public GLFWScrollCallback getScrollCallback();
+    
+    /**
+     * Gets the current drop callback.
+     * @return The current drop callback.
+     */
+    public GLFWDropCallback getDropCallback();
+    
+    /**
+     * Sets the displays error callback.
+     * @param errorCallback - The error Callback to set.
+     */
+    public void setErrorCallback(GLFWErrorCallback errorCallback);
+    
+    /**
      * Sets the displays key callback.
      * @param keyCallback - The key callback to be set.
      */
     public void setKeyCallback(GLFWKeyCallback keyCallback);
+    
+    /**
+     * Sets the displays char callback.
+     * @param charCallback - The char callback to be set.
+     */
+    public void setCharCallback(GLFWCharCallback charCallback);
+    
+    /**
+     * Sets the displays char modifications callback.
+     * @param charModsCallback - The char modifications callback to be set.
+     */
+    public void setCharModsCallback(GLFWCharModsCallback charModsCallback);
+    
+    /**
+     * Sets the displays mouse button callback.
+     * @param mouseButtonCallback - The mouse button callback to be set.
+     */
+    public void setMouseButtonCallback(GLFWMouseButtonCallback mouseButtonCallback);
+    
+    /**
+     * Sets the displays cursor position callback.
+     * @param cursorPosCallback - The cursor position callback to be set.
+     */
+    public void setCursorPosCallback(GLFWCursorPosCallback cursorPosCallback);
+    
+    /**
+     * Sets the displays cursor enter callback.
+     * @param cursorEnterCallback - The cursor enter callback to be set.
+     */
+    public void setCursorEnterCallback(GLFWCursorEnterCallback cursorEnterCallback);
+    
+    /**
+     * Sets the displays scroll callback.
+     * @param scrollCallback - The scroll callback to be set.
+     */
+    public void setScrollCallback(GLFWScrollCallback scrollCallback);
+    
+    /**
+     * Sets the displays drop callback.
+     * @param dropCallback - The drop callback to be set.
+     */
+    public void setDropCallback(GLFWDropCallback dropCallback);
     
     /**
      * Returns the height of the display.

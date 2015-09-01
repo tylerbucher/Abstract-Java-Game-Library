@@ -83,6 +83,7 @@ public class MainGameTest {
         OpenGL.standardSetup();
         OpenGL.shaderSetup();
         
+        GLFW.glfwSwapInterval(1);
     }
     
     /**
@@ -127,10 +128,12 @@ public class MainGameTest {
     private static void input() {
         glfwPollEvents();
         
-        if(GLFW.glfwGetKey(windowHandle, GLFW.GLFW_KEY_W) == GLFW.GLFW_PRESS) rect.dy += 1.0f;
-        if(GLFW.glfwGetKey(windowHandle, GLFW.GLFW_KEY_A) == GLFW.GLFW_PRESS) rect.dx -= 1.0f;
-        if(GLFW.glfwGetKey(windowHandle, GLFW.GLFW_KEY_S) == GLFW.GLFW_PRESS) rect.dy -= 1.0f;
-        if(GLFW.glfwGetKey(windowHandle, GLFW.GLFW_KEY_D) == GLFW.GLFW_PRESS) rect.dx += 1.0f;
+        if(!consoleActive) {
+        	if(GLFW.glfwGetKey(windowHandle, GLFW.GLFW_KEY_W) == GLFW.GLFW_PRESS) rect.dy += 1.0f;
+        	if(GLFW.glfwGetKey(windowHandle, GLFW.GLFW_KEY_A) == GLFW.GLFW_PRESS) rect.dx -= 1.0f;
+        	if(GLFW.glfwGetKey(windowHandle, GLFW.GLFW_KEY_S) == GLFW.GLFW_PRESS) rect.dy -= 1.0f;
+        	if(GLFW.glfwGetKey(windowHandle, GLFW.GLFW_KEY_D) == GLFW.GLFW_PRESS) rect.dx += 1.0f;
+        }
         
 //        DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
 //        DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
