@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.ajgl.game.OpenGL;
@@ -22,6 +23,8 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.stb.STBTTAlignedQuad;
 import org.lwjgl.stb.STBTTBakedChar;
 import org.lwjgl.stb.STBTruetype;
+
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 
 /**
@@ -46,7 +49,7 @@ public class Text {
     private ByteBuffer trueTypeFont;
     private ByteBuffer bitmap;
     
-    private ArrayList<Entry2<Character, Entry2<Float, Float>>> charList;
+    private ArrayList<Entry2<Character, Float>> charList;
     
     private ArrayList<Float> graphicsData;
     private TextVAO vao;
@@ -115,6 +118,8 @@ public class Text {
     
     public void setText(String text) {
         this.text = text;
+        graphicsData.clear();
+        charList.clear();
         
         x.put(0, fontPosition[0]);
         y.put(0, fontPosition[1]);
@@ -145,13 +150,12 @@ public class Text {
             graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(1.0f);
             graphicsData.add(q.getS0()); graphicsData.add(q.getT1());
             
-            charList.add(new Entry2<>(c, new Entry2<>(q.getX1(), q.getY0())));
+            charList.add(new Entry2<>(c, q.getX1()));
         }
         vao = new TextVAO(MathUtils.convertFloat(graphicsData));
     }
     
     public void addChar(char c) {
-    	System.out.println();
         if (c=='\n') {
             y.put(0, y.get(0)+fontDropH);
             x.put(0, fontPosition[0]);
@@ -176,26 +180,33 @@ public class Text {
         graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(1.0f);
         graphicsData.add(q.getS0()); graphicsData.add(q.getT1());
         
-        charList.add(new Entry2<>(c, new Entry2<>(q.getX0(), q.getY1())));
+        charList.add(new Entry2<>(c, q.getX1()));
         
         vao.bufferUpdate(MathUtils.convertFloat(graphicsData));
     }
     
     public void removeLastChar() {
     	System.out.println(charList.size());
-    	if(charList.size() > 1) {
+    	graphicsData.trimToSize();
+    	if(charList.size() > 0) {
+    		int size = graphicsData.size();
     		for(int i=1;i<=36;i++) 
-                graphicsData.remove(graphicsData.size()-i);
+                graphicsData.set(size-i, null);
             
             charList.remove(charList.size()-1);
             charList.trimToSize();
             
-            x.put(0, charList.get(charList.size()-1).second.first);
-            y.put(0, charList.get(charList.size()-1).second.second);
+            if(charList.size() != 0)
+            	x.put(0, charList.get(charList.size()-1).second);
+            else
+            	x.put(0, fontPosition[0]);
             
+            graphicsData.removeAll(Arrays.asList((Float) null));
             graphicsData.trimToSize();
             vao.bufferUpdate(MathUtils.convertFloat(graphicsData));
     	}
+    	System.out.println(charList.size());
+    	System.out.println();
     }
     
     public void draw() {

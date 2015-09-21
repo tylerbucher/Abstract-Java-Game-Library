@@ -75,8 +75,9 @@ public class MainWindow extends Window {
                     return;
                 }
                 
-                if(key == GLFW.GLFW_KEY_BACKSPACE && action == GLFW_RELEASE) {
+                if(key == GLFW.GLFW_KEY_BACKSPACE && action != GLFW.GLFW_PRESS) {
                     MainGameTest.console.text.removeLastChar();
+                    System.out.println("backspace");
                 }
             }
         });

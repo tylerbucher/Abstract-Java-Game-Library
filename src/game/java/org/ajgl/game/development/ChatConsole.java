@@ -40,7 +40,7 @@ public class ChatConsole {
         
         this.console = new Rectangle(Rectangle.CreateGraphicsData(x, y, width, height, consoleColor));
         this.caret = new Rectangle(Rectangle.CreateGraphicsData(x+5, y+5, 1.5f, 20.0f, caretColor));
-        text = new Text("", "src/game/java/resources/ttf/ARIAL.TTF", 25.0f, new float[]{x+7, -(y+7)}, caretColor);
+        text = new Text("", "src/game/java/resources/ttf/baskvl.ttf", 25.0f, new float[]{x+7, -(y+7)}, caretColor);
     }
     
     public void draw() {

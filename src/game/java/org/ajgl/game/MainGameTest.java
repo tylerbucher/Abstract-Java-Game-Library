@@ -182,7 +182,7 @@ public class MainGameTest {
         }
         
         GL20.glUseProgram(0);
-        System.out.println("FPS: "+FPSCounter.getFPS());
+        //System.out.println("FPS: "+FPSCounter.getFPS());
     }
     
     /**
