@@ -31,6 +31,7 @@ import org.ajgl.concurrent.EventDispatcher;
 import org.ajgl.concurrent.Tasker;
 import org.ajgl.game.core2d.MRectangle;
 import org.ajgl.game.core2d.Rectangle;
+import org.ajgl.game.core2d.text.Text;
 import org.ajgl.game.development.ChatConsole;
 import org.ajgl.util.FPSCounter;
 import org.lwjgl.BufferUtils;
@@ -63,6 +64,9 @@ public class MainGameTest {
     
     public static boolean consoleActive;
     public static String text = "test";
+    public static Text fpsText;
+    
+    public static long lastTime = System.nanoTime();
     
     /**
      * Pre OpenGL-initialization.
@@ -83,7 +87,7 @@ public class MainGameTest {
         OpenGL.standardSetup();
         OpenGL.shaderSetup();
         
-        GLFW.glfwSwapInterval(1);
+        GLFW.glfwSwapInterval(0);
     }
     
     /**
@@ -94,6 +98,10 @@ public class MainGameTest {
         
         rect = new MRectangle(Rectangle.CreateGraphicsData(50, 50, 200, 200, new float[]{1,0,0,1.0f, 0,1,0,1.0f, 0,0,1,1.0f, 1,1,1,1.0f}));
         console = new ChatConsole(25.0f, windowTest.getHeight()-55.0f, windowTest.getWidth()/3.0f, 30.0f);
+        
+        fpsText = new Text("60FPS", "src/game/java/resources/ttf/COUR.TTF", 25.0f, 
+                new float[]{25.0f+7, -((windowTest.getHeight()-55.0f)+7)}, 
+                new float[]{1.0f,1.0f,1.0f,1.0f, 1.0f,1.0f,1.0f,1.0f, 1.0f,1.0f,1.0f,1.0f, 1.0f,1.0f,1.0f,1.0f});
     }
     
     /**
@@ -176,11 +184,17 @@ public class MainGameTest {
 //        if(drawCaret)
 //            console.caret.draw();
         console.drawCaret();
+        
+        GL20.glUseProgram(OpenGL.shaderProgram_VCT.id);
         if(drawConsole) {
-            GL20.glUseProgram(OpenGL.shaderProgram_VCT.id);
             console.text.draw();
         }
-        
+        String fpsT = FPSCounter.getFPS()+"";
+        if((System.nanoTime() - lastTime) > 500000000){
+            fpsText.setText(fpsT);
+            lastTime = System.nanoTime();
+        }
+        //fpsText.draw();
         GL20.glUseProgram(0);
         //System.out.println("FPS: "+FPSCounter.getFPS());
     }

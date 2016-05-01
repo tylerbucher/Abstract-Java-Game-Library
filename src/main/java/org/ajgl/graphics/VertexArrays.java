@@ -32,7 +32,6 @@ import org.ajgl.graphics.UtilAnnotations.GlBufferFunction;
 import org.ajgl.graphics.UtilAnnotations.GlDataType;
 import org.lwjgl.opengl.GL11;
 
-
 /**
  * <p>This class draws shapes to the screen through OpenGL. The 
  * rendering method that this class uses is "Vertex Arrays". Please 

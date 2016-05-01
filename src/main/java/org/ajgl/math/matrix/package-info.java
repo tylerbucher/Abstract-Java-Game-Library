@@ -22,13 +22,8 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.math;
-
 /**
- * This class is a utility class designed to 
- * help with vector related tasks.
+ * This package contains math related to matrices.
  * @author Tyler Bucher
  */
-public class VectorUtils {
-    
-}
+package org.ajgl.math.matrix;

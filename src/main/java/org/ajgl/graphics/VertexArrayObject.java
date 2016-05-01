@@ -27,7 +27,6 @@ package org.ajgl.graphics;
 import org.ajgl.OpenGLInfo;
 import org.lwjgl.opengl.GL30;
 
-
 /**
  * This class is designed to be supporting class for Vertex Buffered Objects.
  * This class encapsulates the vertex buffered object, and does not directly

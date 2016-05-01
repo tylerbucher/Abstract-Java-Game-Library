@@ -30,7 +30,6 @@ import java.nio.IntBuffer;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL20;
 
-
 /**
  * This class is designed to provide direct access 
  * to OpenGL shader functions.

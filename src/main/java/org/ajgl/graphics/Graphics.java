@@ -28,8 +28,6 @@ import org.ajgl.OpenGLInfo;
 import org.ajgl.graphics.UtilAnnotations.GlTextureFormat;
 import org.lwjgl.opengl.GL11;
 
-
-
 /**
  * This class is designed to provide basic and general graphical functions.
  * @author Tyler Bucher
@@ -42,7 +40,7 @@ public class Graphics {
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void enableClientSideState(int... state) {
-        for(int i=0;i<state.length;i++)
+        for (int i = 0; i < state.length; i++)
             GL11.glEnableClientState(state[i]);
     }
     
@@ -52,7 +50,7 @@ public class Graphics {
      */
     @OpenGLInfo(doc = false, openGLVersion = "1.1", profile = "OPENGL_CORE_PROFILE")
     public static void disableClientSideState(int... state) {
-        for(int i=0;i<state.length;i++)
+        for (int i = 0; i < state.length; i++)
             GL11.glDisableClientState(state[i]);
     }
     

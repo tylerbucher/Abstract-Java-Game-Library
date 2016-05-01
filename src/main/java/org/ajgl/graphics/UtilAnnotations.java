@@ -29,10 +29,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
- * @author Tyler
- *
+ * This class adds annotated discription to most of the OpenGL 
+ * parameters.
+ * @author Tyler Bucher
  */
 public class UtilAnnotations {
     

@@ -26,7 +26,6 @@ package org.ajgl.concurrent;
 
 import static org.lwjgl.glfw.Callbacks.errorCallbackPrint;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
-import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 
 import org.ajgl.Display;
 import org.lwjgl.glfw.GLFW;
@@ -40,10 +39,9 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
-
 /**
- * @author Tyler
- *
+ * Creates a thread safe window.
+ * @author Tyler Bucher
  */
 public abstract class ThreadedWindow extends Thread implements Display {
     

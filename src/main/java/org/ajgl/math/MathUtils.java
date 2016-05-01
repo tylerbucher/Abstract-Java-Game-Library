@@ -33,6 +33,11 @@ import java.util.List;
  */
 public class MathUtils {
     
+    /**
+     * Converts a float list into a float array.
+     * @param list - The list to be converted.
+     * @return A primitive float array.
+     */
     public static float[] convertFloat(List<Float> list) {
         float[] newArray = new float[list.size()];
         for(int i=0;i<list.size();i++)

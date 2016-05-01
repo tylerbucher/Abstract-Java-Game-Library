@@ -33,10 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * @author Tyler
- *
+ * Dispatches events.
+ * @author Tyler Bucher
  */
 public final class EventDispatcher {
     

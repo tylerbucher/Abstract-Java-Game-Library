@@ -4,6 +4,7 @@
 package org.ajgl.game.development;
 
 import org.ajgl.game.OpenGL;
+import org.ajgl.game.core2d.MRectangle;
 import org.ajgl.game.core2d.Rectangle;
 import org.ajgl.game.core2d.text.Text;
 import org.lwjgl.opengl.GL20;
@@ -26,7 +27,7 @@ public class ChatConsole {
     public float width, height;
 
     public Rectangle console;
-    public Rectangle caret;
+    public MRectangle caret;
     public Text text;
     
     /**
@@ -39,8 +40,8 @@ public class ChatConsole {
         this.height = height;
         
         this.console = new Rectangle(Rectangle.CreateGraphicsData(x, y, width, height, consoleColor));
-        this.caret = new Rectangle(Rectangle.CreateGraphicsData(x+5, y+5, 1.5f, 20.0f, caretColor));
-        text = new Text("", "src/game/java/resources/ttf/baskvl.ttf", 25.0f, new float[]{x+7, -(y+7)}, caretColor);
+        this.caret = new MRectangle(Rectangle.CreateGraphicsData(x+5, y+5, 1.5f, 20.0f, caretColor));
+        text = new Text("", "src/game/java/resources/ttf/COUR.TTF", 25.0f, new float[]{x+7.0f, -(y+7.0f)}, caretColor);
     }
     
     public void draw() {
@@ -48,6 +49,11 @@ public class ChatConsole {
         caret.draw();
         GL20.glUseProgram(OpenGL.shaderProgram_VCT.id);
         text.draw();
+    }
+    
+    public void addCharacter(char c) {
+        text.addChar(c);
+        caret.dx = caret.
     }
     
     long curTime = System.nanoTime();

@@ -26,7 +26,6 @@ package org.ajgl;
 
 import static org.lwjgl.glfw.Callbacks.errorCallbackPrint;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
-import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCharCallback;
@@ -39,7 +38,6 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
-
 /**
  * This class is designed to to provide an independent module
  * for window creation. 
@@ -47,12 +45,12 @@ import org.lwjgl.glfw.GLFWScrollCallback;
  */
 public class Window implements Display {
     
-    private int height;     // Display height
-    private int width;      // Display width
-    private String title;   // Display title
-    private long monitor;   // Monitor to use
-    private long share;     // Window handler to share OpenGL context with
-    private long window;    // The window handler
+    private int    height;      // Display height
+    private int    width;       // Display width
+    private String title;       // Display title
+    private long   monitor;     // Monitor to use
+    private long   share;       // Window handler to share OpenGL context with
+    private long   window;      // The window handler
     
     private GLFWErrorCallback 		errorCallback;    		// error callback reference instance
     private GLFWKeyCallback   		keyCallback;      		// key callback reference instance
@@ -138,14 +136,6 @@ public class Window implements Display {
     
     @Override
     public void callbackSetup() {
-//        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-//        if(keyCallback == null)
-//            keyCallback = new GLFWKeyCallback() {
-//                @Override
-//                public void invoke(long window, int key, int scancode, int action, int mods) {
-//                    
-//                }
-//            };
         GLFW.glfwSetKeyCallback(window, keyCallback);
         GLFW.glfwSetCharCallback(window, charCallback);
         GLFW.glfwSetCharModsCallback(window, charModsCallback);
@@ -317,5 +307,4 @@ public class Window implements Display {
     public synchronized long getWindowHandler() {
         return window;
     }
-    
 }

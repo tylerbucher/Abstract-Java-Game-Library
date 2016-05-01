@@ -33,13 +33,17 @@ import java.util.Set;
 
 
 /**
- * @author Tyler
- *
+ * Creates and executes tasks.
+ * @author Tyler Bucher
  */
 public final class Tasker {
     
-    private static Map<String, List<Task>> aSyncMap = new HashMap<>();// Highest priority goes first
+    private static Map<String, List<Task>> aSyncMap = new HashMap<>();  // Highest priority goes first
     
+    /**
+     * Adds task to a list.
+     * @param task
+     */
     public static synchronized void postASyncTask(Task task) {
         String flag = task.getFlag();
         List<Task> flagList = aSyncMap.get(flag);
@@ -49,6 +53,9 @@ public final class Tasker {
         aSyncMap.get(flag).add(task);
     }
     
+    /**
+     * Executes all tasks.
+     */
     public static synchronized void executeASyncTasks() {
         Set<String> keySet = aSyncMap.keySet();
         for(String s : keySet) {
@@ -62,6 +69,10 @@ public final class Tasker {
         }    
     }
     
+    /**
+     * Executes all tasks with this flag.
+     * @param flag - Flag to search for.
+     */
     public static synchronized void executeASyncTask(String flag) {
         List<Task> taskList = aSyncMap.get(flag);
         if(taskList != null) {

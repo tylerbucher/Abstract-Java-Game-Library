@@ -24,34 +24,48 @@
 
 package org.ajgl.concurrent;
 
-
 /**
- * @author Tyler
- *
+ * This class is designed to create tasks.
+ * @author Tyler Bucher
  */
 public abstract class Task implements Comparable<Task> {
     
-    private String flag;
-    private int priority;
+    private String flag;    // Flag for the task
+    private int priority;   // 1: lowest | 10: highest
     
+    /**
+     * Creates a new task.
+     * @param flag - Flag for the task.
+     * @param priority - 1: lowest | 10: highest
+     */
     public Task(String flag, int priority) {
         this.flag = flag;
         this.priority = priority;
     }
     
+    /**
+     * Executes the tasks.
+     */
     public abstract void execute();
     
+    /**
+     * Returns the flag.
+     * @return the falg.
+     */
     public String getFlag() {
         return flag;
     }
     
+    /**
+     * Returns the priority.
+     * @return the priority.
+     */
     public int getPriority() {
         return priority;
     }
     
     @Override
-    public int compareTo(Task task)
-    {
+    public int compareTo(Task task){
          return this.priority - task.priority;
     }
 }

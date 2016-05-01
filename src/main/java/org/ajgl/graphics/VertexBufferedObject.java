@@ -39,7 +39,6 @@ import org.ajgl.graphics.UtilAnnotations.GlDrawMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
-
 /**
  * This class draws shapes to the screen through OpenGL. The 
  * rendering method that this class uses is "Vertex Buffered Objects". 
@@ -153,5 +152,4 @@ public final class VertexBufferedObject {
         // Draw vertex buffer object
         GL11.glDrawElements(beginMode, vertexNumber, dataType, offSet);
     }
-    
 }

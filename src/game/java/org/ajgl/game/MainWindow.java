@@ -88,6 +88,7 @@ public class MainWindow extends Window {
 				if(MainGameTest.consoleActive) {
 					if(codepoint >= 32 && codepoint < 128 && codepoint != GLFW.GLFW_KEY_GRAVE_ACCENT) {
 	                    MainGameTest.console.text.addChar((char) codepoint);
+	                    //MainGameTest.console.caret.
 	                }
 				}
 			}

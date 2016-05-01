@@ -8,20 +8,14 @@ import static org.lwjgl.glfw.GLFW.GLFW_REFRESH_RATE;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
-import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
-import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
-
-import java.nio.ByteBuffer;
 
 import org.ajgl.Window;
 import org.ajgl.concurrent.Tasker;
 import org.ajgl.test.MainTest;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWvidmode;
 import org.lwjgl.opengl.GL11;
 
 
@@ -60,7 +54,7 @@ public class WindowTest extends Window {
     }
     
     @Override
-    public void keyCallbackSetup() {
+    public void callbackSetup() {
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         this.setKeyCallback(new GLFWKeyCallback() {
             @Override
@@ -71,7 +65,7 @@ public class WindowTest extends Window {
                 }
             }
         });
-        super.keyCallbackSetup();
+        super.callbackSetup();
     }
     
     @Override

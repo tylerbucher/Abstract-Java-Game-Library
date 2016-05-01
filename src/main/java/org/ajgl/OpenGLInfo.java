@@ -29,10 +29,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
- * This class is a source annotation for OpenGL 
- * graphical information.
+ * This class is a source annotation for OpenGL graphical information.
  * @author Tyler Bucher
  */
 @Retention(RetentionPolicy.SOURCE)
@@ -40,8 +38,7 @@ import java.lang.annotation.Target;
 public @interface OpenGLInfo {
     
     /**
-     * States the minimum OpenGL version in which this
-     * method needs to work.
+     * States the minimum OpenGL version in which this method needs to work.
      */
     String openGLVersion();
     

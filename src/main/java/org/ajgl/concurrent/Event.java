@@ -25,14 +25,13 @@
 package org.ajgl.concurrent;
 
 /**
- * This class was designed to be extended by other higher level Events.
+ * This class is designed to be extended by other higher level Events.
  * @author Tyler Bucher
  */
 public class Event {
     
     private boolean canceled = false;   // States weather the event has been canceled
     public final String name;           // States the name of the event
-    
     
     public Event() {
         this.name = "Event";

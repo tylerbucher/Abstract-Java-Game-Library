@@ -24,8 +24,6 @@ import org.lwjgl.stb.STBTTAlignedQuad;
 import org.lwjgl.stb.STBTTBakedChar;
 import org.lwjgl.stb.STBTruetype;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
-
 
 /**
  * @author Tyler
@@ -49,7 +47,7 @@ public class Text {
     private ByteBuffer trueTypeFont;
     private ByteBuffer bitmap;
     
-    private ArrayList<Entry2<Character, Float>> charList;
+    public ArrayList<Entry2<Character, Float>> charList;
     
     private ArrayList<Float> graphicsData;
     private TextVAO vao;
@@ -110,7 +108,7 @@ public class Text {
             GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_ALPHA, BITMAP_W, BITMAP_H, 0, GL11.GL_ALPHA, GL11.GL_UNSIGNED_BYTE, bitmap);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);  
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,27 +133,28 @@ public class Text {
             STBTruetype.stbtt_GetBakedQuad(characterData, BITMAP_W, BITMAP_H, c - 32, x, y, q.buffer(), 1);
             
             graphicsData.add(q.getX0()); graphicsData.add(q.getY0()); graphicsData.add(0.0f);
-            graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(1.0f);
+            graphicsData.add(1.0f); graphicsData.add(1.0f); graphicsData.add(1.0f); graphicsData.add(1.0f);
             graphicsData.add(q.getS0()); graphicsData.add(q.getT0());
             
             graphicsData.add(q.getX1()); graphicsData.add(q.getY0()); graphicsData.add(0.0f);
-            graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(1.0f);
+            graphicsData.add(1.0f); graphicsData.add(1.0f); graphicsData.add(1.0f); graphicsData.add(1.0f);
             graphicsData.add(q.getS1()); graphicsData.add(q.getT0());
             
             graphicsData.add(q.getX1()); graphicsData.add(q.getY1()); graphicsData.add(0.0f);
-            graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(1.0f);
+            graphicsData.add(1.0f); graphicsData.add(1.0f); graphicsData.add(1.0f); graphicsData.add(1.0f);
             graphicsData.add(q.getS1()); graphicsData.add(q.getT1());
             
             graphicsData.add(q.getX0()); graphicsData.add(q.getY1()); graphicsData.add(0.0f);
-            graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(1.0f);
+            graphicsData.add(1.0f); graphicsData.add(1.0f); graphicsData.add(1.0f); graphicsData.add(1.0f);
             graphicsData.add(q.getS0()); graphicsData.add(q.getT1());
             
-            charList.add(new Entry2<>(c, q.getX1()));
+            charList.add(new Entry2<>(c, x.get(0)));
         }
         vao = new TextVAO(MathUtils.convertFloat(graphicsData));
     }
     
     public void addChar(char c) {
+        System.out.println("B x: "+x.get(0)+" | q_x_1: "+q.getX1());
         if (c=='\n') {
             y.put(0, y.get(0)+fontDropH);
             x.put(0, fontPosition[0]);
@@ -180,13 +179,13 @@ public class Text {
         graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(0.0f); graphicsData.add(1.0f);
         graphicsData.add(q.getS0()); graphicsData.add(q.getT1());
         
-        charList.add(new Entry2<>(c, q.getX1()));
+        charList.add(new Entry2<>(c, x.get(0)));
         
         vao.bufferUpdate(MathUtils.convertFloat(graphicsData));
+        System.out.println("A| x: "+x.get(0)+" | q_x_1: "+q.getX1());
     }
     
     public void removeLastChar() {
-    	System.out.println(charList.size());
     	graphicsData.trimToSize();
     	if(charList.size() > 0) {
     		int size = graphicsData.size();
@@ -205,8 +204,22 @@ public class Text {
             graphicsData.trimToSize();
             vao.bufferUpdate(MathUtils.convertFloat(graphicsData));
     	}
-    	System.out.println(charList.size());
-    	System.out.println();
+    }
+    
+    public void removeChar(int index) {
+        if(!(index >= 0 && index < charList.size()))
+            return;
+        
+        graphicsData.subList(index*36, graphicsData.size()).clear();
+        
+        String text = "";
+        for(int i=index+1;i<charList.size();i++)
+            text += charList.get(i).first.charValue();
+        charList.subList(index+1, charList.size()).clear();
+        x.put(0, charList.get(index).second);
+        
+        for(char c : text.toCharArray())
+            addChar(c);
     }
     
     public void draw() {

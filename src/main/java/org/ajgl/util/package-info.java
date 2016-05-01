@@ -22,23 +22,8 @@
  * THE SOFTWARE.
  */
 
-package org.ajgl.util;
-
-import org.lwjgl.glfw.GLFW;
-
 /**
- * This class is designed to count the current fps of a display.
+ * This package contains utility based classes.
  * @author Tyler Bucher
  */
-public class FPSCounter {
-	
-    /**
-     * Gets the current fps of the display.
-     * @return The fps as an int.
-     */
-	public static int getFPS() {
-		int fps = (int) (1.0 / GLFW.glfwGetTime());
-		GLFW.glfwSetTime(0.0);
-		return fps;
-	}
-}
+package org.ajgl.util;

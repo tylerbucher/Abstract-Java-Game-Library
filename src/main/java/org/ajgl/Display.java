@@ -34,7 +34,6 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
-
 /**
  * This class is designed to provide a abstract display reference.
  * @author Tyler Bucher
@@ -59,7 +58,7 @@ public interface Display {
     public boolean windowSetup();
     
     /**
-     * Pre window creation.
+     * Pre-window creation.
      */
     public void preWindowCreation();
     
@@ -219,8 +218,8 @@ public interface Display {
     public long getMonitor();
     
     /**
-     * Return the window handler that this display is sharing a 
-     * OpenGL context with.
+     * Return the window handler that this display is sharing a OpenGL context
+     * with.
      * @return The share context handler.
      */
     public long getShare();
