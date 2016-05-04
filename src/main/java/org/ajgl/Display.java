@@ -193,6 +193,18 @@ public interface Display {
     public int getWidth();
     
     /**
+     * Sets the height of the window.
+     * @param height - The height of the window.
+     */
+    public void setHeight(int height);
+    
+    /**
+     * Sets the width of the window.
+     * @param width - The width of the window.
+     */
+    public void setWidth(int width);
+    
+    /**
      * Sets the displays width and height.
      * @param width - The new width.
      * @param height - The new height.

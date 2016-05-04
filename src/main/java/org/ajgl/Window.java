@@ -279,7 +279,19 @@ public class Window implements Display {
     }
     
     @Override
+    public synchronized void setHeight(int height) {
+        this.height = height;
+    }
+    
+    @Override
+    public synchronized void setWidth(int width) {
+        this.width = width;
+    }
+    
+    @Override
     public synchronized void setWindowSize(int width, int height) {
+        this.width = width;
+        this.height = height;
         GLFW.glfwSetWindowSize(window, width, height);
     }
     
