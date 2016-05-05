@@ -24,7 +24,6 @@
 
 package org.ajgl;
 
-import static org.lwjgl.glfw.Callbacks.errorCallbackPrint;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 
 import org.lwjgl.glfw.GLFW;
@@ -101,7 +100,7 @@ public class Window implements Display {
     public void errorCallbackSetup() {
         // Setup an error callback
         if(errorCallback == null)
-            errorCallback = errorCallbackPrint(System.err);
+            errorCallback = GLFWErrorCallback.createPrint(System.err);
         GLFW.glfwSetErrorCallback(errorCallback);
     }
     

@@ -192,7 +192,7 @@ public class Matrix3i extends Matrix2i {
     
     @Override
     public String toString() {
-        return "Matrix3b [m00=" + m00 + ", m01=" + m01 + ", m02=" + m02 + ",\n" +
+        return "Matrix3i [m00=" + m00 + ", m01=" + m01 + ", m02=" + m02 + ",\n" +
                 "          m10=" + m10 + ", m11=" + m11 + ", m12=" + m12 + ",\n" +
                 "          m20=" + m20 + ", m21=" + m21 + ", m22=" + m22 + "]";
     }

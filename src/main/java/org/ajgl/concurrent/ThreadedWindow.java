@@ -24,7 +24,6 @@
 
 package org.ajgl.concurrent;
 
-import static org.lwjgl.glfw.Callbacks.errorCallbackPrint;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 
 import org.ajgl.Display;
@@ -101,7 +100,7 @@ public abstract class ThreadedWindow extends Thread implements Display {
     public void errorCallbackSetup() {
         // Setup an error callback
         if(errorCallback == null)
-            errorCallback = errorCallbackPrint(System.err);
+            errorCallback = GLFWErrorCallback.createPrint(System.err);
         GLFW.glfwSetErrorCallback(errorCallback);
     }
     
