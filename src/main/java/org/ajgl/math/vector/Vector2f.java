@@ -26,7 +26,7 @@ package org.ajgl.math.vector;
 
 import java.nio.FloatBuffer;
 
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class is designed to be a 2d vector.
@@ -37,12 +37,17 @@ public class Vector2f {
     public float x;    // 1st dimensional value
     public float y;    // 2nd dimensional value
     
+    public FloatBuffer buffer;
+    
     /**
      * Default Vector2d constructor.
      */
     public Vector2f() {
         this.x = 0;
         this.y = 0;
+        
+        buffer = MemoryUtil.memAllocFloat(2);
+        updateBuffer();
     }
     
     /**
@@ -53,6 +58,9 @@ public class Vector2f {
     public Vector2f(float x, float y) {
         this.x = x;
         this.y = y;
+        
+        buffer = MemoryUtil.memAllocFloat(2);
+        updateBuffer();
     }
     
     /**
@@ -62,6 +70,9 @@ public class Vector2f {
     public Vector2f(Vector2f vector) {
         this.x = vector.x;
         this.y = vector.y;
+        
+        buffer = MemoryUtil.memAllocFloat(2);
+        updateBuffer();
     }
     
     /**
@@ -147,19 +158,21 @@ public class Vector2f {
     }
     
     /**
-     * Returns the buffer version of this vector.
+     * Updates the buffer version of this matrix.
      */
-    public FloatBuffer getBuffer() {
-        float[] array = {x, y};
-        
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(x).put(y);
         buffer.flip();
-        return buffer;
     }
 
     @Override
     public String toString() {
         return "Vector2f [x=" + x + ", y=" + y + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

@@ -27,7 +27,7 @@ package org.ajgl.math.matrix;
 import java.nio.ShortBuffer;
 
 import org.ajgl.math.vector.Vector2s;
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class is designed to be a 2x2 matrix.
@@ -38,11 +38,15 @@ public class Matrix2s {
     public short m00, m01; // First row
     public short m10, m11; // Second row
     
+    public ShortBuffer buffer;
+    
     /**
      * Default Matrix constructor.
      */
     public Matrix2s() {
         this.loadIdentity();
+        buffer = MemoryUtil.memAllocShort(4);
+        updateBuffer();
     }
     
     /**
@@ -140,15 +144,12 @@ public class Matrix2s {
     }
     
     /**
-     * Returns the buffer version of this matrix.
+     * Updates the buffer version of this matrix.
      */
-    public ShortBuffer getBuffer() {
-        short[] array = {m00, m10,
-                         m01, m11};
-        ShortBuffer buffer = BufferUtils.createShortBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(m00).put(m10).put(m01).put(m11);
         buffer.flip();
-        return buffer;
     }
     
     /**
@@ -183,5 +184,10 @@ public class Matrix2s {
     public String toString() {
         return "Matrix2s [m00=" + m00 + ", m01=" + m01 + ",\n" +
                 "          m10=" + m10 + ", m11=" + m11 + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

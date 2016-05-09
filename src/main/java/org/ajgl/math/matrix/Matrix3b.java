@@ -24,10 +24,8 @@
 
 package org.ajgl.math.matrix;
 
-import java.nio.ByteBuffer;
-
 import org.ajgl.math.vector.Vector3b;
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class is designed to be a 3x3 matrix.
@@ -44,6 +42,8 @@ public class Matrix3b extends Matrix2b {
      */
     public Matrix3b() {
         this.loadIdentity();
+        buffer = MemoryUtil.memAlloc(9);
+        updateBuffer();
     }
     
     /**
@@ -52,6 +52,8 @@ public class Matrix3b extends Matrix2b {
      */
     public Matrix3b(Matrix3b matrix) {
         Matrix3b.copyMatrix(matrix, this);
+        buffer = MemoryUtil.memAlloc(9);
+        updateBuffer();
     }
     
     /**
@@ -148,16 +150,15 @@ public class Matrix3b extends Matrix2b {
     }
     
     /**
-     * Returns the buffer version of this matrix.
+     * Updates the buffer version of this matrix.
      */
-    public ByteBuffer getBuffer() {
-        byte[] array = {m00, m10, m20,
-                          m01, m11, m21, 
-                          m02, m12, m22};
-        ByteBuffer buffer = BufferUtils.createByteBuffer(array.length);
-        buffer.put(array);
+    @Override
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(m00).put(m10).put(m20)
+                .put(m01).put(m11).put(m21)
+                .put(m02).put(m12).put(m22);
         buffer.flip();
-        return buffer;
     }
     
     /**
@@ -195,5 +196,10 @@ public class Matrix3b extends Matrix2b {
         return "Matrix3b [m00=" + m00 + ", m01=" + m01 + ", m02=" + m02 + ",\n" +
         		"          m10=" + m10 + ", m11=" + m11 + ", m12=" + m12 + ",\n" +
         		"          m20=" + m20 + ", m21=" + m21 + ", m22=" + m22 + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

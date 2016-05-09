@@ -24,9 +24,7 @@
 
 package org.ajgl.math.vector;
 
-import java.nio.ByteBuffer;
-
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 
 /**
@@ -41,8 +39,12 @@ public class Vector3b extends Vector2b {
      * Default Vector3d constructor.
      */
     public Vector3b() {
-        super();
+        this.x = 0;
+        this.y = 0;
         this.z = 0;
+        
+        buffer = MemoryUtil.memAlloc(3);
+        updateBuffer();
     }
     
     /**
@@ -52,8 +54,12 @@ public class Vector3b extends Vector2b {
      * @param z - z value.
      */
     public Vector3b(byte x, byte y, byte z) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
         this.z = z;
+        
+        buffer = MemoryUtil.memAlloc(3);
+        updateBuffer();
     }
     
     /**
@@ -61,8 +67,12 @@ public class Vector3b extends Vector2b {
      * @param vector - Vector to be duplicated.
      */
     public Vector3b(Vector3b vector) {
-        super(vector);
+        this.x = vector.x;
+        this.y = vector.y;
         this.z = vector.z;
+        
+        buffer = MemoryUtil.memAlloc(3);
+        updateBuffer();
     }
     
     /**
@@ -155,20 +165,21 @@ public class Vector3b extends Vector2b {
     }
     
     /**
-     * Returns the buffer version of this vector.
+     * Updates the buffer version of this matrix.
      */
-    @Override
-    public ByteBuffer getBuffer() {
-        byte[] array = {x, y, z};
-        
-        ByteBuffer buffer = BufferUtils.createByteBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(x).put(y);
         buffer.flip();
-        return buffer;
     }
     
     @Override
     public String toString() {
         return "Vector3b [x=" + x + ", y=" + y + ", z=" + z + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

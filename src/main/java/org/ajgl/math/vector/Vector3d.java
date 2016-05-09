@@ -24,9 +24,7 @@
 
 package org.ajgl.math.vector;
 
-import java.nio.DoubleBuffer;
-
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 
 /**
@@ -41,8 +39,12 @@ public class Vector3d extends Vector2d {
      * Default Vector3d constructor.
      */
     public Vector3d() {
-        super();
+        this.x = 0;
+        this.y = 0;
         this.z = 0;
+        
+        buffer = MemoryUtil.memAllocDouble(3);
+        updateBuffer();
     }
     
     /**
@@ -52,8 +54,12 @@ public class Vector3d extends Vector2d {
      * @param z - z value.
      */
     public Vector3d(double x, double y, double z) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
         this.z = z;
+        
+        buffer = MemoryUtil.memAllocDouble(3);
+        updateBuffer();
     }
     
     /**
@@ -61,8 +67,12 @@ public class Vector3d extends Vector2d {
      * @param vector - Vector to be duplicated.
      */
     public Vector3d(Vector3d vector) {
-        super(vector);
+        this.x = vector.x;
+        this.y = vector.y;
         this.z = vector.z;
+        
+        buffer = MemoryUtil.memAllocDouble(3);
+        updateBuffer();
     }
     
     /**
@@ -155,20 +165,21 @@ public class Vector3d extends Vector2d {
     }
     
     /**
-     * Returns the buffer version of this vector.
+     * Updates the buffer version of this matrix.
      */
-    @Override
-    public DoubleBuffer getBuffer() {
-        double[] array = {x, y, z};
-        
-        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(x).put(y);
         buffer.flip();
-        return buffer;
     }
     
     @Override
     public String toString() {
         return "Vector3d [x=" + x + ", y=" + y + ", z=" + z + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

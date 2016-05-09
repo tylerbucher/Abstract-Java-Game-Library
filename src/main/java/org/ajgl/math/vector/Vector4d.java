@@ -24,9 +24,7 @@
 
 package org.ajgl.math.vector;
 
-import java.nio.DoubleBuffer;
-
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class is designed to be a 4d vector.
@@ -40,8 +38,13 @@ public class Vector4d extends Vector3d {
      * Default Vector4d constructor.
      */
     public Vector4d() {
-        super();
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
         this.w = 0;
+        
+        buffer = MemoryUtil.memAllocDouble(4);
+        updateBuffer();
     }
     
     /**
@@ -52,8 +55,13 @@ public class Vector4d extends Vector3d {
      * @param w - w value.
      */
     public Vector4d(double x, double y, double z, double w) {
-        super(x, y, z);
+        this.x = x;
+        this.y = y;
+        this.z = z;
         this.w = w;
+        
+        buffer = MemoryUtil.memAllocDouble(4);
+        updateBuffer();
     }
     
     /**
@@ -61,8 +69,13 @@ public class Vector4d extends Vector3d {
      * @param vector - Vector to be duplicated.
      */
     public Vector4d(Vector4d vector) {
-        super(vector);
+        this.x = vector.x;
+        this.y = vector.y;
+        this.z = vector.z;
         this.w = vector.w;
+        
+        buffer = MemoryUtil.memAllocDouble(4);
+        updateBuffer();
     }
     
     /**
@@ -138,20 +151,21 @@ public class Vector4d extends Vector3d {
     }
     
     /**
-     * Returns the buffer version of this vector.
+     * Updates the buffer version of this matrix.
      */
-    @Override
-    public DoubleBuffer getBuffer() {
-        double[] array = {x, y, z, w};
-        
-        DoubleBuffer buffer = BufferUtils.createDoubleBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(x).put(y);
         buffer.flip();
-        return buffer;
     }
     
     @Override
     public String toString() {
         return "Vector4d [x=" + x + ", y=" + y + ", z=" + z + ", w=" + w + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

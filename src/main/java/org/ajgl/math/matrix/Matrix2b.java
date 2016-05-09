@@ -27,7 +27,7 @@ package org.ajgl.math.matrix;
 import java.nio.ByteBuffer;
 
 import org.ajgl.math.vector.Vector2b;
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class is designed to be a 2x2 matrix.
@@ -38,11 +38,15 @@ public class Matrix2b {
     public byte m00, m01; // First row
     public byte m10, m11; // Second row
     
+    public ByteBuffer buffer;
+    
     /**
      * Default Matrix constructor.
      */
     public Matrix2b() {
         this.loadIdentity();
+        buffer = MemoryUtil.memAlloc(4);
+        updateBuffer();
     }
     
     /**
@@ -51,6 +55,8 @@ public class Matrix2b {
      */
     public Matrix2b(Matrix2b matrix) {
         Matrix2b.copyMatrix(matrix, this);
+        buffer = MemoryUtil.memAlloc(4);
+        updateBuffer();
     }
     
     /**
@@ -140,15 +146,12 @@ public class Matrix2b {
     }
     
     /**
-     * Returns the buffer version of this matrix.
+     * Updates the buffer version of this matrix.
      */
-    public ByteBuffer getBuffer() {
-        byte[] array = {m00, m10,
-                          m01, m11};
-        ByteBuffer buffer = BufferUtils.createByteBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(m00).put(m10).put(m01).put(m11);
         buffer.flip();
-        return buffer;
     }
     
     /**
@@ -183,5 +186,10 @@ public class Matrix2b {
     public String toString() {
         return "Matrix2b [m00=" + m00 + ", m01=" + m01 + ",\n" +
         		"          m10=" + m10 + ", m11=" + m11 + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

@@ -24,10 +24,8 @@
 
 package org.ajgl.math.matrix;
 
-import java.nio.LongBuffer;
-
 import org.ajgl.math.vector.Vector3l;
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class is designed to be a 3x3 matrix.
@@ -44,6 +42,8 @@ public class Matrix3l extends Matrix2l {
      */
     public Matrix3l() {
         this.loadIdentity();
+        buffer = MemoryUtil.memAllocLong(9);
+        updateBuffer();
     }
     
     /**
@@ -52,6 +52,8 @@ public class Matrix3l extends Matrix2l {
      */
     public Matrix3l(Matrix3l matrix) {
         Matrix3l.copyMatrix(matrix, this);
+        buffer = MemoryUtil.memAllocLong(9);
+        updateBuffer();
     }
     
     /**
@@ -148,16 +150,15 @@ public class Matrix3l extends Matrix2l {
     }
     
     /**
-     * Returns the buffer version of this matrix.
+     * Updates the buffer version of this matrix.
      */
-    public LongBuffer getBuffer() {
-        long[] array = {m00, m10, m20,
-                          m01, m11, m21, 
-                          m02, m12, m22};
-        LongBuffer buffer = BufferUtils.createLongBuffer(array.length);
-        buffer.put(array);
+    @Override
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(m00).put(m10).put(m20)
+                .put(m01).put(m11).put(m21)
+                .put(m02).put(m12).put(m22);
         buffer.flip();
-        return buffer;
     }
     
     /**
@@ -195,5 +196,10 @@ public class Matrix3l extends Matrix2l {
         return "Matrix3l [m00=" + m00 + ", m01=" + m01 + ", m02=" + m02 + ",\n" +
                 "          m10=" + m10 + ", m11=" + m11 + ", m12=" + m12 + ",\n" +
                 "          m20=" + m20 + ", m21=" + m21 + ", m22=" + m22 + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

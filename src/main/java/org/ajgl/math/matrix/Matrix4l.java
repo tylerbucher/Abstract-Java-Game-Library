@@ -24,10 +24,8 @@
 
 package org.ajgl.math.matrix;
 
-import java.nio.LongBuffer;
-
 import org.ajgl.math.vector.Vector4l;
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class is designed to be a 4x4 matrix.
@@ -45,6 +43,8 @@ public class Matrix4l extends Matrix3l {
      */
     public Matrix4l() {
         this.loadIdentity();
+        buffer = MemoryUtil.memAllocLong(16);
+        updateBuffer();
     }
     
     /**
@@ -53,6 +53,8 @@ public class Matrix4l extends Matrix3l {
      */
     public Matrix4l(Matrix4l matrix) {
         Matrix4l.copyMatrix(matrix, this);
+        buffer = MemoryUtil.memAllocLong(16);
+        updateBuffer();
     }
     
     /**
@@ -162,18 +164,16 @@ public class Matrix4l extends Matrix3l {
     }
     
     /**
-     * Returns the buffer version of this matrix.
+     * Updates the buffer version of this matrix.
      */
     @Override
-    public LongBuffer getBuffer() {
-        long[] array = {m00, m10, m20, m30,
-                          m01, m11, m21, m31,
-                          m02, m12, m22, m32,
-                          m03, m13, m32, m33};
-        LongBuffer buffer = BufferUtils.createLongBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(m00).put(m10).put(m20).put(m30)
+                .put(m01).put(m11).put(m21).put(m31)
+                .put(m02).put(m12).put(m22).put(m32)
+                .put(m03).put(m13).put(m23).put(m33);
         buffer.flip();
-        return buffer;
     }
     
     /**
@@ -274,9 +274,14 @@ public class Matrix4l extends Matrix3l {
     
     @Override
     public String toString() {
-        return "Matrix4i [m00=" + m00 + ", m01=" + m01 + ", m02=" + m02 + ", m03=" + m03 + ",\n" +
+        return "Matrix4l [m00=" + m00 + ", m01=" + m01 + ", m02=" + m02 + ", m03=" + m03 + ",\n" +
                 "          m10=" + m10 + ", m11=" + m11 + ", m12=" + m12 + ", m13=" + m13 + ",\n" +
                 "          m20=" + m20 + ", m21=" + m21 + ", m22=" + m22 + ", m23=" + m23 + ",\n" +
                 "          m30=" + m30 + ", m31=" + m31 + ", m32=" + m32 + ", m33=" + m33 + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

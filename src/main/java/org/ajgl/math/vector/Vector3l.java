@@ -24,9 +24,7 @@
 
 package org.ajgl.math.vector;
 
-import java.nio.LongBuffer;
-
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 
 /**
@@ -41,8 +39,12 @@ public class Vector3l extends Vector2l {
      * Default Vector3d constructor.
      */
     public Vector3l() {
-        super();
+        this.x = 0;
+        this.y = 0;
         this.z = 0;
+        
+        buffer = MemoryUtil.memAllocLong(3);
+        updateBuffer();
     }
     
     /**
@@ -52,8 +54,12 @@ public class Vector3l extends Vector2l {
      * @param z - z value.
      */
     public Vector3l(long x, long y, long z) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
         this.z = z;
+        
+        buffer = MemoryUtil.memAllocLong(3);
+        updateBuffer();
     }
     
     /**
@@ -61,8 +67,12 @@ public class Vector3l extends Vector2l {
      * @param vector - Vector to be duplicated.
      */
     public Vector3l(Vector3l vector) {
-        super(vector);
+        this.x = vector.x;
+        this.y = vector.y;
         this.z = vector.z;
+        
+        buffer = MemoryUtil.memAllocLong(3);
+        updateBuffer();
     }
     
     /**
@@ -155,20 +165,21 @@ public class Vector3l extends Vector2l {
     }
     
     /**
-     * Returns the buffer version of this vector.
+     * Updates the buffer version of this matrix.
      */
-    @Override
-    public LongBuffer getBuffer() {
-        long[] array = {x, y, z};
-        
-        LongBuffer buffer = BufferUtils.createLongBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(x).put(y);
         buffer.flip();
-        return buffer;
     }
     
     @Override
     public String toString() {
         return "Vector3l [x=" + x + ", y=" + y + ", z=" + z + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

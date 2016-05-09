@@ -26,7 +26,7 @@ package org.ajgl.math.vector;
 
 import java.nio.ShortBuffer;
 
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class is designed to be a 2d vector.
@@ -37,12 +37,17 @@ public class Vector2s {
     public short x;    // 1st dimensional value
     public short y;    // 2nd dimensional value
     
+    public ShortBuffer buffer;
+    
     /**
      * Default Vector2d constructor.
      */
     public Vector2s() {
         this.x = 0;
         this.y = 0;
+        
+        buffer = MemoryUtil.memAllocShort(2);
+        updateBuffer();
     }
     
     /**
@@ -53,6 +58,9 @@ public class Vector2s {
     public Vector2s(short x, short y) {
         this.x = x;
         this.y = y;
+        
+        buffer = MemoryUtil.memAllocShort(2);
+        updateBuffer();
     }
     
     /**
@@ -62,6 +70,9 @@ public class Vector2s {
     public Vector2s(Vector2s vector) {
         this.x = vector.x;
         this.y = vector.y;
+        
+        buffer = MemoryUtil.memAllocShort(2);
+        updateBuffer();
     }
     
     /**
@@ -147,19 +158,21 @@ public class Vector2s {
     }
     
     /**
-     * Returns the buffer version of this vector.
+     * Updates the buffer version of this matrix.
      */
-    public ShortBuffer getBuffer() {
-        short[] array = {x, y};
-        
-        ShortBuffer buffer = BufferUtils.createShortBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(x).put(y);
         buffer.flip();
-        return buffer;
     }
 
     @Override
     public String toString() {
         return "Vector2s [x=" + x + ", y=" + y + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

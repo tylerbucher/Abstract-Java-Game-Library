@@ -27,7 +27,7 @@ package org.ajgl.math.matrix;
 import java.nio.LongBuffer;
 
 import org.ajgl.math.vector.Vector2l;
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class is designed to be a 2x2 matrix.
@@ -38,11 +38,15 @@ public class Matrix2l {
     public long m00, m01; // First row
     public long m10, m11; // Second row
     
+    public LongBuffer buffer;
+    
     /**
      * Default Matrix constructor.
      */
     public Matrix2l() {
         this.loadIdentity();
+        buffer = MemoryUtil.memAllocLong(4);
+        updateBuffer();
     }
     
     /**
@@ -140,15 +144,12 @@ public class Matrix2l {
     }
     
     /**
-     * Returns the buffer version of this matrix.
+     * Updates the buffer version of this matrix.
      */
-    public LongBuffer getBuffer() {
-        long[] array = {m00, m10,
-                          m01, m11};
-        LongBuffer buffer = BufferUtils.createLongBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(m00).put(m10).put(m01).put(m11);
         buffer.flip();
-        return buffer;
     }
     
     /**
@@ -183,5 +184,10 @@ public class Matrix2l {
     public String toString() {
         return "Matrix2l [m00=" + m00 + ", m01=" + m01 + ",\n" +
                 "          m10=" + m10 + ", m11=" + m11 + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }

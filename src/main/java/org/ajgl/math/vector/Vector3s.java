@@ -24,9 +24,7 @@
 
 package org.ajgl.math.vector;
 
-import java.nio.ShortBuffer;
-
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 
 /**
@@ -41,8 +39,12 @@ public class Vector3s extends Vector2s {
      * Default Vector3d constructor.
      */
     public Vector3s() {
-        super();
+        this.x = 0;
+        this.y = 0;
         this.z = 0;
+        
+        buffer = MemoryUtil.memAllocShort(3);
+        updateBuffer();
     }
     
     /**
@@ -52,8 +54,12 @@ public class Vector3s extends Vector2s {
      * @param z - z value.
      */
     public Vector3s(short x, short y, short z) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
         this.z = z;
+        
+        buffer = MemoryUtil.memAllocShort(3);
+        updateBuffer();
     }
     
     /**
@@ -61,8 +67,12 @@ public class Vector3s extends Vector2s {
      * @param vector - Vector to be duplicated.
      */
     public Vector3s(Vector3s vector) {
-        super(vector);
+        this.x = vector.x;
+        this.y = vector.y;
         this.z = vector.z;
+        
+        buffer = MemoryUtil.memAllocShort(3);
+        updateBuffer();
     }
     
     /**
@@ -155,20 +165,21 @@ public class Vector3s extends Vector2s {
     }
     
     /**
-     * Returns the buffer version of this vector.
+     * Updates the buffer version of this matrix.
      */
-    @Override
-    public ShortBuffer getBuffer() {
-        short[] array = {x, y, z};
-        
-        ShortBuffer buffer = BufferUtils.createShortBuffer(array.length);
-        buffer.put(array);
+    public void updateBuffer() {
+        buffer.clear();
+        buffer.put(x).put(y);
         buffer.flip();
-        return buffer;
     }
     
     @Override
     public String toString() {
         return "Vector3s [x=" + x + ", y=" + y + ", z=" + z + "]";
+    }
+    
+    @Override
+    protected void finalize() {
+        MemoryUtil.memFree(buffer);
     }
 }
