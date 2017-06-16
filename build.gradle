@@ -1,15 +1,28 @@
+import org.gradle.internal.os.OperatingSystem
+
+plugins {
+    id "com.github.hierynomus.license" version "0.13.1"
+}
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'application'
+apply plugin: 'idea'
 
-mainClassName = 'org.ajgl.test.MainTest'
+project.ext.lwjglVersion = "3.1.1"
+
+switch (OperatingSystem.current()) {
+    case OperatingSystem.WINDOWS:
+        project.ext.lwjglNatives = "natives-windows"
+        break
+    case OperatingSystem.LINUX:
+        project.ext.lwjglNatives = "natives-linux"
+        break
+    case OperatingSystem.MAC_OS:
+        project.ext.lwjglNatives = "natives-macos"
+        break
+}
 
 repositories {
     mavenCentral()
-	
-	flatDir {
-		dirs 'lib'
-	}
 }
 
 jar {
@@ -18,9 +31,27 @@ jar {
 }
 
 dependencies {
-    compile files('lib/lwjgl_3/jar/lwjgl.jar')
+    compile "org.lwjgl:lwjgl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
+
+    testCompile 'junit:junit:4.12'
+
+    runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '3.4.1'
+}
+
+license {
+    header project.file("LICENSE.txt")
+    strictCheck true
 }

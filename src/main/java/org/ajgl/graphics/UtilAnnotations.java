@@ -1,27 +1,3 @@
-/**
- * The MIT License (MIT)
- * 
- * Copyright (c) 2015 Tyler Bucher
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 package org.ajgl.graphics;
 
 import java.lang.annotation.ElementType;
@@ -30,12 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This class adds annotated discription to most of the OpenGL 
+ * This class adds annotated discription to most of the OpenGL
  * parameters.
+ *
  * @author Tyler Bucher
  */
 public class UtilAnnotations {
-    
+
     /**
      * The following are all valid begin modes for use in
      * {@link org.lwjgl.opengl.GL11#glBegin(int) glBegin}.
@@ -51,16 +28,17 @@ public class UtilAnnotations {
      * <li>{@link org.lwjgl.opengl.GL11#GL_QUAD_STRIP GL_QUAD_STRIP}
      * <li>{@link org.lwjgl.opengl.GL11#GL_POLYGON GL_POLYGON}
      * </ul>
+     *
      * @author Tyler Bucher
      */
-    @Retention(RetentionPolicy.SOURCE)
-    @Target({ElementType.PARAMETER})
+    @Retention (RetentionPolicy.SOURCE)
+    @Target ({ElementType.PARAMETER})
     public @interface GlBeginMode {
-        
+
     }
-    
+
     /**
-     * The following constants are OpenGL storage patterns. 
+     * The following constants are OpenGL storage patterns.
      * Commonly used with buffer-data.
      * <ul>
      * <li>{@link org.lwjgl.opengl.GL15#GL_STREAM_DRAW GL_STREAM_DRAW}
@@ -73,29 +51,31 @@ public class UtilAnnotations {
      * <li>{@link org.lwjgl.opengl.GL15#GL_DYNAMIC_READ GL_DYNAMIC_READ}
      * <li>{@link org.lwjgl.opengl.GL15#GL_DYNAMIC_COPY GL_DYNAMIC_COPY}
      * </ul>
+     *
      * @author Tyler Bucher
      */
-    @Retention(RetentionPolicy.SOURCE)
-    @Target({ElementType.PARAMETER})
+    @Retention (RetentionPolicy.SOURCE)
+    @Target ({ElementType.PARAMETER})
     public @interface GlDrawMode {
-        
+
     }
-    
+
     /**
      * The following constants are compile modes used with display lists.
      * <ul>
      * <li>{@link org.lwjgl.opengl.GL11#GL_COMPILE GL_COMPILE}
      * <li>{@link org.lwjgl.opengl.GL11#GL_COMPILE_AND_EXECUTE GL_COMPILE_AND_EXECUTE}
      * </ul>
+     *
      * @author Tyler Bucher
      * @see {@link org.lwjgl.opengl.GL11#glNewList(int, int) glNewList}
      */
-    @Retention(RetentionPolicy.SOURCE)
-    @Target({ElementType.PARAMETER})
+    @Retention (RetentionPolicy.SOURCE)
+    @Target ({ElementType.PARAMETER})
     public @interface GlCompileMode {
-        
+
     }
-    
+
     /**
      * The following constants are OpenGL Data-type pointers.
      * <ul>
@@ -111,39 +91,41 @@ public class UtilAnnotations {
      * <li>{@link org.lwjgl.opengl.GL11#GL_4_BYTES GL_4_BYTES}
      * <li>{@link org.lwjgl.opengl.GL11#GL_DOUBLE GL_DOUBLE}
      * </ul>
+     *
      * @author Tyler Bucher
      */
-    @Retention(RetentionPolicy.SOURCE)
-    @Target({ElementType.PARAMETER})
+    @Retention (RetentionPolicy.SOURCE)
+    @Target ({ElementType.PARAMETER})
     public @interface GlDataType {
-        
+
     }
-    
+
     /**
      * The following are OpenGL texture constants.
      * <ul>
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_1D TEXTURE_1D}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_2D TEXTURE_2D}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_1D_ARRAY TEXTURE_1D_ARRAY}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_RECTANGLE TEXTURE_RECTANGLE}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_CUBE_MAP TEXTURE_CUBE_MAP}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_3D TEXTURE_3D}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_2D_ARRAY TEXTURE_2D_ARRAY}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_CUBE_MAP_ARRAY TEXTURE_CUBE_MAP_ARRAY}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_BUFFER TEXTURE_BUFFER}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_2D_MULTISAMPLE TEXTURE_2D_MULTISAMPLE}
-     * <li>{@link org.lwjgl.opengl.GL11#TEXTURE_2D_MULTISAMPLE_ARRAY TEXTURE_2D_MULTISAMPLE_ARRAY}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_TEXTURE_1D}
+     * <li>{@link org.lwjgl.opengl.GL11#GL_TEXTURE_2D}
+     * <li>{@link org.lwjgl.opengl.GL12#GL_TEXTURE_3D}
+     * <li>{@link org.lwjgl.opengl.GL13#GL_TEXTURE_CUBE_MAP}
+     * <li>{@link org.lwjgl.opengl.GL30#GL_TEXTURE_1D_ARRAY}
+     * <li>{@link org.lwjgl.opengl.GL30#GL_TEXTURE_2D_ARRAY}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_TEXTURE_RECTANGLE}
+     * <li>{@link org.lwjgl.opengl.GL31#GL_TEXTURE_BUFFER}
+     * <li>{@link org.lwjgl.opengl.GL32#GL_TEXTURE_2D_MULTISAMPLE}
+     * <li>{@link org.lwjgl.opengl.GL32#GL_TEXTURE_2D_MULTISAMPLE_ARRAY}
+     * <li>{@link org.lwjgl.opengl.GL40#GL_TEXTURE_CUBE_MAP_ARRAY}
      * </ul>
+     *
      * @author Tyler Bucher
      */
-    @Retention(RetentionPolicy.SOURCE)
-    @Target({ElementType.PARAMETER})
+    @Retention (RetentionPolicy.SOURCE)
+    @Target ({ElementType.PARAMETER})
     public @interface GlTextureFormat {
-        
+
     }
-    
+
     /**
-     * Between {@link org.lwjgl.opengl.GL11#glBegin(int) glBegin} and 
+     * Between {@link org.lwjgl.opengl.GL11#glBegin(int) glBegin} and
      * {@link org.lwjgl.opengl.GL11#glEnd() glEnd} all of
      * the following are acceptable.
      * <ul>
@@ -164,19 +146,20 @@ public class UtilAnnotations {
      * <li>{@link org.lwjgl.opengl.GL11#glCallList(int) glCallList}
      * <li>{@link org.lwjgl.opengl.GL11 glCallLists}
      * </ul>
+     *
      * @author Tyler Bucher
      */
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention (RetentionPolicy.SOURCE)
     public @interface GlBeginFunction {
-        
+
     }
-    
+
     /**
      * For GL buffer binding the following functions should
      * be applicable. To use the buffer functions you need to call
-     * {@link org.lwjgl.opengl.GL15#glBindBuffer(int, int) glBindBuffer} 
-     * then the function don't forget to call 
-     * {@link org.lwjgl.opengl.GL15#glBindBuffer(int, int) glBindBuffer(int, 0)} 
+     * {@link org.lwjgl.opengl.GL15#glBindBuffer(int, int) glBindBuffer}
+     * then the function don't forget to call
+     * {@link org.lwjgl.opengl.GL15#glBindBuffer(int, int) glBindBuffer(int, 0)}
      * again when you are done.
      * <ul>
      * <li>{@link org.lwjgl.opengl.GL11 glVertexPointer}
@@ -191,13 +174,14 @@ public class UtilAnnotations {
      * <li>{@link org.lwjgl.opengl.GL15 glBufferData}
      * <li>{@link org.lwjgl.opengl.GL15 glBufferSubData}
      * </ul>
+     *
      * @author Tyler Bucher
      */
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention (RetentionPolicy.SOURCE)
     public @interface GlBufferFunction {
-        
+
     }
-    
+
     /**
      * The Following constants are OpenGL buffer data targets.
      * <ul>
@@ -216,15 +200,16 @@ public class UtilAnnotations {
      * <li>{@link org.lwjgl.opengl.GL30#GL_TRANSFORM_FEEDBACK_BUFFER GL_TRANSFORM_FEEDBACK_BUFFER}
      * <li>{@link org.lwjgl.opengl.GL31#GL_UNIFORM_BUFFER GL_UNIFORM_BUFFER}
      * </ul>
+     *
      * @author Tyler Bucher
-     * @see {@link org.lwjgl.opengl.GL15 glBufferData}
+     * @see org.lwjgl.opengl.GL15#glBufferData
      */
-    @Retention(RetentionPolicy.SOURCE)
-    @Target({ElementType.PARAMETER})
+    @Retention (RetentionPolicy.SOURCE)
+    @Target ({ElementType.PARAMETER})
     public @interface GlBufferTarget {
-        
+
     }
-    
+
     /**
      * For OpenGL Shaders the following functions are acceptable.
      * <ul>
@@ -251,10 +236,11 @@ public class UtilAnnotations {
      * <li>{@link org.lwjgl.opengl.GL30 glUnifrom}
      * <li>{@link org.lwjgl.opengl.GL40 glUnifrom}
      * </ul>
+     *
      * @author Tyler Bucher
      */
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention (RetentionPolicy.SOURCE)
     public @interface GlShaderFunction {
-        
+
     }
 }
