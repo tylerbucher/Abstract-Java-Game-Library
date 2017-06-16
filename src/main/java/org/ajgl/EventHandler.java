@@ -14,7 +14,13 @@ import java.lang.annotation.Target;
 @Retention (RetentionPolicy.RUNTIME)
 public @interface EventHandler {
 
-    Class<? extends Event> value(); // The class of the received event
+    /**
+     * @return the class of the received event.
+     */
+    Class<? extends Event> value();
 
-    int priority();                 // States the priority of the event
+    /**
+     * @return the priority of the event.
+     */
+    int priority();
 }

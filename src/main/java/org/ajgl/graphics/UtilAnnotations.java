@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This class adds annotated discription to most of the OpenGL
+ * This class adds annotated description to most of the OpenGL
  * parameters.
  *
  * @author Tyler Bucher
@@ -68,7 +68,7 @@ public class UtilAnnotations {
      * </ul>
      *
      * @author Tyler Bucher
-     * @see {@link org.lwjgl.opengl.GL11#glNewList(int, int) glNewList}
+     * @see org.lwjgl.opengl.GL11#glNewList(int, int)
      */
     @Retention (RetentionPolicy.SOURCE)
     @Target ({ElementType.PARAMETER})

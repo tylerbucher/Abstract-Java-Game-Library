@@ -10,7 +10,7 @@ import org.lwjgl.glfw.*;
 public interface Display {
 
     /**
-     * @return True if the {@link Display} was created false otherwise.
+     * @return true if the {@link Display} was created false otherwise.
      */
     boolean setup();
 
@@ -20,7 +20,7 @@ public interface Display {
     void errorCallbackSetup();
 
     /**
-     * @return True if the display was created false otherwise.
+     * @return true if the display was created false otherwise.
      */
     boolean windowSetup();
 
@@ -40,42 +40,42 @@ public interface Display {
     void postWindowCreation();
 
     /**
-     * @return The {@link Display}'s {@link GLFWErrorCallback}.
+     * @return the {@link Display}'s {@link GLFWErrorCallback}.
      */
     GLFWErrorCallback getErrorCallback();
 
     /**
-     * @return The {@link Display}'s {@link GLFWKeyCallback}..
+     * @return the {@link Display}'s {@link GLFWKeyCallback}..
      */
     GLFWKeyCallback getKeyCallback();
 
     /**
-     * @return The {@link Display}'s {@link GLFWCharCallback}.
+     * @return the {@link Display}'s {@link GLFWCharCallback}.
      */
     GLFWCharCallback getCharCallback();
 
     /**
-     * @return The {@link Display}'s {@link GLFWCharModsCallback}.
+     * @return the {@link Display}'s {@link GLFWCharModsCallback}.
      */
     GLFWCharModsCallback getCharModsCallback();
 
     /**
-     * @return The {@link Display}'s {@link GLFWMouseButtonCallback}.
+     * @return the {@link Display}'s {@link GLFWMouseButtonCallback}.
      */
     GLFWMouseButtonCallback getMouseButtonCallback();
 
     /**
-     * @return The {@link Display}'s {@link GLFWCursorPosCallback}.
+     * @return the {@link Display}'s {@link GLFWCursorPosCallback}.
      */
     GLFWCursorPosCallback getCursorPosCallback();
 
     /**
-     * @return The {@link Display}'s {@link GLFWCursorEnterCallback}.
+     * @return the {@link Display}'s {@link GLFWCursorEnterCallback}.
      */
     GLFWCursorEnterCallback getCursorEnterCallback();
 
     /**
-     * @return The {@link Display}'s {@link GLFWScrollCallback}.
+     * @return the {@link Display}'s {@link GLFWScrollCallback}.
      */
     GLFWScrollCallback getScrollCallback();
 

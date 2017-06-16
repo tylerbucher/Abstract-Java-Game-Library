@@ -11,22 +11,80 @@ import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
  */
 public class Window implements Display {
 
-    private int height;   // Display height
-    private int width;    // Display width
-    private String title; // Display title
-    private long monitor; // Monitor to use
-    private long share;   // Window handler to share OpenGL context with
-    private long window;  // The window handler
+    /**
+     * {@link Window} height.
+     */
+    private int height;
 
-    private GLFWErrorCallback errorCallback;             // error callback reference instance
-    private GLFWKeyCallback keyCallback;                 // key callback reference instance
-    private GLFWCharCallback charCallback;               // char callback reference instance
-    private GLFWCharModsCallback charModsCallback;       // char modifications callback reference instance
-    private GLFWMouseButtonCallback mouseButtonCallback; // mouse button callback reference instance
-    private GLFWCursorPosCallback cursorPosCallback;     // cursor position callback reference instance
-    private GLFWCursorEnterCallback cursorEnterCallback; // cursor enter callback reference instance
-    private GLFWScrollCallback scrollCallback;           // scroll callback reference instance
-    private GLFWDropCallback dropCallback;               // drop callback reference instance
+    /**
+     * {@link Window} width.
+     */
+    private int width;
+
+    /**
+     * {@link Window} title.
+     */
+    private String title;
+
+    /**
+     * {@link Window} monitor number.
+     */
+    private long monitor;
+
+    /**
+     * {@link Window#window Window handler} to share OpenGL context with.
+     */
+    private long share;
+
+    /**
+     * {@link Window#window Window handler}.
+     */
+    private long window;
+
+    /**
+     * {@link Window} error callback instance.
+     */
+    private GLFWErrorCallback errorCallback;
+
+    /**
+     * {@link Window} key callback instance.
+     */
+    private GLFWKeyCallback keyCallback;
+
+    /**
+     * {@link Window} char callback instance.
+     */
+    private GLFWCharCallback charCallback;
+
+    /**
+     * {@link Window} char modifications callback instance.
+     */
+    private GLFWCharModsCallback charModsCallback;
+
+    /**
+     * {@link Window} mouse button callback instance.
+     */
+    private GLFWMouseButtonCallback mouseButtonCallback;
+
+    /**
+     * {@link Window} cursor position callback instance.
+     */
+    private GLFWCursorPosCallback cursorPosCallback;
+
+    /**
+     * {@link Window} cursor enter callback instance.
+     */
+    private GLFWCursorEnterCallback cursorEnterCallback;
+
+    /**
+     * {@link Window} scroll callback instance.
+     */
+    private GLFWScrollCallback scrollCallback;
+
+    /**
+     * {@link Window} drop callback instance.
+     */
+    private GLFWDropCallback dropCallback;
 
     /**
      * Default window constructor.
@@ -42,9 +100,9 @@ public class Window implements Display {
     /**
      * Main window constructor.
      *
-     * @param width   width of the {@link Display}.
-     * @param height  height of the {@link Display}.
-     * @param title   title of the {@link Display}.
+     * @param width   width of the {@link Window}.
+     * @param height  height of the {@link Window}.
+     * @param title   title of the {@link Window}.
      * @param monitor monitor for the {@link Window} to use.
      * @param share   {@link Window} handler to share OpenGL context with.
      */
@@ -111,7 +169,6 @@ public class Window implements Display {
 
     @Override
     public void postWindowCreation() {
-
     }
 
     @Override

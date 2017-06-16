@@ -38,7 +38,7 @@ public class Shader {
      *
      * @param type the type of shader.
      * @param path the path to the shader file.
-     * @return The new shader object.
+     * @return The new {@link Shader} object.
      *
      * @throws IOException If an I/O error occurs.
      * @see ShaderUtil#FRAGMENT_SHADER

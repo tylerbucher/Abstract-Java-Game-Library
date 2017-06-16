@@ -24,9 +24,9 @@ public final class EventDispatcher {
     /**
      * The Comparator for the type method, used in sorting. (Lowest priority gets executed last but has final say).
      */
-    private static Comparator<Method> methodComparator = (method1, mehtod2)->{
+    private static Comparator<Method> methodComparator = (method1, method2)->{
         final int method1Priority = method1.getAnnotation(EventHandler.class).priority();
-        final int method2Priority = mehtod2.getAnnotation(EventHandler.class).priority();
+        final int method2Priority = method2.getAnnotation(EventHandler.class).priority();
         return method1Priority - method2Priority;
     };
 
@@ -90,7 +90,6 @@ public final class EventDispatcher {
         for (Method m : tempMethods) {
             List<Method> list = eventMap.get(m.getAnnotation(EventHandler.class).value());
             list.add(m);
-
             list.sort(methodComparator);
         }
     }
