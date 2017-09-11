@@ -21,19 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.ajgl;
+package org.ajgl.graphics.shaders;
 
-import java.util.logging.Logger;
+import org.ajgl.Window;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL;
 
-/**
- * @author Tyler Bucher
- */
-public class AJGL {
+public class ShaderTest {
 
-    /**
-     * @return the version of AJGL.
-     */
-    public static String getVersion() {
-        return "1.0.2";
+    @Before
+    public void setUp() throws Exception {
+        final Window window = new Window();
+        window.setup();
+        GLFW.glfwMakeContextCurrent(window.getWindowHandler());
+        GL.createCapabilities();
+    }
+
+    @Test
+    public void testShaderLoadsCorrectly() throws Exception {
+        final Shader shader = Shader.loadShader(ShaderUtil.VERTEX_SHADER, "src/test/java/org/ajgl/graphics/shaders/VertexShader.glsl");
+        Assert.assertTrue("Shader did not compile", shader.verify());
     }
 }

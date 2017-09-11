@@ -1,13 +1,13 @@
 import org.gradle.internal.os.OperatingSystem
 
 plugins {
-    id "com.github.hierynomus.license" version "0.13.1"
+    id "com.github.hierynomus.license" version "0.14.0"
 }
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
-project.ext.lwjglVersion = "3.1.1"
+project.ext.lwjglVersion = "3.1.2"
 
 switch (OperatingSystem.current()) {
     case OperatingSystem.WINDOWS:
@@ -37,6 +37,9 @@ dependencies {
     compile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
+
 
     testCompile 'junit:junit:4.12'
 
@@ -45,6 +48,7 @@ dependencies {
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
+    runtime group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
 }
 
 task wrapper(type: Wrapper) {
@@ -54,4 +58,7 @@ task wrapper(type: Wrapper) {
 license {
     header project.file("LICENSE.txt")
     strictCheck true
+    mapping {
+        java='SLASHSTAR_STYLE'
+    }
 }

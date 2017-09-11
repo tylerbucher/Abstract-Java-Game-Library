@@ -23,17 +23,17 @@
  */
 package org.ajgl;
 
-import java.util.logging.Logger;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * @author Tyler Bucher
+ * Tests the {@link Window} functions.
  */
-public class AJGL {
+public class WindowTest {
 
-    /**
-     * @return the version of AJGL.
-     */
-    public static String getVersion() {
-        return "1.0.2";
+    @Test
+    public void testWindowInitializes() {
+        final Window windowTest = new Window(400, 400, "Window Test", 0, 0);
+        Assert.assertTrue("Window failed to initialize.", windowTest.setup());
     }
 }
