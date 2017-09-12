@@ -1,7 +1,18 @@
 language: java
 
+sudo: required
+before_install:
+ - chmod +x gradlew
+ - sudo apt-get install -qq --force-yes mesa-utils libgl1-mesa-swx11 libgl1-mesa-swx11-dev xvfb
+ - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render
+
 jdk:
   - openjdk8
+
+before_script:
+  - export DISPLAY=:99.0
+  - export LIBGL_ALWAYS_SOFTWARE=1
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -9,7 +20,3 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-
-sudo: required
-before_install:
- - chmod +x gradlew
