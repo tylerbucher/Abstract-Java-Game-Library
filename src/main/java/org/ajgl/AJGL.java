@@ -23,8 +23,6 @@
  */
 package org.ajgl;
 
-import java.util.logging.Logger;
-
 /**
  * @author Tyler Bucher
  */

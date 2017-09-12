@@ -24,14 +24,11 @@
 package org.ajgl.graphics.shaders;
 
 import org.ajgl.Window;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
-
-import static org.junit.Assert.*;
 
 public class ShaderProgramTest {
 
@@ -43,7 +40,24 @@ public class ShaderProgramTest {
         window.setup();
         GLFW.glfwMakeContextCurrent(window.getWindowHandler());
         GL.createCapabilities();
-        shader = Shader.loadShader(ShaderUtil.VERTEX_SHADER, "src/test/java/org/ajgl/graphics/shaders/VertexShader.glsl");
+        final String VERTEX_SHADER_STRING = "#version 400\n" +
+                "\n" +
+                "layout(location=0) in vec3 position;\n" +
+                "layout(location=1) in vec3 color;\n" +
+                "\n" +
+                "uniform mat4 model;\n" +
+                "uniform mat4 view;\n" +
+                "uniform mat4 projection;\n" +
+                "\n" +
+                "out vec3 oColor;\n" +
+                "\n" +
+                "void main()\n" +
+                "{\n" +
+                "    oColor = color;\n" +
+                "    mat4 mvp = projection * view * model;\n" +
+                "    gl_Position = mvp * vec4(position, 1.0f);\n" +
+                "}";
+        shader = new Shader(ShaderUtil.VERTEX_SHADER, VERTEX_SHADER_STRING);
     }
 
     @Test
