@@ -1,24 +1,30 @@
 language: java
+jdk:
+ - openjdk8
 sudo: required
+
 before_install:
  - sudo add-apt-repository -y ppa:oibaf/graphics-drivers
  - sudo apt-get update -qq -y
  - chmod +x gradlew
  - sudo apt-get -yq --force-yes install libgl1-mesa-dev libgl1-mesa-glx mesa-common-dev libglapi-mesa libgbm1 libgl1-mesa-dri libxatracker-dev xvfb
- # - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render
-
-jdk:
-  - openjdk8
+install:
+ - sudo apt-get install -y gdb
 
 before_script:
-  - export DISPLAY=:99.0
-  - export LIBGL_ALWAYS_SOFTWARE=1
-  - sh -e /etc/init.d/xvfb start
+ - export DISPLAY=:99.0
+ - export LIBGL_ALWAYS_SOFTWARE=1
+ - ulimit -c unlimited -S # enable core dumps
+ - sh -e /etc/init.d/xvfb start
 
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+ - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+ - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+
+after_failure:
+ - COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1) # find core file
+ - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" example -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
