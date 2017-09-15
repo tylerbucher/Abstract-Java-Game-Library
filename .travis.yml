@@ -1,6 +1,8 @@
 language: java
 sudo: required
 before_install:
+ - sudo add-apt-repository -y ppa:oibaf/graphics-drivers
+ - sudo apt-get update -qq -y
  - chmod +x gradlew
  - sudo apt-get -yq --force-yes install libgl1-mesa-dev libgl1-mesa-glx mesa-common-dev libglapi-mesa libgbm1 libgl1-mesa-dri libxatracker-dev xvfb
  # - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render

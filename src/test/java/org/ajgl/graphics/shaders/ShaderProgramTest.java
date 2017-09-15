@@ -36,8 +36,11 @@ public class ShaderProgramTest {
 
     @Before
     public void setUp() throws Exception {
+        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 1);
+        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);
         final Window window = new Window();
         window.setup();
+
         GLFW.glfwMakeContextCurrent(window.getWindowHandler());
         GL.createCapabilities();
         final String VERTEX_SHADER_STRING = "#version 400\n" +
