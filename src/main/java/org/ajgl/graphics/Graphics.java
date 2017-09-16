@@ -39,8 +39,8 @@ public class Graphics {
      * @param state the list of OpenGL states to enable.
      */
     public static void enableClientSideState(int... state) {
-        for (int i = 0; i < state.length; i++)
-            GL11.glEnableClientState(state[i]);
+        for (int aState : state)
+            GL11.glEnableClientState(aState);
     }
 
     /**
@@ -49,13 +49,14 @@ public class Graphics {
      * @param state the list of OpenGL states to disable.
      */
     public static void disableClientSideState(int... state) {
-        for (int i = 0; i < state.length; i++)
-            GL11.glDisableClientState(state[i]);
+        for (int aState : state)
+            GL11.glDisableClientState(aState);
     }
 
     /**
      * Binds the textureID to the current OpenGL context.
      *
+     * @param textureFormat the {@link GlTextureFormat} to use.
      * @param textureID the id of the texture.
      * @see GlTextureFormat
      */

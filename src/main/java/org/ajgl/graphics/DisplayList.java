@@ -84,7 +84,7 @@ public final class DisplayList {
      * @param lists    the lists to draw.
      * @see GlDataType
      */
-    public static void drawLists(int listID, int number, @GlDataType int dataType, ByteBuffer lists) {
+    public static void drawLists(int listID, @GlDataType int dataType, ByteBuffer lists) {
         GL11.glListBase(listID);
         GL11.glCallLists(dataType, lists);
     }

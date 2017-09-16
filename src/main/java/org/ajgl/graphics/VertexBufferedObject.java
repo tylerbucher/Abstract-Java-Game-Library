@@ -43,8 +43,9 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      *
-     * @param drawMode the OpenGL draw mode of the object.
-     * @param vertices the vertices of the object.
+     * @param bufferTarget the {@link GlBufferTarget buffer target} to use.
+     * @param drawMode     the OpenGL draw mode of the object.
+     * @param vertices     the vertices of the object.
      * @return the vertex buffer object handler.
      *
      * @see GlBufferTarget
@@ -63,8 +64,9 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      *
-     * @param drawMode the OpenGL draw mode of the object.
-     * @param vertices the vertices of the object.
+     * @param bufferTarget the {@link GlBufferTarget buffer target} to use.
+     * @param drawMode     the OpenGL draw mode of the object.
+     * @param vertices     the vertices of the object.
      * @return the vertex buffer object handler.
      *
      * @see GlBufferTarget
@@ -83,8 +85,9 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      *
-     * @param drawMode the OpenGL draw mode of the object.
-     * @param vertices the vertices of the object.
+     * @param bufferTarget the {@link GlBufferTarget buffer target} to use.
+     * @param drawMode     the OpenGL draw mode of the object.
+     * @param vertices     the vertices of the object.
      * @return the vertex buffer object handler.
      *
      * @see GlBufferTarget
@@ -103,8 +106,9 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      *
-     * @param drawMode the OpenGL draw mode of the object.
-     * @param vertices the vertices of the object.
+     * @param bufferTarget the {@link GlBufferTarget buffer target} to use.
+     * @param drawMode     the OpenGL draw mode of the object.
+     * @param vertices     the vertices of the object.
      * @return the vertex buffer object handler.
      *
      * @see GlBufferTarget
@@ -123,8 +127,9 @@ public final class VertexBufferedObject {
     /**
      * Creates a vertex buffer object handler.
      *
-     * @param drawMode the OpenGL draw mode of the object.
-     * @param vertices the vertices of the object.
+     * @param bufferTarget the {@link GlBufferTarget buffer target} to use.
+     * @param drawMode     the OpenGL draw mode of the object.
+     * @param vertices     the vertices of the object.
      * @return the vertex buffer object handler.
      *
      * @see GlBufferTarget

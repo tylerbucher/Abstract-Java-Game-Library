@@ -2,10 +2,16 @@ import org.gradle.internal.os.OperatingSystem
 
 plugins {
     id "com.github.hierynomus.license" version "0.14.0"
+    id "com.jfrog.artifactory" version "4.5.2"
 }
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'maven-publish'
+
+version = '1.0.2'
+group = 'org.ajgl'
+archivesBaseName = 'AJGL'
 
 project.ext.lwjglVersion = "3.1.2"
 
@@ -26,8 +32,8 @@ repositories {
 }
 
 jar {
-    baseName = 'AJGL'
-    version =  '1.0.2'
+    baseName = archivesBaseName
+    version =  version
 }
 
 dependencies {
@@ -40,7 +46,6 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
 
-
     testCompile 'junit:junit:4.12'
 
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
@@ -51,14 +56,57 @@ dependencies {
     runtime group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.4.1'
-}
-
 license {
     header project.file("LICENSE.txt")
     strictCheck true
     mapping {
         java='SLASHSTAR_STYLE'
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4.1'
+}
+
+artifactory {
+    contextUrl = 'https://reallifegames.net/artifactory/'
+    publish {
+        repository {
+            repoKey = 'gradle-release-local'
+            username = "${rlgMavenUser}"
+            password = "${rlgMavenPassword}"
+            maven = true
+        }
+        defaults {
+            publications ('mavenJava')
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId "${group}"
+            artifactId "${archivesBaseName}"
+            version "${version}"
+            from components.java
+
+            artifact (sourcesJar) {
+                classifier "sources"
+            }
+            artifact (javadocJar) {
+                classifier "javadoc"
+            }
+        }
     }
 }
