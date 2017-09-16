@@ -13,6 +13,9 @@ version = '1.0.2'
 group = 'org.ajgl'
 archivesBaseName = 'AJGL'
 
+project.ext.rlgMavenUser = hasProperty('rlgMavenUser') ? rlgMavenUser : System.getenv('rlgMavenUser')
+project.ext.rlgMavenPassword = hasProperty('rlgMavenPassword') ? rlgMavenPassword : System.getenv('rlgMavenPassword')
+
 project.ext.lwjglVersion = "3.1.2"
 
 switch (OperatingSystem.current()) {
