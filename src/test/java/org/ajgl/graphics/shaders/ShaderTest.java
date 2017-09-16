@@ -29,12 +29,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL20;
 
 public class ShaderTest {
 
+    private Window window;
+
     @Before
     public void setUp() throws Exception {
-        final Window window = new Window();
+        window = new Window();
         window.setup();
         GLFW.glfwMakeContextCurrent(window.getWindowHandler());
         GL.createCapabilities();
@@ -42,22 +45,18 @@ public class ShaderTest {
 
     @Test
     public void testShaderLoadsCorrectly() throws Exception {
-        final String VERTEX_SHADER_STRING = "#version 400\n" +
+        final String VERTEX_SHADER_STRING = "#version 100\n" +
                 "\n" +
-                "layout(location=0) in vec3 position;\n" +
-                "layout(location=1) in vec3 color;\n" +
+                "uniform mat4 projTrans;\n" +
                 "\n" +
-                "uniform mat4 model;\n" +
-                "uniform mat4 view;\n" +
-                "uniform mat4 projection;\n" +
+                "attribute vec2 Position;\n" +
+                "attribute vec2 TexCoord;\n" +
                 "\n" +
-                "out vec3 oColor;\n" +
+                "varying vec2 vTexCoord;\n" +
                 "\n" +
-                "void main()\n" +
-                "{\n" +
-                "    oColor = color;\n" +
-                "    mat4 mvp = projection * view * model;\n" +
-                "    gl_Position = mvp * vec4(position, 1.0f);\n" +
+                "void main() {\n" +
+                "    vTexCoord = TexCoord;\n" +
+                "    gl_Position = 80.0 * vec4(Position, 0.0, 1.0);\n" +
                 "}";
         final Shader shader = new Shader(ShaderUtil.VERTEX_SHADER, VERTEX_SHADER_STRING);
         Assert.assertTrue("Shader did not compile", shader.verify());
