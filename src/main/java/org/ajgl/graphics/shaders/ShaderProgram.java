@@ -83,4 +83,16 @@ public class ShaderProgram {
 
         return status != 0;
     }
+
+    /**
+     * Deletes an OpenGL shader program.
+     */
+    public void deleteProgram() {
+        GL20.glDeleteProgram(id);
+    }
+
+    @Override
+    public void finalize() {
+        GL20.glDeleteProgram(id);
+    }
 }

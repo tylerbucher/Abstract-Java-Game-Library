@@ -8,15 +8,19 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
+//apply plugin: 'application'
 
 version = '1.0.2'
 group = 'org.ajgl'
 archivesBaseName = 'AJGL'
 
+//mainClassName = 'org.ajgl.Launcher'
+
 project.ext.rlgMavenUser = hasProperty('rlgMavenUser') ? rlgMavenUser : System.getenv('rlgMavenUser')
 project.ext.rlgMavenPassword = hasProperty('rlgMavenPassword') ? rlgMavenPassword : System.getenv('rlgMavenPassword')
 
 project.ext.lwjglVersion = "3.1.2"
+project.ext.jomlVersion = "1.9.6"
 
 switch (OperatingSystem.current()) {
     case OperatingSystem.WINDOWS:
@@ -39,6 +43,17 @@ jar {
     version =  version
 }
 
+configurations {
+    quality
+}
+
+sourceSets {
+    quality {
+        compileClasspath += main.output
+        runtimeClasspath += main.output
+    }
+}
+
 dependencies {
     compile "org.lwjgl:lwjgl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
@@ -46,6 +61,7 @@ dependencies {
     compile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
     compile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
+    compile "org.joml:joml:${jomlVersion}"
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
 
@@ -56,15 +72,46 @@ dependencies {
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives}"
     runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.joml:joml:${jomlVersion}"
     runtime group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
+
+    qualityCompile "org.lwjgl:lwjgl:${lwjglVersion}"
+    qualityCompile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+    qualityCompile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+    qualityCompile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
+    qualityCompile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
+    qualityCompile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
+    qualityCompile "org.joml:joml:${jomlVersion}"
+    qualityCompile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.0'
+    qualityCompile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
+
+    qualityRuntime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
+    qualityRuntime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
+    qualityRuntime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
+    qualityRuntime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives}"
+    qualityRuntime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
+    qualityRuntime "org.joml:joml:${jomlVersion}"
+    qualityRuntime group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.0'
 }
 
 license {
+    excludes(["**/Vector??c.java", "**/Quaternion?c.java", "**/Matrix??c.java"])
     header project.file("LICENSE.txt")
     strictCheck true
     mapping {
         java='SLASHSTAR_STYLE'
     }
+}
+
+task qualityJar(type: Jar) {
+    baseName = archivesBaseName + "_quality"
+    version =  version
+    from sourceSets.quality.output
+}
+
+task qualityExecute(type: JavaExec) {
+    main = 'org.ajgl.Launcher'
+    classpath = qualityJar.outputs.files + sourceSets.quality.runtimeClasspath
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

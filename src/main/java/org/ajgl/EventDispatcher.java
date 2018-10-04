@@ -37,6 +37,9 @@ import java.util.*;
  */
 public final class EventDispatcher {
 
+    /**
+     * Internal class logger for errors.
+     */
     private static final Logger logger = LogManager.getLogger(EventDispatcher.class.getName());
 
     /**
@@ -121,5 +124,4 @@ public final class EventDispatcher {
             list.sort(methodComparator);
         }
     }
-
 }

@@ -65,9 +65,44 @@ public class Window implements Display {
     private long window;
 
     /**
-     * {@link Window} error callback instance.
+     * {@link Window} window pos callback instance.
      */
-    private GLFWErrorCallback errorCallback;
+    private GLFWWindowPosCallback windowPosCallback;
+
+    /**
+     * {@link Window} window size callback instance.
+     */
+    private GLFWWindowSizeCallback windowSizeCallback;
+
+    /**
+     * {@link Window} window close callback instance.
+     */
+    private GLFWWindowCloseCallback windowCloseCallback;
+
+    /**
+     * {@link Window} window refresh callback instance.
+     */
+    private GLFWWindowRefreshCallback windowRefreshCallback;
+
+    /**
+     * {@link Window} window focus callback instance.
+     */
+    private GLFWWindowFocusCallback windowFocusCallback;
+
+    /**
+     * {@link Window} window iconify callback instance.
+     */
+    private GLFWWindowIconifyCallback windowIconifyCallback;
+
+    /**
+     * {@link Window} window maximize callback instance.
+     */
+    private GLFWWindowMaximizeCallback windowMaximizeCallback;
+
+    /**
+     * {@link Window} frame buffer size callback instance.
+     */
+    private GLFWFramebufferSizeCallback framebufferSizeCallback;
 
     /**
      * {@link Window} key callback instance.
@@ -144,16 +179,7 @@ public class Window implements Display {
      */
     @Override
     public boolean setup() {
-        errorCallbackSetup();
         return windowSetup();
-    }
-
-    @Override
-    public void errorCallbackSetup() {
-        // Setup an error callback
-        if (errorCallback == null)
-            errorCallback = GLFWErrorCallback.createPrint(System.err);
-        GLFW.glfwSetErrorCallback(errorCallback);
     }
 
     /**
@@ -165,7 +191,6 @@ public class Window implements Display {
     public boolean windowSetup() {
         // Initialize GLFW
         if (!GLFW.glfwInit()) {
-            errorCallback.free();
             return false;
         }
         // Setup window properties
@@ -173,7 +198,6 @@ public class Window implements Display {
         // Create the window
         window = glfwCreateWindow(width, height, title, monitor, share);
         if (window == 0) {
-            errorCallback.free();
             return false;
         }
         // Callback setup
@@ -198,6 +222,14 @@ public class Window implements Display {
         GLFW.glfwSetCursorEnterCallback(window, cursorEnterCallback);
         GLFW.glfwSetScrollCallback(window, scrollCallback);
         GLFW.glfwSetDropCallback(window, dropCallback);
+        GLFW.glfwSetWindowPosCallback(window, windowPosCallback);
+        GLFW.glfwSetWindowSizeCallback(window, windowSizeCallback);
+        GLFW.glfwSetWindowCloseCallback(window, windowCloseCallback);
+        GLFW.glfwSetWindowRefreshCallback(window, windowRefreshCallback);
+        GLFW.glfwSetWindowFocusCallback(window, windowFocusCallback);
+        GLFW.glfwSetWindowIconifyCallback(window, windowIconifyCallback);
+        GLFW.glfwSetWindowMaximizeCallback(window, windowMaximizeCallback);
+        GLFW.glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     }
 
     @Override
@@ -205,8 +237,43 @@ public class Window implements Display {
     }
 
     @Override
-    public GLFWErrorCallback getErrorCallback() {
-        return errorCallback;
+    public GLFWWindowPosCallback getWindowPosCallback() {
+        return windowPosCallback;
+    }
+
+    @Override
+    public GLFWWindowSizeCallback getWindowSizeCallback() {
+        return windowSizeCallback;
+    }
+
+    @Override
+    public GLFWWindowCloseCallback getWindowCloseCallback() {
+        return windowCloseCallback;
+    }
+
+    @Override
+    public GLFWWindowRefreshCallback getWindowRefreshCallback() {
+        return windowRefreshCallback;
+    }
+
+    @Override
+    public GLFWWindowFocusCallback getWindowFocusCallback() {
+        return windowFocusCallback;
+    }
+
+    @Override
+    public GLFWWindowIconifyCallback getWindowIconifyCallback() {
+        return windowIconifyCallback;
+    }
+
+    @Override
+    public GLFWWindowMaximizeCallback getWindowMaximizeCallback() {
+        return windowMaximizeCallback;
+    }
+
+    @Override
+    public GLFWFramebufferSizeCallback getFramebufferSizeCallback() {
+        return framebufferSizeCallback;
     }
 
     @Override
@@ -250,17 +317,66 @@ public class Window implements Display {
     }
 
     @Override
-    public void setErrorCallback(GLFWErrorCallback errorCallback) {
-        if (this.errorCallback != null)
-            this.errorCallback.free();
-        this.errorCallback = errorCallback;
+    public void setWindowPosCallback(GLFWWindowPosCallback windowPosCallback) {
+        if (this.windowPosCallback != null)
+            this.windowPosCallback.free();
+        GLFW.glfwSetWindowPosCallback(window, this.windowPosCallback = windowPosCallback);
+    }
+
+    @Override
+    public void setWindowSizeCallback(GLFWWindowSizeCallback windowSizeCallback) {
+        if (this.windowSizeCallback != null)
+            this.windowSizeCallback.free();
+        GLFW.glfwSetWindowSizeCallback(window, this.windowSizeCallback = windowSizeCallback);
+    }
+
+    @Override
+    public void setWindowCloseCallback(GLFWWindowCloseCallback windowCloseCallback) {
+        if (this.windowCloseCallback != null)
+            this.windowCloseCallback.free();
+        GLFW.glfwSetWindowCloseCallback(window, this.windowCloseCallback = windowCloseCallback);
+    }
+
+    @Override
+    public void setWindowRefreshCallback(GLFWWindowRefreshCallback windowRefreshCallback) {
+        if (this.windowRefreshCallback != null)
+            this.windowRefreshCallback.free();
+        GLFW.glfwSetWindowRefreshCallback(window, this.windowRefreshCallback = windowRefreshCallback);
+    }
+
+    @Override
+    public void setWindowFocusCallback(GLFWWindowFocusCallback windowFocusCallback) {
+        if (this.windowFocusCallback != null)
+            this.windowFocusCallback.free();
+        GLFW.glfwSetWindowFocusCallback(window, this.windowFocusCallback = windowFocusCallback);
+    }
+
+    @Override
+    public void setWindowIconifyCallback(GLFWWindowIconifyCallback windowIconifyCallback) {
+        if (this.windowIconifyCallback != null)
+            this.windowIconifyCallback.free();
+        GLFW.glfwSetWindowIconifyCallback(window, this.windowIconifyCallback = windowIconifyCallback);
+    }
+
+    @Override
+    public void setWindowMaximizeCallback(GLFWWindowMaximizeCallback windowMaximizeCallback) {
+        if (this.windowMaximizeCallback != null)
+            this.windowMaximizeCallback.free();
+        GLFW.glfwSetWindowMaximizeCallback(window, this.windowMaximizeCallback = windowMaximizeCallback);
+    }
+
+    @Override
+    public void setFramebufferSizeCallback(GLFWFramebufferSizeCallback framebufferSizeCallback) {
+        if (this.framebufferSizeCallback != null)
+            this.framebufferSizeCallback.free();
+        GLFW.glfwSetFramebufferSizeCallback(window, this.framebufferSizeCallback = framebufferSizeCallback);
     }
 
     @Override
     public void setKeyCallback(GLFWKeyCallback keyCallback) {
         if (this.keyCallback != null)
             this.keyCallback.free();
-        this.keyCallback = keyCallback;
+        GLFW.glfwSetKeyCallback(window, this.keyCallback = keyCallback);
     }
 
     @Override
@@ -268,48 +384,49 @@ public class Window implements Display {
         if (this.charCallback != null)
             this.charCallback.free();
         this.charCallback = charCallback;
+        GLFW.glfwSetCharCallback(window, charCallback);
     }
 
     @Override
     public void setCharModsCallback(GLFWCharModsCallback charModsCallback) {
         if (this.charModsCallback != null)
             this.charModsCallback.free();
-        this.charModsCallback = charModsCallback;
+        GLFW.glfwSetCharModsCallback(window, this.charModsCallback = charModsCallback);
     }
 
     @Override
     public void setMouseButtonCallback(GLFWMouseButtonCallback mouseButtonCallback) {
         if (this.mouseButtonCallback != null)
             this.mouseButtonCallback.free();
-        this.mouseButtonCallback = mouseButtonCallback;
+        GLFW.glfwSetMouseButtonCallback(window, this.mouseButtonCallback = mouseButtonCallback);
     }
 
     @Override
     public void setCursorPosCallback(GLFWCursorPosCallback cursorPosCallback) {
         if (this.cursorPosCallback != null)
             this.cursorPosCallback.free();
-        this.cursorPosCallback = cursorPosCallback;
+        GLFW.glfwSetCursorPosCallback(window, this.cursorPosCallback = cursorPosCallback);
     }
 
     @Override
     public void setCursorEnterCallback(GLFWCursorEnterCallback cursorEnterCallback) {
         if (this.cursorEnterCallback != null)
             this.cursorEnterCallback.free();
-        this.cursorEnterCallback = cursorEnterCallback;
+        GLFW.glfwSetCursorEnterCallback(window, this.cursorEnterCallback = cursorEnterCallback);
     }
 
     @Override
     public void setScrollCallback(GLFWScrollCallback scrollCallback) {
         if (this.scrollCallback != null)
             this.scrollCallback.free();
-        this.scrollCallback = scrollCallback;
+        GLFW.glfwSetScrollCallback(window, this.scrollCallback = scrollCallback);
     }
 
     @Override
     public void setDropCallback(GLFWDropCallback dropCallback) {
         if (this.dropCallback != null)
             this.dropCallback.free();
-        this.dropCallback = dropCallback;
+        GLFW.glfwSetDropCallback(window, this.dropCallback = dropCallback);
     }
 
     @Override
@@ -360,5 +477,16 @@ public class Window implements Display {
     @Override
     public long getWindowHandler() {
         return window;
+    }
+
+    @Override
+    public void destroyWindow() {
+        GLFW.glfwDestroyWindow(window);
+    }
+
+    @Override
+    public void finalize() {
+        GLFW.glfwDestroyWindow(window);
+        Callbacks.glfwFreeCallbacks(window);
     }
 }

@@ -24,6 +24,7 @@
 package org.ajgl.graphics.shaders;
 
 import org.ajgl.Window;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +37,12 @@ public class ShaderTest {
 
     @Before
     public void setUp() throws Exception {
-        window = new Window();
+        window = new Window() {
+            @Override
+            public void preWindowCreation() {
+                GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
+            }
+        };
         window.setup();
         GLFW.glfwMakeContextCurrent(window.getWindowHandler());
         GL.createCapabilities();
@@ -59,5 +65,10 @@ public class ShaderTest {
                 "}";
         final Shader shader = new Shader(ShaderUtil.VERTEX_SHADER, VERTEX_SHADER_STRING);
         Assert.assertTrue("Shader did not compile", shader.verify());
+    }
+
+    @After
+    public void tearDown() {
+       window.destroyWindow();
     }
 }

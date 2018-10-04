@@ -24,6 +24,7 @@
 package org.ajgl.graphics.shaders;
 
 import org.ajgl.Window;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +38,12 @@ public class ShaderProgramTest {
 
     @Before
     public void setUp() throws Exception {
-        window = new Window();
+        window = new Window() {
+            @Override
+            public void preWindowCreation() {
+                GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
+            }
+        };
         window.setup();
 
         GLFW.glfwMakeContextCurrent(window.getWindowHandler());
@@ -62,8 +68,14 @@ public class ShaderProgramTest {
     public void testShaderProgramLoadsCorrectly() throws Exception {
         final ShaderProgram program = new ShaderProgram();
         program.attachShader(shader);
+        shader.delete();
         program.link();
         program.validate();
         Assert.assertTrue("ShaderProgram did not initialize correctly", program.verify());
+    }
+
+    @After
+    public void tearDown() {
+        window.destroyWindow();
     }
 }

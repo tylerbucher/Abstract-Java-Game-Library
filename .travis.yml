@@ -3,7 +3,9 @@ os:
   - linux
 jdk:
  - openjdk8
+ - openjdk9
  - oraclejdk8
+ - oraclejdk9
 sudo: required
 addons:
  apt:

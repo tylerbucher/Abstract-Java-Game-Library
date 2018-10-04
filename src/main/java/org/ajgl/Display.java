@@ -38,11 +38,6 @@ public interface Display {
     boolean setup();
 
     /**
-     * Error call back setup.
-     */
-    void errorCallbackSetup();
-
-    /**
      * @return true if the display was created false otherwise.
      */
     boolean windowSetup();
@@ -63,9 +58,44 @@ public interface Display {
     void postWindowCreation();
 
     /**
-     * @return the {@link Display}'s {@link GLFWErrorCallback}.
+     * @return the {@link Display}'s {@link GLFWWindowPosCallback}.
      */
-    GLFWErrorCallback getErrorCallback();
+    GLFWWindowPosCallback getWindowPosCallback();
+
+    /**
+     * @return the {@link Display}'s {@link GLFWWindowSizeCallback}.
+     */
+    GLFWWindowSizeCallback getWindowSizeCallback();
+
+    /**
+     * @return the {@link Display}'s {@link GLFWWindowCloseCallback}.
+     */
+    GLFWWindowCloseCallback getWindowCloseCallback();
+
+    /**
+     * @return the {@link Display}'s {@link GLFWWindowRefreshCallback}.
+     */
+    GLFWWindowRefreshCallback getWindowRefreshCallback();
+
+    /**
+     * @return the {@link Display}'s {@link GLFWWindowFocusCallback}.
+     */
+    GLFWWindowFocusCallback getWindowFocusCallback();
+
+    /**
+     * @return the {@link Display}'s {@link GLFWWindowIconifyCallback}.
+     */
+    GLFWWindowIconifyCallback getWindowIconifyCallback();
+
+    /**
+     * @return the {@link Display}'s {@link GLFWWindowMaximizeCallback}.
+     */
+    GLFWWindowMaximizeCallback getWindowMaximizeCallback();
+
+    /**
+     * @return the {@link Display}'s {@link GLFWFramebufferSizeCallback}.
+     */
+    GLFWFramebufferSizeCallback getFramebufferSizeCallback();
 
     /**
      * @return the {@link Display}'s {@link GLFWKeyCallback}..
@@ -108,11 +138,60 @@ public interface Display {
     GLFWDropCallback getDropCallback();
 
     /**
-     * Sets the {@link Display}'s {@link GLFWErrorCallback}.
+     * Sets the {@link Display}'s {@link GLFWWindowPosCallback}.
      *
-     * @param errorCallback the {@link GLFWErrorCallback} of the {@link Display}.
+     * @param windowPosCallback the {@link GLFWWindowPosCallback} of the {@link Display}.
      */
-    void setErrorCallback(GLFWErrorCallback errorCallback);
+    void setWindowPosCallback(GLFWWindowPosCallback windowPosCallback);
+
+    /**
+     * Sets the {@link Display}'s {@link GLFWWindowSizeCallback}.
+     *
+     * @param windowSizeCallback the {@link GLFWWindowSizeCallback} of the {@link Display}.
+     */
+    void setWindowSizeCallback(GLFWWindowSizeCallback windowSizeCallback);
+
+    /**
+     * Sets the {@link Display}'s {@link GLFWWindowCloseCallback}.
+     *
+     * @param windowCloseCallback the {@link GLFWWindowCloseCallback} of the {@link Display}.
+     */
+    void setWindowCloseCallback(GLFWWindowCloseCallback windowCloseCallback);
+
+    /**
+     * Sets the {@link Display}'s {@link GLFWWindowRefreshCallback}.
+     *
+     * @param windowRefreshCallback the {@link GLFWWindowRefreshCallback} of the {@link Display}.
+     */
+    void setWindowRefreshCallback(GLFWWindowRefreshCallback windowRefreshCallback);
+
+    /**
+     * Sets the {@link Display}'s {@link GLFWWindowFocusCallback}.
+     *
+     * @param windowFocusCallback the {@link GLFWWindowFocusCallback} of the {@link Display}.
+     */
+    void setWindowFocusCallback(GLFWWindowFocusCallback windowFocusCallback);
+
+    /**
+     * Sets the {@link Display}'s {@link GLFWWindowIconifyCallback}.
+     *
+     * @param windowIconifyCallback the {@link GLFWWindowIconifyCallback} of the {@link Display}.
+     */
+    void setWindowIconifyCallback(GLFWWindowIconifyCallback windowIconifyCallback);
+
+    /**
+     * Sets the {@link Display}'s {@link GLFWWindowMaximizeCallback}.
+     *
+     * @param windowMaximizeCallback the {@link GLFWWindowMaximizeCallback} of the {@link Display}.
+     */
+    void setWindowMaximizeCallback(GLFWWindowMaximizeCallback windowMaximizeCallback);
+
+    /**
+     * Sets the {@link Display}'s {@link GLFWFramebufferSizeCallback}.
+     *
+     * @param framebufferSizeCallback the {@link GLFWFramebufferSizeCallback} of the {@link Display}.
+     */
+    void setFramebufferSizeCallback(GLFWFramebufferSizeCallback framebufferSizeCallback);
 
     /**
      * Sets the {@link Display}'s {@link GLFWKeyCallback}.
@@ -228,4 +307,15 @@ public interface Display {
      * @return the window handler id.
      */
     long getWindowHandler();
+
+    /**
+     * Destroy the current window and its context.
+     *
+     * <ul>
+     * <li>This function must only be called from the main thread.</li>
+     * <li>This function must not be called from a callback.</li>
+     * <li>The context of the specified window must not be current on any other thread when this function is called.</li>
+     * </ul>
+     */
+    void destroyWindow();
 }

@@ -25,6 +25,7 @@ package org.ajgl;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lwjgl.glfw.GLFW;
 
 /**
  * Tests the {@link Window} functions.
@@ -33,7 +34,12 @@ public class WindowTest {
 
     @Test
     public void testWindowInitializes() {
-        final Window windowTest = new Window(400, 400, "Window Test", 0, 0);
+        final Window windowTest = new Window(400, 400, "Window Test", 0, 0) {
+            @Override
+            public void preWindowCreation() {
+                GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
+            }
+        };
         Assert.assertTrue("Window failed to initialize.", windowTest.setup());
     }
 }

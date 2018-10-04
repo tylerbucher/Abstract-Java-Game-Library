@@ -40,6 +40,9 @@ public class Event {
      */
     public final String name;
 
+    /**
+     * Creates a default event with name being 'Event'.
+     */
     public Event() {
         this.name = "Event";
     }
